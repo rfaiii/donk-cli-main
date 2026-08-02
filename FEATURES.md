@@ -12,10 +12,13 @@
 - **Works Everywhere:** first-class support in every terminal on macOS, Linux, Windows (PowerShell and WSL), Android, FreeBSD, OpenBSD, and NetBSD
 
 ## Planned
-- **Tool Registry:** centralized slash-command and tool-panel registry in `internal/tools`
-- **Health Monitor:** `/health` service checks and resource monitor in Go
-- **Ollama / Local Models:** first-class local-model backend support in agent/tools
-- **System Monitor:** terminal-native system resource panel
-- **Remote Node Discovery:** expand NODE discovery beyond localhost ports to remote IPs
-- **Palette-Native Node Flow:** direct palette invocation of node/npm tools with device selection
-- **NPM Script Runner:** device-scoped npm script execution with output routing to chat
+- **Multiple Device Support:** connect and manage multiple NODE devices simultaneously
+- **Resource Monitor:** `/health` service checks and terminal-native system resource panel
+- **ChromeDB + Persistent Memory:** local storage layer for model swapping, session caching, and persistent memory across sessions
+- **Ollama / Local Models:** expanded local-model backend support with improved agent coordination, MCP server support, LSP integration, and updated local AI model support
+- **UI Animations:** many new animations for the terminal UI
+- **Alternate Theme Selection Tool:** built-in theme picker and theme management
+- **Mission Control:** system that allows users to assign and monitor mission control tasks, doubling as a system monitor
+- **Home/Landing Page NODE Connections:** show NODE connection state on the home/landing page and add NODE options to the menu for easy device and file management
+- **Voice:** voice input and output support
+- **Cross-Platform Apps:** native apps for every operating system so you can work on any machine at any time

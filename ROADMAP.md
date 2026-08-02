@@ -1,21 +1,21 @@
 # Roadmap
 
 ## Near Term
-- Complete centralized tool registry (`internal/tools`)
-- Finish `/health` service and resource monitor
-- Add remote IP support to NODE device discovery
-- Wire palette commands directly into agent tool execution
-- Improve NODE dialog with device picker and npm script runner
+- Multiple device support with NODE connections
+- Resource monitor and `/health` service checks
+- ChromeDB and persistent memory for model swapping and session caching
+- Expand Ollama and local model support with agent coordination, MCP server support, and LSP integration
+- New UI animations
+- Alternate theme selection tool
 
 ## Medium Term
-- Ollama and local-model backend support
-- System monitor panel
-- Expanded MCP tool coverage
-- Workspace sharing UX improvements
-- Additional file-finder enhancements
+- Mission Control system for task assignment and monitoring
+- Home/landing page NODE connection state and menu integration
+- Voice input and output support
+- Cross-platform native app exploration
 
 ## Long Term
-- Plugin/module system for community extensions
-- Performance and memory profiling integrations
-- Cross-project agent context sharing
-- Advanced permission and approval workflows
+- Native apps for every operating system
+- Advanced multi-device orchestration
+- Expanded local AI model coverage and offline workflows
+- Community plugin/module system

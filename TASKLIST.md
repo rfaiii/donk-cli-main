@@ -1,24 +1,21 @@
 # Tasklist
 
 ## In Progress
-- [ ] Centralize tool registry and slash-command routing (`internal/tools`)
-- [ ] Expand NODE discovery to remote IP connections
-- [ ] Wire palette `/npm` and `/node` commands into agent execution
-- [ ] Add device picker to NPM script action flow
-- [ ] Complete `/health` service checks and resource monitor
+- [ ] Multiple device support with NODE connections
+- [ ] Resource monitor and `/health` service checks
+- [ ] ChromeDB and persistent memory for model swapping and session caching
+- [ ] Expand Ollama and local model support with agent coordination, MCP server support, LSP integration, and updated local AI model support
+- [ ] New UI animations
+- [ ] Alternate theme selection tool
 
 ## Planned
-- [ ] Add GitHub Actions workflow for build/test
-- [ ] Add justfile/Taskfile target for local automation
-- [ ] Complete Ollama/local model backend support
-- [ ] Add system monitor panel
-- [ ] Improve file finder scrollbar and pane geometry edge cases
-- [ ] Add workspace attach/detach UX improvements
-- [ ] Document NODE integration paths in `REFERENCE.md`
-- [ ] Add MCP tool coverage for common developer workflows
+- [ ] Mission Control system for task assignment and monitoring
+- [ ] Home/landing page NODE connection state and menu integration
+- [ ] Voice input and output support
+- [ ] Cross-platform native app exploration
+- [ ] Native apps for every operating system
 
 ## Backlog
-- [ ] Plugin/module system design
-- [ ] Cross-project context sharing
-- [ ] Advanced permission workflows
-- [ ] Performance profiling integration
+- [ ] Advanced multi-device orchestration
+- [ ] Expanded local AI model coverage and offline workflows
+- [ ] Community plugin/module system
