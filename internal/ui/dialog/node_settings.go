@@ -69,6 +69,19 @@ func NewNodeSettings(com *common.Common) *NodeSettings {
 	return &NodeSettings{com: com}
 }
 
+// selectedDevice returns the currently selected device, if any.
+func (n *NodeSettings) selectedDevice() (node.Device, bool) {
+	if n.selectedID == "" {
+		return node.Device{}, false
+	}
+	for _, d := range n.devices {
+		if d.ID == n.selectedID {
+			return d, true
+		}
+	}
+	return node.Device{}, false
+}
+
 // ID implements Dialog.
 func (n *NodeSettings) ID() string { return NodeSettingsID }
 
@@ -95,16 +108,11 @@ func (n *NodeSettings) HandleMsg(msg tea.Msg) Action {
 		case "esc", "ctrl+c":
 			return ActionClose{}
 		case "enter":
-			if n.selectedID == "" {
-				return nil
-			}
-			for _, d := range n.devices {
-				if d.ID == n.selectedID {
-					if strings.EqualFold(d.ConnectionType, "local") {
-						return ActionNodeUpdateStatus{DeviceID: d.ID, Status: node.DeviceStatusOnline}
-					}
-					return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
+			if d, ok := n.selectedDevice(); ok {
+				if strings.EqualFold(d.ConnectionType, "local") {
+					return ActionNodeUpdateStatus{DeviceID: d.ID, Status: node.DeviceStatusOnline}
 				}
+				return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
 			}
 			return nil
 		case "up", "ctrl+p":
@@ -130,13 +138,8 @@ func (n *NodeSettings) HandleMsg(msg tea.Msg) Action {
 			n.list.ScrollToSelected()
 			syncSelection(n)
 		case "r":
-			if n.selectedID == "" {
-				return nil
-			}
-			for _, d := range n.devices {
-				if d.ID == n.selectedID {
-					return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
-				}
+			if d, ok := n.selectedDevice(); ok {
+				return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
 			}
 			return nil
 		}
