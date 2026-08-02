@@ -6,7 +6,7 @@ Migrate all portable features/assets from the old Rust/Python `donk-cli` into th
 ## Migration Order
 
 ### Phase 1: Animation Library
-- [x] Create animation reference library (`internal/ui/anim/library/rust-reference/`)
+- [x] Create animation reference library (`old/internal/ui/anim/library/rust-reference/`)
 - [x] Port gallery metadata (`gallery.rs` → `internal/ui/anim/gallery.go`)
 - [x] Port spinner presets (`spinner.rs` → `internal/ui/anim/spinner.go`)
 - [x] Port spring physics (`spring.rs` → `internal/ui/anim/spring.go`)
@@ -43,5 +43,5 @@ Migrate all portable features/assets from the old Rust/Python `donk-cli` into th
 ## Current State
 - Go master: `/Users/richavery/Projects/donk-cli-main`
 - Rust reference: `/Users/richavery/Projects/donk-cli`
-- Animation library: `internal/ui/anim/library/rust-reference/`
+- Animation library: `old/internal/ui/anim/library/rust-reference/`
 - Ported animations: `internal/ui/anim/{gallery,spinner,spring,progress}.go`

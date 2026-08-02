@@ -25,7 +25,7 @@ This catalog lists key paths in `donk-cli-main` for reuse across migration work.
 - `internal/ui/chat` — Chat rendering, tools panel, shell, agent output
 - `internal/ui/anim` — UI animation helpers and re-exports from `internal/anim`
 - `internal/anim` — Go-native animation library: gallery, spinner, spring, progress
-- `internal/ui/anim/library/rust-reference` — Original Rust `donk-anim` sources for future ports
+- `old/internal/ui/anim/library/rust-reference` — Original Rust `donk-anim` sources for future ports
 - `internal/ui/anim/scenes` — Planned Go scene implementations
 
 ## Agent & Tools
@@ -48,5 +48,5 @@ This catalog lists key paths in `donk-cli-main` for reuse across migration work.
 ## Docs
 - `SYSARCH.md` — System architecture overview with diagram
 - `docs/MIGRATION-PLAN.md` — Feature migration order and checklist
-- `docs/INTEGRATION-PLAN.md` — Integration notes for animation, health, FileBrowser/ChromeDB
+- `old/docs/INTEGRATION-PLAN.md` — Integration notes for animation, health, FileBrowser/ChromeDB
 - `README.md` — Project readme

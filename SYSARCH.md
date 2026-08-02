@@ -128,7 +128,7 @@ sequenceDiagram
 | `internal/ui` | Bubble Tea model/view/update, dialogs, styles |
 | `internal/ui/anim` | UI-bound animation helpers + re-exports from `internal/anim` |
 | `internal/anim` | Go-native animation library (gallery, spinner, spring, progress) |
-| `internal/ui/anim/library/rust-reference` | Original Rust animation sources for future ports |
+| `old/internal/ui/anim/library/rust-reference` | Original Rust animation sources for future ports |
 | `internal/ui/anim/scenes` | Planned Go scene implementations |
 | `internal/agent` | Coordinator, permissions, questions, prompts, notify |
 | `internal/agent/tools` | Tool implementations: bash, edit, fetch, grep, LSP, MCP |
@@ -150,7 +150,7 @@ sequenceDiagram
 | `internal/proto` | Protobuf or protocol helpers |
 | `internal/pubsub` | Event brokers |
 | `internal/workspace` | Workspace/resolution helpers |
-| `docs-donk-cli` | Migrated Rust documentation |
+| `old/docs-donk-cli` | Migrated Rust documentation |
 | `scripts-donk-cli` | Migrated Rust scripts |
 | `reference` | Shared reference material |
 
@@ -173,7 +173,7 @@ sequenceDiagram
 - CLI-only UI; no Rust chrome, no Alacritty app wrapper
 - One feature at a time, fully rewritten in Go unless impossible
 - Keep `donk-cli-go` as reference; merge features into `donk-cli-main`
-- Store legacy Rust sources under `internal/ui/anim/library/rust-reference/`
+- Store legacy Rust sources under `old/internal/ui/anim/library/rust-reference/`
 - Catalog references in `REFERENCE.md` with exact paths and reuse notes
 - Prefer KISS/DRY, concise, elegant code
 - Linear history with rebase, small focused commits

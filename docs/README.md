@@ -5,4 +5,4 @@ This folder contains migration, integration, and architecture documentation for 
 ## Documents
 - `SYSARCH.md` — System architecture overview with package map, runtime modes, Mermaid diagrams, and migration status
 - `docs/MIGRATION-PLAN.md` — Feature-by-feature migration checklist and order
-- `docs/INTEGRATION-PLAN.md` — Integration notes for animation, health, FileBrowser, and ChromeDB
+- `old/docs/INTEGRATION-PLAN.md` — Integration notes for animation, health, FileBrowser, and ChromeDB

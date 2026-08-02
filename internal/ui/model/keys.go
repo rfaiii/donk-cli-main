@@ -69,6 +69,7 @@ type KeyMap struct {
 	Tab             key.Binding
 	ToggleBeastmode key.Binding
 	Finder          key.Binding
+	Node            key.Binding
 }
 
 func DefaultKeyMap() KeyMap {
