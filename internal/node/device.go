@@ -5,7 +5,9 @@ package node
 
 import (
 	"fmt"
+	"net"
 	"sync"
+	"time"
 )
 
 // DeviceStatus represents the connectivity state of a node/device.
@@ -180,4 +182,33 @@ func RemoveDevice(id string) {
 // EnsureDefaultDevice adds the default local device if the registry is empty.
 func EnsureDefaultDevice() {
 	defaultManager.EnsureDefault()
+}
+
+// DiscoverDevices probes common local ports and registers responsive endpoints
+// as devices. It is intentionally best-effort and non-blocking.
+func DiscoverDevices() {
+	candidates := []struct {
+		name string
+		addr string
+	}{
+		{"localhost-3000", "localhost:3000"},
+		{"localhost-5173", "localhost:5173"},
+		{"localhost-8080", "localhost:8080"},
+		{"localhost-4200", "localhost:4200"},
+		{"localhost-8000", "localhost:8000"},
+		{"localhost-9000", "localhost:9000"},
+	}
+	for _, c := range candidates {
+		if conn, err := net.DialTimeout("tcp", c.addr, 250*time.Millisecond); err == nil {
+			_ = conn.Close()
+			UpsertDevice(Device{
+				ID:             c.name,
+				Name:           c.name,
+				Nickname:       "",
+				ConnectionType: "local",
+				Address:        c.addr,
+				Status:         DeviceStatusOnline,
+			})
+		}
+	}
 }

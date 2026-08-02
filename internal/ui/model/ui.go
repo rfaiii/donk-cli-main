@@ -40,6 +40,7 @@ import (
 	"github.com/rfaiii/donk-cli-main/internal/history"
 	"github.com/rfaiii/donk-cli-main/internal/home"
 	"github.com/rfaiii/donk-cli-main/internal/message"
+	"github.com/rfaiii/donk-cli-main/internal/node"
 	"github.com/rfaiii/donk-cli-main/internal/permission"
 	"github.com/rfaiii/donk-cli-main/internal/pubsub"
 	"github.com/rfaiii/donk-cli-main/internal/question"
@@ -2031,6 +2032,25 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 	case dialog.ActionAttachSkill:
 		m.dialog.CloseFrontDialog()
 		cmds = append(cmds, m.attachSkill(msg.ID, msg.Name))
+	case dialog.ActionNodeUpdateStatus:
+		node.SetDeviceStatus(msg.DeviceID, msg.Status)
+		m.dialog.CloseDialog(dialog.NodeSettingsID)
+		if cmd := m.openNodeDialog(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Node status updated")))
+	case dialog.ActionNodeRename:
+		if msg.Nickname == "" {
+			m.dialog.CloseDialog(dialog.NodeSettingsID)
+			cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Nickname cannot be empty")))
+			break
+		}
+		node.SetDeviceNickname(msg.DeviceID, msg.Nickname)
+		m.dialog.CloseDialog(dialog.NodeSettingsID)
+		if cmd := m.openNodeDialog(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Node renamed")))
 	case dialog.ActionRunMCPPrompt:
 		if len(msg.Arguments) > 0 && msg.Args == nil {
 			m.dialog.CloseFrontDialog()

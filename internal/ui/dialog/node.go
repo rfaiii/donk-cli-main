@@ -8,6 +8,7 @@ const NodeSettingsID = "node-settings"
 // ActionNodeRename requests renaming the selected node.
 type ActionNodeRename struct {
 	DeviceID string
+	Current  string
 	Nickname string
 }
 

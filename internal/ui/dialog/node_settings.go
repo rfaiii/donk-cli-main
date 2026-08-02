@@ -2,6 +2,7 @@ package dialog
 
 import (
 	"fmt"
+	"strings"
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/rfaiii/donk-cli-main/internal/node"
@@ -13,7 +14,7 @@ import (
 
 const (
 	nodeSettingsDialogMaxWidth  = 56
-	nodeSettingsDialogMaxHeight = 16
+	nodeSettingsDialogMaxHeight = 18
 )
 
 // nodeSettingsItem is a simple list renderable for the node settings dialog.
@@ -54,6 +55,13 @@ type NodeSettings struct {
 	devices    []node.Device
 	selectedID string
 	list       *list.List
+	loading    bool
+	rename     struct {
+		id     string
+		open   bool
+		value  string
+		cursor int
+	}
 }
 
 // NewNodeSettings creates a new node settings dialog.
@@ -92,7 +100,10 @@ func (n *NodeSettings) HandleMsg(msg tea.Msg) Action {
 			}
 			for _, d := range n.devices {
 				if d.ID == n.selectedID {
-					return ActionNodeUpdateStatus{DeviceID: d.ID, Status: node.DeviceStatusOnline}
+					if strings.EqualFold(d.ConnectionType, "local") {
+						return ActionNodeUpdateStatus{DeviceID: d.ID, Status: node.DeviceStatusOnline}
+					}
+					return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
 				}
 			}
 			return nil
@@ -118,7 +129,19 @@ func (n *NodeSettings) HandleMsg(msg tea.Msg) Action {
 			}
 			n.list.ScrollToSelected()
 			syncSelection(n)
+		case "r":
+			if n.selectedID == "" {
+				return nil
+			}
+			for _, d := range n.devices {
+				if d.ID == n.selectedID {
+					return ActionNodeRename{DeviceID: d.ID, Current: d.Nickname}
+				}
+			}
+			return nil
 		}
+	case NodeSettingsUpdateMsg:
+		n.Devices(msg.Devices)
 	}
 	return nil
 }
@@ -145,13 +168,15 @@ func (n *NodeSettings) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	width := max(0, min(nodeSettingsDialogMaxWidth, area.Dx()-t.Dialog.View.GetHorizontalBorderSize()))
 
 	var body string
-	if len(n.devices) == 0 {
+	if n.loading {
+		body = t.Dialog.List.Height(1).Render(t.Resource.AdditionalText.Render("refreshing..."))
+	} else if len(n.devices) == 0 {
 		body = t.Resource.AdditionalText.Render("None")
 	} else if n.list != nil {
 		body = t.Dialog.List.Height(n.list.Height()).Render(n.list.Render())
 	}
 
-	help := "enter mark online • esc close"
+	help := "enter rename • r rename • esc close"
 	view := t.Dialog.View.
 		Width(width).
 		Height(nodeSettingsDialogMaxHeight).
