@@ -148,3 +148,36 @@ func (m *Manager) EnsureDefault() {
 		m.onChange()
 	}
 }
+
+// defaultManager is the process-wide device registry used by UI panels.
+var defaultManager = NewManager()
+
+// Devices returns a snapshot of the default device registry.
+func Devices() []Device {
+	return defaultManager.Devices()
+}
+
+// UpsertDevice adds or updates a device in the default registry.
+func UpsertDevice(device Device) {
+	defaultManager.Upsert(device)
+}
+
+// SetDeviceStatus updates the status of a device in the default registry.
+func SetDeviceStatus(id string, status DeviceStatus) {
+	defaultManager.SetStatus(id, status)
+}
+
+// SetDeviceNickname updates the nickname of a device in the default registry.
+func SetDeviceNickname(id, nickname string) {
+	defaultManager.SetNickname(id, nickname)
+}
+
+// RemoveDevice deletes a device from the default registry.
+func RemoveDevice(id string) {
+	defaultManager.Remove(id)
+}
+
+// EnsureDefaultDevice adds the default local device if the registry is empty.
+func EnsureDefaultDevice() {
+	defaultManager.EnsureDefault()
+}

@@ -110,6 +110,10 @@ func DefaultKeyMap() KeyMap {
 			key.WithKeys("ctrl+shift+f"),
 			key.WithHelp("ctrl+shift+f", "file finder"),
 		),
+		Node: key.NewBinding(
+			key.WithKeys("ctrl+shift+n"),
+			key.WithHelp("ctrl+shift+n", "node settings"),
+		),
 	}
 
 	km.Editor.SendMessage = key.NewBinding(

@@ -2271,6 +2271,11 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 				cmds = append(cmds, cmd)
 			}
 			return true
+		case key.Matches(msg, m.keyMap.Node):
+			if cmd := m.openNodeDialog(); cmd != nil {
+				cmds = append(cmds, cmd)
+			}
+			return true
 		case key.Matches(msg, m.keyMap.Models):
 			if cmd := m.openModelsDialog(); cmd != nil {
 				cmds = append(cmds, cmd)
@@ -4367,6 +4372,17 @@ func (m *UI) openFileBrowserDialog() tea.Cmd {
 		return cmd
 	}
 	m.dialog.OpenDialog(m.fileBrowser)
+	return nil
+}
+
+// openNodeDialog opens the node settings dialog.
+func (m *UI) openNodeDialog() tea.Cmd {
+	if m.dialog.ContainsDialog(dialog.NodeSettingsID) {
+		m.dialog.BringToFront(dialog.NodeSettingsID)
+		return nil
+	}
+	nodeSettings := dialog.NewNodeSettings(m.com)
+	m.dialog.OpenDialog(nodeSettings)
 	return nil
 }
 
