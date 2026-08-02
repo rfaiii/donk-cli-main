@@ -211,17 +211,7 @@ func (a *Arguments) HandleMsg(msg tea.Msg) Action {
 					return ActionCmd{Cmd: warning}
 				}
 
-				switch action := a.resultAction.(type) {
-				case ActionRunCustomCommand:
-					action.Args = args
-					return action
-				case ActionRunMCPPrompt:
-					action.Args = args
-					return action
-				case ActionRunNpmScript:
-					action.Args = args
-					return action
-				}
+				return Args(a.resultAction, args)
 			}
 			a.focusInput(a.focused + 1)
 		case key.Matches(msg, a.keyMap.Next):
@@ -378,7 +368,21 @@ func (a *Arguments) StopLoading() {
 	a.loading = false
 }
 
-// ShortHelp implements help.KeyMap.
+// Args sets the collected argument map on actions that accept it.
+func Args(action Action, args map[string]string) Action {
+	switch action := action.(type) {
+	case ActionRunCustomCommand:
+		action.Args = args
+		return action
+	case ActionRunMCPPrompt:
+		action.Args = args
+		return action
+	case ActionRunNpmScript:
+		action.Args = args
+		return action
+	}
+	return action
+}
 func (a *Arguments) ShortHelp() []key.Binding {
 	return []key.Binding{
 		a.keyMap.Confirm,
