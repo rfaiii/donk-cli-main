@@ -11,6 +11,12 @@ type ActionNodeRename struct {
 	Current  string
 	Nickname string
 }
+// ActionRunNpmScript requests running an npm script for the selected node.
+type ActionRunNpmScript struct {
+	DeviceID string
+	Script   string
+	Args     map[string]string
+}
 
 // ActionNodeUpdateStatus requests updating a node status.
 type ActionNodeUpdateStatus struct {

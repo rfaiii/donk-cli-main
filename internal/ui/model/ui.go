@@ -2029,6 +2029,16 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		}
 		cmds = append(cmds, m.sendMessage(content))
 		m.dialog.CloseFrontDialog()
+	case dialog.ActionRunNpmScript:
+		script := msg.Script
+		args := ""
+		if msg.Args != nil {
+			args = msg.Args["args"]
+		}
+		content := fmt.Sprintf("Use the npm tool to run script %q with args %q", script, args)
+		cmds = append(cmds, m.sendMessage(content))
+		m.dialog.CloseDialog(dialog.NodeSettingsID)
+		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Running npm script: "+script)))
 	case dialog.ActionAttachSkill:
 		m.dialog.CloseFrontDialog()
 		cmds = append(cmds, m.attachSkill(msg.ID, msg.Name))

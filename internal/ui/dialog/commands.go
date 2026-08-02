@@ -450,6 +450,7 @@ func (c *Commands) defaultCommands() []*CommandItem {
 		NewCommandItem(c.com.Styles, "switch_model", "Switch Model", "ctrl+l", ActionOpenDialog{ModelsID}),
 		NewCommandItem(c.com.Styles, "file_browser", "Open File Finder", "ctrl+shift+f", ActionOpenDialog{FileBrowserID}).WithAliases("finder", "/finder"),
 		NewCommandItem(c.com.Styles, "node_settings", "Node Settings", "ctrl+shift+n", ActionOpenDialog{NodeSettingsID}).WithAliases("node", "/node"),
+		NewCommandItem(c.com.Styles, "npm_script", "Run npm Script", "ctrl+shift+m", ActionRunNpmScript{}).WithAliases("npm", "/npm"),
 	}
 
 	// Only show compact command if there's an active session
