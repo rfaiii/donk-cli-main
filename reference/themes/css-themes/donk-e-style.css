@@ -1,0 +1,23 @@
+:root {
+  --donk-bg: #060606;
+  --donk-fg: #67ff67;
+  --donk-surface: #1b1b1b;
+  --donk-surface-bright: #1d1d1d;
+  --donk-cursor: #9f6eff;
+  --donk-selection-bg: #671070;
+  --donk-selection-fg: #e6e6e6;
+  --donk-red: #f88a8a;
+  --donk-bright-red: #dd1010;
+  --donk-green: #6af85f;
+  --donk-bright-green: #2fd422;
+  --donk-yellow: #fcff6f;
+  --donk-bright-yellow: #d5d918;
+  --donk-blue: #00acff;
+  --donk-bright-blue: #0000ff;
+  --donk-magenta: #9f6eff;
+  --donk-bright-magenta: #5c19df;
+  --donk-cyan: #67f5ff;
+  --donk-white: #e6e6e6;
+  --donk-bright-white: #dcdcdc;
+  --donk-font: 'JetBrainsMono Nerd Font', monospace;
+}

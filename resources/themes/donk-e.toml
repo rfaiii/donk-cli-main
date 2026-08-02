@@ -1,0 +1,62 @@
+name = "donk-e"
+description = "Donk-E Master System - Cyber-Gothic Dark Mode / Terminal Operator"
+
+# Primary canvas
+background = "#060606"
+foreground = "#67ff67"
+selection = "#671070"
+cursor = "#9f6eff"
+
+# DONK brand accents (existing fields)
+donk_purple = "#9f6eff"
+donk_pink = "#F967DC"
+donk_green = "#6af85f"
+donk_blue = "#00acff"
+
+# Layout roles
+border = "#1d1d1d"
+border_focused = "#9f6eff"
+header_bg = "#060606"
+header_fg = "#67ff67"
+footer_bg = "#060606"
+footer_fg = "#626262"
+
+# Chat role colors
+user_fg = "#67f5ff"
+assistant_fg = "#67ff67"
+system_fg = "#e6e6e6"
+error_fg = "#dd1010"
+
+# ANSI Normal palette
+ansi_black = "#1b1b1b"
+ansi_red = "#f88a8a"
+ansi_green = "#6af85f"
+ansi_yellow = "#fcff6f"
+ansi_blue = "#00acff"
+ansi_magenta = "#9f6eff"
+ansi_cyan = "#67f5ff"
+ansi_white = "#e6e6e6"
+
+# ANSI Bright palette
+ansi_bright_black = "#1d1d1d"
+ansi_bright_red = "#dd1010"
+ansi_bright_green = "#2fd422"
+ansi_bright_yellow = "#d5d918"
+ansi_bright_blue = "#0000ff"
+ansi_bright_magenta = "#5c19df"
+ansi_bright_cyan = "#67f5ff"
+ansi_bright_white = "#dcdcdc"
+
+# Syntax highlighting roles
+syntax_keyword = "#9f6eff"
+syntax_string = "#6af85f"
+syntax_function = "#9f6eff"
+syntax_variable = "#fcff6f"
+syntax_type = "#67f5ff"
+syntax_number = "#d5d918"
+syntax_comment = "#1d1d1d"
+syntax_error = "#dd1010"
+
+# Extra UI roles
+vi_cursor = "#1b1d1e"
+selection_fg = "#e6e6e6"

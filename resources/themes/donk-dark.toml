@@ -1,0 +1,23 @@
+name = "donk-dark"
+description = "Default DONK dark theme with CRUSH-inspired palette"
+background = "#0a0a0f"
+foreground = "#fafafa"
+selection = "#2a2a3e"
+cursor = "#fafafa"
+
+donk_purple = "#7D56F4"
+donk_pink = "#F967DC"
+donk_green = "#5eca89"
+donk_blue = "#43c1be"
+
+border = "#7D56F4"
+border_focused = "#F967DC"
+header_bg = "#0a0a0f"
+header_fg = "#fafafa"
+footer_bg = "#0a0a0f"
+footer_fg = "#626262"
+
+user_fg = "#43c1be"
+assistant_fg = "#fafafa"
+system_fg = "#626262"
+error_fg = "#ef6487"
