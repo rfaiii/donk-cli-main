@@ -33,6 +33,7 @@ import (
 	"github.com/rfaiii/donk-cli-main/internal/log"
 	"github.com/rfaiii/donk-cli-main/internal/lsp"
 	"github.com/rfaiii/donk-cli-main/internal/message"
+	"github.com/rfaiii/donk-cli-main/internal/node"
 	"github.com/rfaiii/donk-cli-main/internal/oauth"
 	"github.com/rfaiii/donk-cli-main/internal/oauth/copilot"
 	"github.com/rfaiii/donk-cli-main/internal/permission"
@@ -728,6 +729,8 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		tools.NewTodosTool(c.sessions),
 		tools.NewViewTool(c.lspManager, c.permissions, c.filetracker, c.skillTracker, c.cfg.WorkingDir(), c.cfg.Config().Options.SkillsPaths...),
 		tools.NewWriteTool(c.lspManager, c.permissions, c.history, c.filetracker, c.cfg.WorkingDir()),
+		node.NewNodeTool(c.permissions, c.cfg.WorkingDir()),
+		node.NewNpmTool(c.permissions, c.cfg.WorkingDir()),
 	)
 
 	// Question tool is interactive-only and not available to sub-agents.

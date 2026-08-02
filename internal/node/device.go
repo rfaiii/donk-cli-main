@@ -197,6 +197,12 @@ func DiscoverDevices() {
 		{"localhost-4200", "localhost:4200"},
 		{"localhost-8000", "localhost:8000"},
 		{"localhost-9000", "localhost:9000"},
+		{"127.0.0.1-3000", "127.0.0.1:3000"},
+		{"127.0.0.1-5173", "127.0.0.1:5173"},
+		{"127.0.0.1-8080", "127.0.0.1:8080"},
+		{"127.0.0.1-4200", "127.0.0.1:4200"},
+		{"127.0.0.1-8000", "127.0.0.1:8000"},
+		{"127.0.0.1-9000", "127.0.0.1:9000"},
 	}
 	for _, c := range candidates {
 		if conn, err := net.DialTimeout("tcp", c.addr, 250*time.Millisecond); err == nil {
