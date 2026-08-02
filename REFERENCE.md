@@ -50,3 +50,14 @@ This catalog lists key paths in `donk-cli-main` for reuse across migration work.
 - `docs/MIGRATION-PLAN.md` — Feature migration order and checklist
 - `old/docs/INTEGRATION-PLAN.md` — Integration notes for animation, health, FileBrowser/ChromeDB
 - `README.md` — Project readme
+
+## FILE FINDER WINDOW
+
+- Path: `internal/ui/dialog/filebrowser.go`, `internal/ui/dialog/filepicker.go`
+- Tests: `internal/ui/dialog/filebrowser_test.go`
+- Key behavior:
+  - Uses dynamic pane widths via `finderPaneWidths(contentW)` with a deliberate 3-cell right gutter.
+  - Draws panes independently with hard rectangles to prevent control-heavy text from spilling.
+  - Pane header row added above the divider for clearer layout.
+  - Scrollbar rendered in a reserved track column; geometry stays invariant as directories change.
+- Palette: `/file_finder` or `/finder` shortcut

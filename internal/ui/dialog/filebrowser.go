@@ -257,26 +257,27 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		BorderForeground(lipgloss.Color("#b8bec8")).
 		Background(lipgloss.Color("#111415")).
 		Padding(1)
-	// Keep the panel responsive without letting it become a full-terminal
-	// block whose lower edge appears to jump on taller screens.
+	// Use the available vertical space while retaining a small terminal inset.
+	// This intentionally covers the large application banner while the Finder is
+	// open, giving both panes more room without changing the global header.
 	width := min(max(1, area.Dx()-2), 120)
-	height := min(max(1, area.Dy()-2), 34)
+	height := max(1, area.Dy()-2)
 	contentW := max(1, width-panelStyle.GetHorizontalFrameSize())
 	contentH := max(1, height-panelStyle.GetVerticalFrameSize())
 	center := common.CenterRect(area, width, height)
 	contentX := center.Min.X + 1 + 1
 	contentY := center.Min.Y + 1 + 1
 
-	// Reserve fixed rows for the title, divider, and footer. The remaining body is a
-	// fixed-height, two-pane viewport; long paths and previews are clipped.
+	// Reserve fixed rows for the title, pane header rule, divider, and footer. The
+	// remaining body is a fixed-height, two-pane viewport; long paths and previews
+	// are clipped.
 	titleH := min(1, contentH)
-	dividerH := min(1, max(0, contentH-titleH))
-	footerH := min(3, max(0, contentH-titleH-dividerH))
-	bodyH := max(0, contentH-titleH-dividerH-footerH)
-	separatorW := 1
-	leftW := max(1, (contentW-separatorW)*2/5)
-	rightW := max(1, contentW-leftW-separatorW)
-	f.contentRect = image.Rect(contentX, contentY+titleH, contentX+leftW, contentY+titleH+bodyH)
+	paneHeaderH := min(1, max(0, contentH-titleH))
+	dividerH := min(1, max(0, contentH-titleH-paneHeaderH))
+	footerH := min(3, max(0, contentH-titleH-paneHeaderH-dividerH))
+	bodyH := max(0, contentH-titleH-paneHeaderH-dividerH-footerH)
+	leftW, rightW, listW := finderPaneWidths(contentW)
+	f.contentRect = image.Rect(contentX, contentY+titleH+paneHeaderH, contentX+leftW, contentY+titleH+paneHeaderH+bodyH)
 	f.ensureSelectedVisible(max(0, bodyH-1))
 	// Include the title row and a few cells around the label so the control is
 	// easy to hit with a mouse even when the terminal font is narrow.
@@ -298,10 +299,8 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		leftLines = append(leftLines, fmt.Sprintf("%s %s", icon, e.name))
 	}
 	visibleEntries := max(0, bodyH-1)
-	showScrollbar := len(f.entries) > visibleEntries && visibleEntries > 0
 	// Always reserve one track column, even when the list fits. This keeps the
 	// pane geometry invariant as directories change size.
-	listW := max(1, leftW-1)
 	leftLines = fixedLines(leftLines, listW, bodyH)
 	leftRendered := make([]string, len(leftLines))
 	for i, line := range leftLines {
@@ -330,14 +329,10 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	}
 	bodyLines := make([]string, bodyH)
 	for i := range bodyLines {
-		// Each pane and separator already has an exact display width. Do not run
-		// ANSI truncation over this composed row: doing so can split the styled
-		// scrollbar glyphs and make the track appear fragmented.
-		barCell := " "
-		if showScrollbar {
-			barCell = " "
-		}
-		bodyLines[i] = leftRendered[i] + barCell + lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render("│") + rightRendered[i]
+		// The panes are drawn into their own bounded rectangles below. Keeping
+		// the panel's body canvas blank prevents Lip Gloss from reflowing a
+		// composed ANSI row (notably RTF/control-heavy text) across the divider.
+		bodyLines[i] = strings.Repeat(" ", contentW)
 	}
 
 	meta := "Metadata: (none selected)"
@@ -357,6 +352,10 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	titleCell := lipgloss.NewStyle().Foreground(lipgloss.Color("#3bf66b")).Bold(true).Render(titleText)
 	contentLines := make([]string, 0, contentH)
 	contentLines = append(contentLines, titleCell)
+	if paneHeaderH > 0 {
+		paneW := leftW + 1 + rightW
+		contentLines = append(contentLines, lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render(strings.Repeat("─", paneW)+strings.Repeat(" ", max(0, contentW-paneW))))
+	}
 	contentLines = append(contentLines, bodyLines...)
 	if dividerH > 0 {
 		contentLines = append(contentLines, lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render(strings.Repeat("─", contentW)))
@@ -376,10 +375,20 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	panel := common.CenterRect(area, width, height)
 	actualContentX := panel.Min.X + panelStyle.GetHorizontalFrameSize()/2
 	actualContentY := panel.Min.Y + panelStyle.GetVerticalFrameSize()/2
-	f.contentRect = image.Rect(actualContentX, actualContentY+titleH, actualContentX+leftW, actualContentY+titleH+bodyH)
+	f.contentRect = image.Rect(actualContentX, actualContentY+titleH+paneHeaderH, actualContentX+leftW, actualContentY+titleH+paneHeaderH+bodyH)
 	closeX = actualContentX + contentW - closeW - 1
 	f.closeRect = image.Rect(closeX, actualContentY, closeX+closeW, actualContentY+titleH)
 	uv.NewStyledString(view).Draw(scr, panel)
+
+	// Draw each pane independently with wrapping disabled and a hard rectangle
+	// boundary. A long or control-heavy preview can therefore only be clipped
+	// inside the preview pane; it cannot spill into the file list.
+	for i := range leftRendered {
+		y := actualContentY + titleH + paneHeaderH + i
+		uv.NewStyledString(leftRendered[i]).Draw(scr, image.Rect(actualContentX, y, actualContentX+listW, y+1))
+		uv.NewStyledString(lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render("│")).Draw(scr, image.Rect(actualContentX+leftW, y, actualContentX+leftW+1, y+1))
+		uv.NewStyledString(rightRendered[i]).Draw(scr, image.Rect(actualContentX+leftW+1, y, actualContentX+leftW+1+rightW, y+1))
+	}
 
 	// Draw controls after the fixed panel so text layout cannot wrap or move
 	// them. These rectangles are the same ones used by HandleMsg.
@@ -389,10 +398,23 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		bar := scrollbarLines(visibleEntries, len(f.entries), f.scroll)
 		barX := actualContentX + listW
 		for i, glyph := range bar {
-			uv.NewStyledString(lipgloss.NewStyle().Foreground(lipgloss.Color("#ff5fb7")).Render(glyph)).Draw(scr, image.Rect(barX, actualContentY+titleH+i, barX+1, actualContentY+titleH+i+1))
+			uv.NewStyledString(lipgloss.NewStyle().Foreground(lipgloss.Color("#ff5fb7")).Render(glyph)).Draw(scr, image.Rect(barX, actualContentY+titleH+paneHeaderH+i, barX+1, actualContentY+titleH+paneHeaderH+i+1))
 		}
 	}
 	return nil
+}
+
+// finderPaneWidths leaves a deliberate three-cell gutter before the panel's
+// right frame. The extra space is important for terminals whose styled-string
+// renderer handles control-heavy input differently at a hard rectangle edge.
+func finderPaneWidths(contentW int) (leftW, rightW, listW int) {
+	const separatorW = 1
+	rightMargin := min(3, max(0, contentW-3))
+	innerW := max(1, contentW-rightMargin)
+	leftW = max(1, (innerW-separatorW)*2/5)
+	rightW = max(1, innerW-leftW-separatorW)
+	listW = max(1, leftW-1)
+	return leftW, rightW, listW
 }
 
 func closeLabel(contentW int) string {

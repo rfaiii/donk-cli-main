@@ -36,6 +36,15 @@ func TestFixedLinesClipsUnbrokenTextAndNormalizesCarriageReturns(t *testing.T) {
 	require.Equal(t, "0123456…", lines[0])
 }
 
+func TestFixedLinesDoesNotPreserveRtfControlSequencesAsLayoutCommands(t *testing.T) {
+	lines := fixedLines([]string{"{\\rtf1\\ansi\\ansicpg1252\\cocoartf2868"}, 16, 1)
+
+	require.Len(t, lines, 1)
+	require.Equal(t, 16, ansi.StringWidth(lines[0]))
+	require.NotContains(t, lines[0], "\n")
+	require.NotContains(t, lines[0], "\r")
+}
+
 func TestFileBrowserKeepsSelectedEntryVisible(t *testing.T) {
 	f := &FileBrowser{
 		entries:  make([]fileBrowserEntry, 12),
@@ -69,4 +78,19 @@ func TestScrollbarLinesShowsMovingBlock(t *testing.T) {
 func TestCloseLabelUsesUppercaseButton(t *testing.T) {
 	require.Equal(t, "[X]", closeLabel(40))
 	require.Equal(t, "X", closeLabel(8))
+}
+
+func TestFinderPaneWidthsLeavesRightGutter(t *testing.T) {
+	left, right, list := finderPaneWidths(80)
+
+	require.Equal(t, left-1, list)
+	require.Equal(t, 77, left+1+right)
+}
+
+func TestFinderPaneWidthsHandlesNarrowContent(t *testing.T) {
+	left, right, list := finderPaneWidths(2)
+
+	require.GreaterOrEqual(t, left, 1)
+	require.GreaterOrEqual(t, right, 1)
+	require.GreaterOrEqual(t, list, 1)
 }
