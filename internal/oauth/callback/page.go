@@ -113,7 +113,7 @@ func Write(w io.Writer, r Result) error {
 	data.Favicon = template.URL("data:image/svg+xml;base64," + base64.StdEncoding.EncodeToString(art))
 
 	if r.Failed() {
-		data.Title = "Authorization failed — Crush"
+		data.Title = "Authorization failed — DONK"
 		data.Kind = "failed"
 		data.Heading = "Authorization failed"
 		data.Detail = "Donk was not granted access to"
@@ -122,9 +122,9 @@ func Write(w io.Writer, r Result) error {
 		}
 		// A failed page keeps itself open: the reader needs the reason,
 		// and closing the tab out from under them would take it away.
-		data.Status = "Close this tab and try again from Crush."
+		data.Status = "Close this tab and try again from DONK."
 	} else {
-		data.Title = "Authorized — Crush"
+		data.Title = "Authorized — DONK"
 		data.Kind = "ok"
 		data.Heading = "You’re all set"
 		data.Detail = "Donk is now connected to"
