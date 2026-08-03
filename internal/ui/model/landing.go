@@ -4,8 +4,8 @@ import (
 	"image"
 
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/workspace"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/workspace"
 	"github.com/charmbracelet/ultraviolet/layout"
 )
 
@@ -31,7 +31,7 @@ func (m *UI) landingView() string {
 	parts := []string{cwd, "", button}
 
 	m.finderButtonRect = image.Rect(m.layout.main.Min.X, m.layout.main.Min.Y+3, m.layout.main.Min.X+lipgloss.Width(button), m.layout.main.Min.Y+3+lipgloss.Height(button))
-	parts = append(parts, "", m.modelInfo(width))
+	parts = append(parts, "", m.modelInfo(width), "", m.nodeInfo(min(42, width), 3))
 	infoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)
 
 	var remainingHeightArea image.Rectangle
@@ -45,7 +45,7 @@ func (m *UI) landingView() string {
 	lspSection := m.lspInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
 	mcpSection := m.mcpInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
 	skillsSection := m.skillsInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
-	nodeSection := m.nodeInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
+	nodeSection := m.nodeInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()))
 
 	content := lipgloss.JoinHorizontal(lipgloss.Left, lspSection, " ", mcpSection, " ", skillsSection, " ", nodeSection)
 

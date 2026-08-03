@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/csync"
+	"github.com/charmbracelet/crush/internal/csync"
 	"github.com/stretchr/testify/require"
 )
 

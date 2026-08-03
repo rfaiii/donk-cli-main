@@ -9,9 +9,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/rfaiii/donk-cli-main/internal/home"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/home"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/util"
 )
 
 // markProjectInitializedCmd marks the current project as initialized in the config.
@@ -49,25 +49,11 @@ func (m *UI) updateInitializeView(msg tea.KeyPressMsg) (cmds []tea.Cmd) {
 
 // initializeProject starts project initialization and transitions to the landing view.
 func (m *UI) initializeProject() tea.Cmd {
-	// clear the session
-	var cmds []tea.Cmd
-	if cmd := m.newSession(); cmd != nil {
-		cmds = append(cmds, cmd)
-	}
-	initialize := func() tea.Msg {
-		initPrompt, err := m.com.Workspace.InitializePrompt()
-		if err != nil {
-			return util.InfoMsg{
-				Type: util.InfoTypeError,
-				Msg:  fmt.Sprintf("Failed to initialize project: %v", err),
-			}
-		}
-		return sendMessageMsg{Content: initPrompt}
-	}
-	// Mark the project as initialized
-	cmds = append(cmds, initialize, m.markProjectInitializedCmd())
-
-	return tea.Sequence(cmds...)
+	// Initialization is an explicit, local project-state operation. Do not
+	// send an analysis prompt to the agent here; that makes a simple menu action
+	// unexpectedly run a long coding task.
+	m.setState(uiLanding, uiFocusEditor)
+	return m.markProjectInitializedCmd()
 }
 
 // skipInitializeProject skips project initialization and transitions to the landing view.

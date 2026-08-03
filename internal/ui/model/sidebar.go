@@ -7,10 +7,11 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	mcp "github.com/rfaiii/donk-cli-main/internal/agent/tools/mcp"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/logo"
+	mcp "github.com/charmbracelet/crush/internal/agent/tools/mcp"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/localmodel"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/logo"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
 )
@@ -57,7 +58,11 @@ func (m *UI) modelInfo(width int) string {
 	if model != nil {
 		modelName = model.CatwalkCfg.Name
 	}
-	return common.ModelInfo(m.com.Styles, modelName, providerName, reasoningInfo, modelContext, width, m.hyperCredits)
+	runtime := common.ModelRuntimeUnknown
+	if model != nil && model.ModelCfg.Provider == localmodel.ManagedOllamaProviderID {
+		runtime = m.ollamaRuntime
+	}
+	return common.ModelInfoWithRuntime(m.com.Styles, modelName, providerName, reasoningInfo, modelContext, width, m.hyperCredits, runtime)
 }
 
 // updateSidebarScrollState renders the sidebar content and computes scroll

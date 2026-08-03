@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/csync"
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
-	"github.com/rfaiii/donk-cli-main/internal/oauth/copilot"
+	"github.com/charmbracelet/crush/internal/csync"
+	"github.com/charmbracelet/crush/internal/oauth"
+	"github.com/charmbracelet/crush/internal/oauth/copilot"
 	"github.com/invopop/jsonschema"
 )
 
@@ -261,6 +261,7 @@ type TUIOptions struct {
 	Completions Completions `json:"completions,omitzero" jsonschema:"description=Completions UI options"`
 	Transparent *bool       `json:"transparent,omitempty" jsonschema:"description=Enable transparent background for the TUI interface,default=false"`
 	Scrollbar   string      `json:"scrollbar,omitempty" jsonschema:"description=Chat scrollbar visibility,enum=default,enum=always,enum=never,default=default"`
+	Theme       string      `json:"theme,omitempty" jsonschema:"description=Color theme name,default=rich-aizen-green"`
 }
 
 // Completions defines options for the completions UI.
@@ -766,6 +767,8 @@ func allToolNames() []string {
 	return []string{
 		"agent",
 		"bash",
+		"node",
+		"npm",
 		"crush_info",
 		"crush_logs",
 		"job_output",

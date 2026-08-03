@@ -15,14 +15,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/app"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/csync"
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
-	"github.com/rfaiii/donk-cli-main/internal/version"
+	"github.com/charmbracelet/crush/internal/app"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/csync"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/crush/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/version"
 	"github.com/google/uuid"
 )
 

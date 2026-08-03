@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/event"
+	"github.com/charmbracelet/crush/internal/event"
 )
 
 func (a *sessionAgent) eventPromptSent(sessionID string) {

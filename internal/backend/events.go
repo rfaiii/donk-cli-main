@@ -5,10 +5,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	mcptools "github.com/rfaiii/donk-cli-main/internal/agent/tools/mcp"
-	"github.com/rfaiii/donk-cli-main/internal/app"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	mcptools "github.com/charmbracelet/crush/internal/agent/tools/mcp"
+	"github.com/charmbracelet/crush/internal/app"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/pubsub"
 )
 
 // SubscribeEvents returns a per-caller event channel for a workspace.

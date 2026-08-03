@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/lock"
-	"github.com/rfaiii/donk-cli-main/internal/version"
+	"github.com/charmbracelet/crush/internal/lock"
+	"github.com/charmbracelet/crush/internal/version"
 )
 
 // ErrDataDirLocked is returned by Connect when the data directory is

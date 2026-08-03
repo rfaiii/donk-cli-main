@@ -17,11 +17,11 @@ import (
 	"unicode/utf8"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/filepathext"
-	"github.com/rfaiii/donk-cli-main/internal/filetracker"
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
+	"github.com/charmbracelet/crush/internal/filepathext"
+	"github.com/charmbracelet/crush/internal/filetracker"
+	"github.com/charmbracelet/crush/internal/lsp"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/skills"
 )
 
 //go:embed view.md.tpl

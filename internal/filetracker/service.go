@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
+	"github.com/charmbracelet/crush/internal/db"
 )
 
 // Service defines the interface for tracking file reads in sessions.

@@ -1,16 +1,16 @@
-// Package node defines the local node/device registry used by the UI and
-// agent tools. This is intentionally dependency-light so it can be shared
-// without import cycles.
+// Package node contains the device registry and discovery primitives used by
+// the DONK NODE connection UI and future remote transports.
 package node
 
 import (
 	"fmt"
 	"net"
+	"slices"
+	"sort"
 	"sync"
 	"time"
 )
 
-// DeviceStatus represents the connectivity state of a node/device.
 type DeviceStatus string
 
 const (
@@ -19,7 +19,6 @@ const (
 	DeviceStatusError   DeviceStatus = "error"
 )
 
-// Device represents a discoverable node/device in the local network or via IP.
 type Device struct {
 	ID             string
 	Name           string
@@ -27,9 +26,10 @@ type Device struct {
 	ConnectionType string
 	Address        string
 	Status         DeviceStatus
+	LastSeen       time.Time
+	TransportURL   string
 }
 
-// DisplayName returns the best human-readable name for the device.
 func (d Device) DisplayName() string {
 	if d.Nickname != "" {
 		return d.Nickname
@@ -40,7 +40,6 @@ func (d Device) DisplayName() string {
 	return d.ID
 }
 
-// ConnectionLabel returns a short connection descriptor.
 func (d Device) ConnectionLabel() string {
 	if d.ConnectionType == "" {
 		return "local"
@@ -48,173 +47,159 @@ func (d Device) ConnectionLabel() string {
 	return d.ConnectionType
 }
 
-// Manager stores the current set of known devices.
 type Manager struct {
-	mu       sync.Mutex
+	mu       sync.RWMutex
 	devices  map[string]Device
-	onChange func()
+	onChange func([]Device)
 }
 
-// NewManager creates a new device manager.
-func NewManager() *Manager {
-	return &Manager{
-		devices: make(map[string]Device),
-	}
-}
+func NewManager() *Manager { return &Manager{devices: make(map[string]Device)} }
 
-// OnChange registers a callback invoked after mutations.
-func (m *Manager) OnChange(fn func()) {
+func (m *Manager) OnChange(fn func([]Device)) {
 	m.mu.Lock()
 	m.onChange = fn
 	m.mu.Unlock()
 }
 
-func (m *Manager) changed() {
-	if fn := func() func() {
-		m.mu.Lock()
-		defer m.mu.Unlock()
-		return m.onChange
-	}(); fn != nil {
-		fn()
-	}
-}
-
-// Devices returns a snapshot of known devices.
 func (m *Manager) Devices() []Device {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	out := make([]Device, 0, len(m.devices))
-	for _, d := range m.devices {
-		out = append(out, d)
+	m.mu.RLock()
+	devices := make([]Device, 0, len(m.devices))
+	for _, device := range m.devices {
+		devices = append(devices, device)
 	}
-	return out
+	m.mu.RUnlock()
+	sort.Slice(devices, func(i, j int) bool { return devices[i].ID < devices[j].ID })
+	return devices
 }
 
-// Upsert adds or updates a device.
+func (m *Manager) emit() {
+	m.mu.RLock()
+	fn := m.onChange
+	m.mu.RUnlock()
+	if fn != nil {
+		fn(m.Devices())
+	}
+}
+
 func (m *Manager) Upsert(device Device) {
 	if device.ID == "" {
 		device.ID = fmt.Sprintf("%s-%s", device.Name, device.Address)
 	}
+	if device.LastSeen.IsZero() && device.Status == DeviceStatusOnline {
+		device.LastSeen = time.Now()
+	}
 	m.mu.Lock()
 	m.devices[device.ID] = device
 	m.mu.Unlock()
-	m.changed()
+	m.emit()
 }
 
-// SetStatus updates only the status of a known device.
 func (m *Manager) SetStatus(id string, status DeviceStatus) {
 	m.mu.Lock()
-	if d, ok := m.devices[id]; ok {
-		d.Status = status
-		m.devices[id] = d
+	if device, ok := m.devices[id]; ok {
+		device.Status = status
+		if status == DeviceStatusOnline {
+			device.LastSeen = time.Now()
+		}
+		m.devices[id] = device
 	}
 	m.mu.Unlock()
-	m.changed()
+	m.emit()
 }
 
-// SetNickname updates the nickname for a known device.
 func (m *Manager) SetNickname(id, nickname string) {
 	m.mu.Lock()
-	if d, ok := m.devices[id]; ok {
-		d.Nickname = nickname
-		m.devices[id] = d
+	if device, ok := m.devices[id]; ok {
+		device.Nickname, m.devices[id] = nickname, device
 	}
 	m.mu.Unlock()
-	m.changed()
+	m.emit()
 }
 
-// Remove deletes a device.
+func (m *Manager) SetTransportURL(id, endpoint string) {
+	m.mu.Lock()
+	if device, ok := m.devices[id]; ok {
+		device.TransportURL = endpoint
+		m.devices[id] = device
+	}
+	m.mu.Unlock()
+	m.emit()
+}
+
 func (m *Manager) Remove(id string) {
 	m.mu.Lock()
 	delete(m.devices, id)
 	m.mu.Unlock()
-	m.changed()
+	m.emit()
 }
 
-// EnsureDefault adds the default local device if none exist.
 func (m *Manager) EnsureDefault() {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	if len(m.devices) > 0 {
+	if len(m.Devices()) != 0 {
 		return
 	}
-	m.devices["local"] = Device{
-		ID:             "local",
-		Name:           "local",
-		Nickname:       "Local Device",
-		ConnectionType: "local",
-		Address:        "127.0.0.1",
-		Status:         DeviceStatusOnline,
+	m.Upsert(Device{ID: "local", Name: "local", Nickname: "Local Device", ConnectionType: "local", Address: "127.0.0.1", Status: DeviceStatusOnline})
+}
+
+// Probe is a network endpoint to test during discovery.
+type Probe struct{ ID, Name, Address, ConnectionType string }
+
+type ProbeFunc func(Probe) bool
+
+func Discover(probes []Probe, probe ProbeFunc) []Device {
+	devices := make([]Device, 0, len(probes))
+	for _, candidate := range probes {
+		if probe == nil || !probe(candidate) {
+			continue
+		}
+		devices = append(devices, Device{ID: candidate.ID, Name: candidate.Name, Address: candidate.Address, ConnectionType: candidate.ConnectionType, Status: DeviceStatusOnline, LastSeen: time.Now()})
 	}
-	if m.onChange != nil {
-		m.onChange()
+	return devices
+}
+
+func TCPProbe(timeout time.Duration) ProbeFunc {
+	if timeout <= 0 {
+		timeout = 250 * time.Millisecond
+	}
+	return func(candidate Probe) bool {
+		conn, err := net.DialTimeout("tcp", candidate.Address, timeout)
+		if err != nil {
+			return false
+		}
+		_ = conn.Close()
+		return true
 	}
 }
 
-// defaultManager is the process-wide device registry used by UI panels.
 var defaultManager = NewManager()
 
-// Devices returns a snapshot of the default device registry.
-func Devices() []Device {
-	return defaultManager.Devices()
-}
+func Devices() []Device                              { return defaultManager.Devices() }
+func UpsertDevice(device Device)                     { defaultManager.Upsert(device) }
+func SetDeviceStatus(id string, status DeviceStatus) { defaultManager.SetStatus(id, status) }
+func SetDeviceNickname(id, nickname string)          { defaultManager.SetNickname(id, nickname) }
+func SetDeviceTransportURL(id, endpoint string)      { defaultManager.SetTransportURL(id, endpoint) }
+func RemoveDevice(id string)                         { defaultManager.Remove(id) }
+func EnsureDefaultDevice()                           { defaultManager.EnsureDefault() }
 
-// UpsertDevice adds or updates a device in the default registry.
-func UpsertDevice(device Device) {
-	defaultManager.Upsert(device)
-}
-
-// SetDeviceStatus updates the status of a device in the default registry.
-func SetDeviceStatus(id string, status DeviceStatus) {
-	defaultManager.SetStatus(id, status)
-}
-
-// SetDeviceNickname updates the nickname of a device in the default registry.
-func SetDeviceNickname(id, nickname string) {
-	defaultManager.SetNickname(id, nickname)
-}
-
-// RemoveDevice deletes a device from the default registry.
-func RemoveDevice(id string) {
-	defaultManager.Remove(id)
-}
-
-// EnsureDefaultDevice adds the default local device if the registry is empty.
-func EnsureDefaultDevice() {
-	defaultManager.EnsureDefault()
-}
-
-// DiscoverDevices probes common local ports and registers responsive endpoints
-// as devices. It is intentionally best-effort and non-blocking.
 func DiscoverDevices() {
-	candidates := []struct {
-		name string
-		addr string
-	}{
-		{"localhost-3000", "localhost:3000"},
-		{"localhost-5173", "localhost:5173"},
-		{"localhost-8080", "localhost:8080"},
-		{"localhost-4200", "localhost:4200"},
-		{"localhost-8000", "localhost:8000"},
-		{"localhost-9000", "localhost:9000"},
-		{"127.0.0.1-3000", "127.0.0.1:3000"},
-		{"127.0.0.1-5173", "127.0.0.1:5173"},
-		{"127.0.0.1-8080", "127.0.0.1:8080"},
-		{"127.0.0.1-4200", "127.0.0.1:4200"},
-		{"127.0.0.1-8000", "127.0.0.1:8000"},
-		{"127.0.0.1-9000", "127.0.0.1:9000"},
-	}
-	for _, c := range candidates {
-		if conn, err := net.DialTimeout("tcp", c.addr, 250*time.Millisecond); err == nil {
-			_ = conn.Close()
-			UpsertDevice(Device{
-				ID:             c.name,
-				Name:           c.name,
-				Nickname:       "",
-				ConnectionType: "local",
-				Address:        c.addr,
-				Status:         DeviceStatusOnline,
-			})
+	ports := []int{3000, 5173, 8080, 4200, 8000, 9000}
+	probes := make([]Probe, 0, len(ports)*2)
+	for _, host := range []string{"localhost", "127.0.0.1"} {
+		for _, port := range ports {
+			address := fmt.Sprintf("%s:%d", host, port)
+			probes = append(probes, Probe{ID: host + "-" + fmt.Sprint(port), Name: address, Address: address, ConnectionType: "tcp"})
 		}
 	}
+	for _, device := range Discover(probes, TCPProbe(250*time.Millisecond)) {
+		UpsertDevice(device)
+	}
+}
+
+// DefaultProbes is exposed for callers that want to run discovery on their
+// own scheduler without using the process-wide registry.
+func DefaultProbes() []Probe {
+	probes := []Probe{}
+	for _, device := range Devices() {
+		probes = append(probes, Probe{ID: device.ID, Name: device.Name, Address: device.Address, ConnectionType: device.ConnectionType})
+	}
+	return slices.Clone(probes)
 }

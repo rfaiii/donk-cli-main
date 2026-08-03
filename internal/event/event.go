@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/version"
+	"github.com/charmbracelet/crush/internal/version"
 	"github.com/posthog/posthog-go"
 )
 

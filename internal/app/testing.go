@@ -5,10 +5,10 @@ import (
 	"sync"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/rfaiii/donk-cli-main/internal/agent/notify"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
-	"github.com/rfaiii/donk-cli-main/internal/question"
+	"github.com/charmbracelet/crush/internal/agent/notify"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/question"
 )
 
 // NewForTest constructs a minimal [App] suitable for in-process tests

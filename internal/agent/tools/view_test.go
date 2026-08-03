@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/filetracker"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/filetracker"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

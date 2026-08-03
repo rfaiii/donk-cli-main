@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/agent/hyper"
-	"github.com/rfaiii/donk-cli-main/internal/home"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/agent/hyper"
+	"github.com/charmbracelet/crush/internal/home"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -39,10 +39,36 @@ type ModelContextInfo struct {
 	EstimatedUsage bool
 }
 
+// ModelRuntimeStatus describes the local runtime state of the selected model.
+// It is intentionally independent from the model's identity/provider.
+type ModelRuntimeStatus string
+
+const (
+	ModelRuntimeUnknown ModelRuntimeStatus = "unknown"
+	ModelRuntimeLoading ModelRuntimeStatus = "loading"
+	ModelRuntimeReady   ModelRuntimeStatus = "ready"
+	ModelRuntimeFailed  ModelRuntimeStatus = "failed"
+)
+
 // ModelInfo renders model information including name, provider, reasoning
 // settings, and optional context usage/cost.
 func ModelInfo(t *styles.Styles, modelName, providerName, reasoningInfo string, context *ModelContextInfo, width int, hyperCredits *int) string {
-	modelIcon := t.ModelInfo.Icon.Render(styles.ModelIcon)
+	return ModelInfoWithRuntime(t, modelName, providerName, reasoningInfo, context, width, hyperCredits, ModelRuntimeUnknown)
+}
+
+// ModelInfoWithRuntime renders model information and colors the model diamond
+// according to the selected local model's runtime state.
+func ModelInfoWithRuntime(t *styles.Styles, modelName, providerName, reasoningInfo string, context *ModelContextInfo, width int, hyperCredits *int, runtime ModelRuntimeStatus) string {
+	iconStyle := t.ModelInfo.Icon
+	switch runtime {
+	case ModelRuntimeLoading:
+		iconStyle = t.Resource.BusyIcon
+	case ModelRuntimeReady:
+		iconStyle = t.Resource.OnlineIcon
+	case ModelRuntimeFailed:
+		iconStyle = t.Resource.ErrorIcon
+	}
+	modelIcon := iconStyle.Render(styles.ModelIcon)
 	modelName = t.ModelInfo.Name.Render(modelName)
 
 	// Build first line with model name and optionally provider on the same line

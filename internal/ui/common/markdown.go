@@ -6,8 +6,8 @@ import (
 
 	"charm.land/glamour/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
-	"github.com/rfaiii/donk-cli-main/internal/ui/xchroma"
+	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/ui/xchroma"
 )
 
 const formatterName = "crush"

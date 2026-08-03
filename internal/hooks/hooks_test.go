@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/shell"
 	"github.com/stretchr/testify/require"
 )
 

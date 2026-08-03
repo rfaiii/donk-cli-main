@@ -10,7 +10,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/glamour/v2/ansi"
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/ui/diffview"
+	"github.com/charmbracelet/crush/internal/ui/diffview"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -93,6 +93,17 @@ func quickStyle(o quickStyleOpts) Styles {
 	)
 
 	s.Background = o.bgBase
+	s.Dialog.FileBrowser.Panel = lipgloss.NewStyle().Background(o.bgLessVisible)
+	s.Dialog.FileBrowser.Border = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
+	s.Dialog.FileBrowser.Title = lipgloss.NewStyle().Foreground(o.primary).Bold(true)
+	s.Dialog.FileBrowser.Close = lipgloss.NewStyle().Foreground(o.destructive).Bold(true)
+	s.Dialog.FileBrowser.Rule = lipgloss.NewStyle().Foreground(o.fgMostSubtle)
+	s.Dialog.FileBrowser.Directory = lipgloss.NewStyle().Foreground(o.primary)
+	s.Dialog.FileBrowser.Entry = lipgloss.NewStyle().Foreground(o.fgBase)
+	s.Dialog.FileBrowser.Selected = lipgloss.NewStyle().Background(lipgloss.Color("#f5bde6")).Foreground(o.onPrimary)
+	s.Dialog.FileBrowser.Preview = lipgloss.NewStyle().Foreground(o.fgBase)
+	s.Dialog.FileBrowser.Footer = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
+	s.Dialog.FileBrowser.Error = lipgloss.NewStyle().Foreground(o.error)
 
 	// Populate color fields
 	s.WorkingGradFromColor = o.primary
@@ -803,7 +814,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Resource.OfflineIcon = lipgloss.NewStyle().Foreground(o.bgMostVisible).SetString("●")
 	s.Resource.BusyIcon = s.Resource.OfflineIcon.Foreground(o.busy)
 	s.Resource.ErrorIcon = s.Resource.OfflineIcon.Foreground(o.destructive)
-	s.Resource.OnlineIcon = s.Resource.OfflineIcon.Foreground(o.successMostSubtle)
+	s.Resource.OnlineIcon = s.Resource.OfflineIcon.Foreground(o.success)
 	s.Resource.NeedsAuthIcon = s.Resource.OfflineIcon.Foreground(o.info)
 	s.Resource.DisabledIcon = lipgloss.NewStyle().Foreground(o.fgMoreSubtle).SetString("●")
 	s.Resource.AdditionalText = lipgloss.NewStyle().Foreground(o.fgMostSubtle)

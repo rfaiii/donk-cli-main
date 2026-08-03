@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/config"
 	xstrings "github.com/charmbracelet/x/exp/strings"
 )
 

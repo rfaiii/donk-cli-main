@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 )
 
 // GenericToolMessageItem is a message item that represents an unknown tool call.

@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"charm.land/bubbles/v2/textarea"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/session"
-	"github.com/rfaiii/donk-cli-main/internal/ui/chat"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/session"
+	"github.com/charmbracelet/crush/internal/ui/chat"
+	"github.com/charmbracelet/crush/internal/ui/common"
 )
 
 // testMessageItem is a minimal chat item used to populate the chat list

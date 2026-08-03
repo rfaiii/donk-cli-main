@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/rfaiii/donk-cli-main/internal/question"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/question"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/stretchr/testify/require"
 )

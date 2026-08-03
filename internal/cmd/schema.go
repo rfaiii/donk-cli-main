@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/agent/hyper"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/discover"
+	"github.com/charmbracelet/crush/internal/agent/hyper"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/discover"
 	"github.com/invopop/jsonschema"
 	"github.com/spf13/cobra"
 )

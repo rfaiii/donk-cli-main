@@ -3,9 +3,9 @@ package shell
 import (
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/session"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/session"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )

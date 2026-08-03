@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/event"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/event"
+	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/google/uuid"
 	"github.com/zeebo/xxh3"
 )

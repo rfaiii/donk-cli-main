@@ -7,9 +7,9 @@ import (
 	"log/slog"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools"
-	"github.com/rfaiii/donk-cli-main/internal/hooks"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
+	"github.com/charmbracelet/crush/internal/agent/tools"
+	"github.com/charmbracelet/crush/internal/hooks"
+	"github.com/charmbracelet/crush/internal/permission"
 	"github.com/tidwall/sjson"
 )
 

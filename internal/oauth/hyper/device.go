@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/hyper"
-	"github.com/rfaiii/donk-cli-main/internal/event"
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
+	"github.com/charmbracelet/crush/internal/agent/hyper"
+	"github.com/charmbracelet/crush/internal/event"
+	"github.com/charmbracelet/crush/internal/oauth"
 )
 
 // DeviceAuthResponse contains the response from the device authorization endpoint.

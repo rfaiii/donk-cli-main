@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/lock"
+	"github.com/charmbracelet/crush/internal/lock"
 	"github.com/stretchr/testify/require"
 )
 

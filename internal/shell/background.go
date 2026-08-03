@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/csync"
+	"github.com/charmbracelet/crush/internal/csync"
 )
 
 const (

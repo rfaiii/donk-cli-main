@@ -5,10 +5,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/ui/list"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/ui/list"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 )
 
 // BenchmarkResizeSession reproduces the resize re-render path over a real

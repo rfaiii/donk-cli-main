@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/rfaiii/donk-cli-main/internal/ui/diffview"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/ui/diffview"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 )
 
 // DiffFormatter returns a diff formatter with the given styles that can be

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/diffdetect"
-	"github.com/rfaiii/donk-cli-main/internal/stringext"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/diffdetect"
+	"github.com/charmbracelet/crush/internal/stringext"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 )
 
 type toolResultContentWidths struct {

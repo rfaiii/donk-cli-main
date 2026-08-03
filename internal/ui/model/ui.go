@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -27,39 +28,40 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/agent/hyper"
-	"github.com/rfaiii/donk-cli-main/internal/agent/notify"
-	agenttools "github.com/rfaiii/donk-cli-main/internal/agent/tools"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools/mcp"
-	"github.com/rfaiii/donk-cli-main/internal/app"
-	"github.com/rfaiii/donk-cli-main/internal/clipboard"
-	"github.com/rfaiii/donk-cli-main/internal/commands"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/event"
-	"github.com/rfaiii/donk-cli-main/internal/fsext"
-	"github.com/rfaiii/donk-cli-main/internal/history"
-	"github.com/rfaiii/donk-cli-main/internal/home"
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/node"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
-	"github.com/rfaiii/donk-cli-main/internal/question"
-	"github.com/rfaiii/donk-cli-main/internal/session"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
-	"github.com/rfaiii/donk-cli-main/internal/stringext"
-	"github.com/rfaiii/donk-cli-main/internal/ui/anim"
-	"github.com/rfaiii/donk-cli-main/internal/ui/attachments"
-	"github.com/rfaiii/donk-cli-main/internal/ui/chat"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/completions"
-	"github.com/rfaiii/donk-cli-main/internal/ui/dialog"
-	fimage "github.com/rfaiii/donk-cli-main/internal/ui/image"
-	"github.com/rfaiii/donk-cli-main/internal/ui/logo"
-	"github.com/rfaiii/donk-cli-main/internal/ui/notification"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
-	"github.com/rfaiii/donk-cli-main/internal/version"
-	"github.com/rfaiii/donk-cli-main/internal/workspace"
+	"github.com/charmbracelet/crush/internal/agent/hyper"
+	"github.com/charmbracelet/crush/internal/agent/notify"
+	agenttools "github.com/charmbracelet/crush/internal/agent/tools"
+	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
+	"github.com/charmbracelet/crush/internal/app"
+	"github.com/charmbracelet/crush/internal/clipboard"
+	"github.com/charmbracelet/crush/internal/commands"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/event"
+	"github.com/charmbracelet/crush/internal/fsext"
+	"github.com/charmbracelet/crush/internal/history"
+	"github.com/charmbracelet/crush/internal/home"
+	"github.com/charmbracelet/crush/internal/localmodel"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/node"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/question"
+	"github.com/charmbracelet/crush/internal/session"
+	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/crush/internal/stringext"
+	"github.com/charmbracelet/crush/internal/ui/anim"
+	"github.com/charmbracelet/crush/internal/ui/attachments"
+	"github.com/charmbracelet/crush/internal/ui/chat"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/completions"
+	"github.com/charmbracelet/crush/internal/ui/dialog"
+	fimage "github.com/charmbracelet/crush/internal/ui/image"
+	"github.com/charmbracelet/crush/internal/ui/logo"
+	"github.com/charmbracelet/crush/internal/ui/notification"
+	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/version"
+	"github.com/charmbracelet/crush/internal/workspace"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
 	"github.com/charmbracelet/ultraviolet/screen"
@@ -132,6 +134,11 @@ type shellStreamMsg struct {
 }
 
 type (
+	ollamaModelStateMsg struct {
+		model string
+		state common.ModelRuntimeStatus
+		err   error
+	}
 	// cancelTimerExpiredMsg is sent when the cancel timer expires.
 	cancelTimerExpiredMsg struct{}
 	// userCommandsLoadedMsg is sent when user commands are loaded.
@@ -206,6 +213,7 @@ type UI struct {
 	// skip the expensive style rebuild when switching to a provider that
 	// resolves to the same theme.
 	themeKey string
+	themeID  string
 
 	focus uiFocusState
 	state uiState
@@ -237,7 +245,8 @@ type UI struct {
 	// Escape works for bang commands the same way it does for agent runs.
 	bangCancel context.CancelFunc
 
-	header *header
+	header        *header
+	ollamaRuntime common.ModelRuntimeStatus
 
 	// sendProgressBar instructs the TUI to send progress bar updates to the
 	// terminal.
@@ -368,6 +377,7 @@ type UI struct {
 
 // New creates a new instance of the [UI] model.
 func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
+	node.EnsureDefaultDevice()
 	// Editor components
 	ta := textarea.New()
 	ta.SetStyles(com.Styles.Editor.Textarea)
@@ -446,11 +456,17 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 	}
 
 	status := NewStatus(com, ui)
+	ui.status = status
 
 	// Seed the active theme key from the large model provider so the
 	// first model selection can correctly skip a redundant theme swap.
 	if cfg := com.Config(); cfg != nil {
-		ui.themeKey = styles.ThemeKeyForProvider(cfg.Models[config.SelectedModelTypeLarge].Provider)
+		ui.themeID = styles.DefaultTheme
+		if cfg.Options != nil && cfg.Options.TUI != nil && cfg.Options.TUI.Theme != "" {
+			ui.themeID = cfg.Options.TUI.Theme
+		}
+		ui.themeKey = "theme:" + ui.themeID
+		ui.applyTheme(styles.ThemeForName(ui.themeID))
 	}
 
 	// Seed the beastmode cache once at construction; afterwards it is kept
@@ -461,7 +477,6 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 	ui.setEditorPrompt(beastmode)
 	ui.randomizePlaceholders()
 	ui.textarea.Placeholder = ui.readyPlaceholder
-	ui.status = status
 
 	// Initialize compact mode from config
 	ui.forceCompactMode = com.Config().Options.TUI.CompactMode
@@ -517,7 +532,30 @@ func (m *UI) Init() tea.Cmd {
 		cmds = append(cmds, cmd)
 	}
 	cmds = append(cmds, m.checkPendingMCPAuth())
+	if model := m.selectedOllamaModel(); model != "" {
+		m.ollamaRuntime = common.ModelRuntimeLoading
+		cmds = append(cmds, m.loadOllamaModelCmd(model))
+	}
 	return tea.Batch(cmds...)
+}
+
+func (m *UI) selectedOllamaModel() string {
+	model := m.com.Config().Models[config.SelectedModelTypeLarge]
+	if model.Provider != localmodel.ManagedOllamaProviderID {
+		return ""
+	}
+	return model.Model
+}
+
+func (m *UI) loadOllamaModelCmd(name string) tea.Cmd {
+	return func() tea.Msg {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+		defer cancel()
+		if err := localmodel.NewOllama("").LoadModel(ctx, name); err != nil {
+			return ollamaModelStateMsg{model: name, state: common.ModelRuntimeFailed, err: err}
+		}
+		return ollamaModelStateMsg{model: name, state: common.ModelRuntimeReady}
+	}
 }
 
 // loadInitialSession loads the initial session if one was specified on startup.
@@ -689,6 +727,13 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.notifyWindowFocused = true
 	case tea.BlurMsg:
 		m.notifyWindowFocused = false
+	case ollamaModelStateMsg:
+		if msg.model == m.selectedOllamaModel() {
+			m.ollamaRuntime = msg.state
+			if msg.err != nil {
+				cmds = append(cmds, util.ReportError(fmt.Errorf("load Ollama model %q: %w", msg.model, msg.err)))
+			}
+		}
 	case pubsub.Event[notify.Notification]:
 		if cmd := m.handleAgentNotification(msg.Payload); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -1774,6 +1819,12 @@ func (m *UI) handleChildSessionMessage(event pubsub.Event[message.Message]) tea.
 }
 
 func (m *UI) handleDialogMsg(msg tea.Msg) tea.Cmd {
+	if update, ok := msg.(dialog.NodeSettingsUpdateMsg); ok {
+		if settings, exists := m.dialog.Dialog(dialog.NodeSettingsID).(*dialog.NodeSettings); exists {
+			settings.HandleMsg(update)
+		}
+		return nil
+	}
 	action := m.dialog.Update(msg)
 	return m.handleDialogAction(action)
 }
@@ -1824,7 +1875,8 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		if cmd := m.openDialog(msg.DialogID); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
-
+	case dialog.ActionSelectTheme:
+		m.setTheme(msg.ID)
 	// Command dialog messages.
 	case dialog.ActionToggleBeastmodeMode:
 		m.toggleBeastmodeMode()
@@ -1952,6 +2004,10 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		if cmd := m.handleSelectModel(msg); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
+	case dialog.LocalModelsMsg:
+		if dlg, ok := m.dialog.Dialog(dialog.ModelsID).(*dialog.Models); ok {
+			dlg.HandleMsg(msg)
+		}
 	case dialog.ActionSelectReasoningEffort:
 		if m.isAgentBusy() {
 			cmds = append(cmds, util.ReportWarn("Agent is busy, please wait..."))
@@ -2006,6 +2062,33 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 			},
 		))
 
+	case dialog.ActionFileBrowserSelected:
+		if msg.Path != "" {
+			cmds = append(cmds, m.insertFileCompletion(msg.Path))
+		}
+		m.dialog.CloseDialog(dialog.FileBrowserID)
+		cmds = append(cmds, m.textarea.Focus())
+
+	case dialog.ActionFileBrowserOpenExternal:
+		if msg.Path != "" {
+			cmds = append(cmds, m.openFileInExternalEditor(msg.Path))
+		}
+		m.dialog.CloseDialog(dialog.FileBrowserID)
+	case dialog.ActionChangeProject:
+		m.dialog.CloseDialog(dialog.FileBrowserID)
+		cmd, err := os.Executable()
+		if err != nil {
+			cmds = append(cmds, util.ReportError(err))
+			break
+		}
+		process := exec.Command(cmd, "--cwd", msg.Path)
+		cmds = append(cmds, tea.ExecProcess(process, func(err error) tea.Msg {
+			if err != nil {
+				return util.ReportError(fmt.Errorf("switch project: %w", err))
+			}
+			return tea.QuitMsg{}
+		}))
+
 	case dialog.ActionRunCustomCommand:
 		if len(msg.Arguments) > 0 && msg.Args == nil {
 			m.dialog.CloseFrontDialog()
@@ -2029,38 +2112,9 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		}
 		cmds = append(cmds, m.sendMessage(content))
 		m.dialog.CloseFrontDialog()
-	case dialog.ActionRunNpmScript:
-		script := msg.Script
-		args := ""
-		if msg.Args != nil {
-			args = msg.Args["args"]
-		}
-		content := fmt.Sprintf("Use the npm tool to run script %q with args %q", script, args)
-		cmds = append(cmds, m.sendMessage(content))
-		m.dialog.CloseDialog(dialog.NodeSettingsID)
-		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Running npm script: "+script)))
 	case dialog.ActionAttachSkill:
 		m.dialog.CloseFrontDialog()
 		cmds = append(cmds, m.attachSkill(msg.ID, msg.Name))
-	case dialog.ActionNodeUpdateStatus:
-		node.SetDeviceStatus(msg.DeviceID, msg.Status)
-		m.dialog.CloseDialog(dialog.NodeSettingsID)
-		if cmd := m.openNodeDialog(); cmd != nil {
-			cmds = append(cmds, cmd)
-		}
-		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Node status updated")))
-	case dialog.ActionNodeRename:
-		if msg.Nickname == "" {
-			m.dialog.CloseDialog(dialog.NodeSettingsID)
-			cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Nickname cannot be empty")))
-			break
-		}
-		node.SetDeviceNickname(msg.DeviceID, msg.Nickname)
-		m.dialog.CloseDialog(dialog.NodeSettingsID)
-		if cmd := m.openNodeDialog(); cmd != nil {
-			cmds = append(cmds, cmd)
-		}
-		cmds = append(cmds, util.CmdHandler(util.NewInfoMsg("Node renamed")))
 	case dialog.ActionRunMCPPrompt:
 		if len(msg.Arguments) > 0 && msg.Args == nil {
 			m.dialog.CloseFrontDialog()
@@ -2166,6 +2220,31 @@ func (m *UI) handleSelectModel(msg dialog.ActionSelectModel) tea.Cmd {
 	cfg := m.com.Config()
 	if cfg == nil {
 		return util.ReportError(errors.New("configuration not found"))
+	}
+	if msg.LocalModel {
+		provider := localmodel.ProviderConfig(localmodel.Model{Name: msg.Model.Model, DisplayName: msg.Model.Model})
+		if err := m.com.Workspace.SetConfigField(config.ScopeGlobal, "providers.ollama-local", provider); err != nil {
+			return util.ReportError(err)
+		}
+		if err := m.com.Workspace.UpdatePreferredModel(config.ScopeGlobal, msg.ModelType, msg.Model); err != nil {
+			return util.ReportError(err)
+		}
+		m.dialog.CloseDialog(dialog.ModelsID)
+		loadModel := func() tea.Msg {
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+			defer cancel()
+			if err := localmodel.NewOllama("").LoadModel(ctx, msg.Model.Model); err != nil {
+				return ollamaModelStateMsg{model: msg.Model.Model, state: common.ModelRuntimeFailed, err: err}
+			}
+			return ollamaModelStateMsg{model: msg.Model.Model, state: common.ModelRuntimeReady}
+		}
+		m.ollamaRuntime = common.ModelRuntimeLoading
+		return tea.Batch(func() tea.Msg {
+			if err := m.com.Workspace.UpdateAgentModel(context.Background()); err != nil {
+				return util.ReportError(err)
+			}
+			return util.NewInfoMsg("Loading Ollama model: " + msg.Model.Model)
+		}, loadModel)
 	}
 
 	var (
@@ -2301,10 +2380,19 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 				cmds = append(cmds, cmd)
 			}
 			return true
-		case key.Matches(msg, m.keyMap.Node):
-			if cmd := m.openNodeDialog(); cmd != nil {
+		case key.Matches(msg, m.keyMap.NodeSettings):
+			if cmd := m.openNodeSettingsDialog(); cmd != nil {
 				cmds = append(cmds, cmd)
 			}
+			return true
+		case key.Matches(msg, m.keyMap.Themes):
+			m.dialog.OpenDialog(dialog.NewThemes(m.com, m.themeID))
+			return true
+		case key.Matches(msg, m.keyMap.ThemePrev):
+			m.cycleTheme(-1)
+			return true
+		case key.Matches(msg, m.keyMap.ThemeNext):
+			m.cycleTheme(1)
 			return true
 		case key.Matches(msg, m.keyMap.Models):
 			if cmd := m.openModelsDialog(); cmd != nil {
@@ -2489,6 +2577,9 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 				value = strings.TrimSpace(value)
 				if value == "exit" || value == "quit" {
 					return m.openQuitDialog()
+				}
+				if path, ok := projectPathCommand(value); ok {
+					return m.restartInProject(path)
 				}
 
 				if m.bangMode && value != "" {
@@ -2788,6 +2879,42 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 	}
 
 	return tea.Sequence(cmds...)
+}
+
+// projectPathCommand recognizes shell-like directory changes typed into the
+// prompt and keeps them from being sent to the agent as coding instructions.
+func projectPathCommand(value string) (string, bool) {
+	fields := strings.Fields(value)
+	if len(fields) != 2 || fields[0] != "cd" {
+		return "", false
+	}
+	path := fields[1]
+	if path == "~" || strings.HasPrefix(path, "~/") {
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			return "", false
+		}
+		path = filepath.Join(homeDir, strings.TrimPrefix(path, "~/"))
+	}
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return "", false
+	}
+	info, err := os.Stat(path)
+	return path, err == nil && info.IsDir()
+}
+
+func (m *UI) restartInProject(path string) tea.Cmd {
+	process, err := os.Executable()
+	if err != nil {
+		return util.ReportError(err)
+	}
+	return tea.ExecProcess(exec.Command(process, "--cwd", path), func(err error) tea.Msg {
+		if err != nil {
+			return util.ReportError(fmt.Errorf("switch project: %w", err))
+		}
+		return tea.QuitMsg{}
+	})
 }
 
 // drawHeader draws the header section of the UI.
@@ -3661,6 +3788,21 @@ func (m *UI) openEditor(value string) tea.Cmd {
 	})
 }
 
+// openFileInExternalEditor hands an existing project file to the configured
+// editor without copying its path into a temporary message buffer.
+func (m *UI) openFileInExternalEditor(path string) tea.Cmd {
+	cmd, err := editor.Command("crush", path)
+	if err != nil {
+		return util.ReportError(err)
+	}
+	return tea.ExecProcess(cmd, func(err error) tea.Msg {
+		if err != nil {
+			return util.ReportError(err)
+		}
+		return nil
+	})
+}
+
 // setEditorPrompt configures the textarea prompt function based on whether
 // beastmode or bang mode is enabled.
 func (m *UI) setEditorPrompt(beastmode bool) {
@@ -3942,12 +4084,34 @@ func (m *UI) cacheSidebarLogo(width int) {
 // invalidating the markdown renderer cache and re-rendering the entire
 // transcript for no visible change.
 func (m *UI) applyThemeForProvider(providerID string) {
+	if m.themeID != "" && m.themeID != styles.DefaultTheme {
+		return
+	}
 	key := styles.ThemeKeyForProvider(providerID)
 	if key == m.themeKey {
 		return
 	}
 	m.themeKey = key
 	m.applyTheme(styles.ThemeForProvider(providerID))
+}
+
+func (m *UI) setTheme(id string) {
+	theme := styles.ThemeByID(id)
+	m.themeID, m.themeKey = theme.ID, "theme:"+theme.ID
+	m.applyTheme(styles.ThemeForName(theme.ID))
+	_ = m.com.Workspace.SetConfigField(config.ScopeGlobal, "options.tui.theme", theme.ID)
+}
+
+func (m *UI) cycleTheme(delta int) {
+	themes := styles.Themes()
+	index := 0
+	for i, theme := range themes {
+		if theme.ID == m.themeID {
+			index = i
+		}
+	}
+	index = (index + delta + len(themes)) % len(themes)
+	m.setTheme(themes[index].ID)
 }
 
 // applyTheme replaces the active styles with the given theme, drops the
@@ -4252,6 +4416,14 @@ func (m *UI) openDialog(id string) tea.Cmd {
 		if cmd := m.openFileBrowserDialog(); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
+	case dialog.NodeSettingsID:
+		if cmd := m.openNodeSettingsDialog(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+	case dialog.OllamaHowToID:
+		m.dialog.OpenDialog(dialog.NewOllamaHowTo(m.com))
+	case dialog.ThemesID:
+		m.dialog.OpenDialog(dialog.NewThemes(m.com, m.themeID))
 	case dialog.QuitID:
 		if cmd := m.openQuitDialog(); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -4291,8 +4463,7 @@ func (m *UI) openModelsDialog() tea.Cmd {
 	}
 
 	m.dialog.OpenDialog(modelsDialog)
-
-	return nil
+	return modelsDialog.LocalModelsCmd()
 }
 
 // openCommandsDialog opens the commands dialog.
@@ -4405,15 +4576,17 @@ func (m *UI) openFileBrowserDialog() tea.Cmd {
 	return nil
 }
 
-// openNodeDialog opens the node settings dialog.
-func (m *UI) openNodeDialog() tea.Cmd {
+func (m *UI) openNodeSettingsDialog() tea.Cmd {
 	if m.dialog.ContainsDialog(dialog.NodeSettingsID) {
 		m.dialog.BringToFront(dialog.NodeSettingsID)
 		return nil
 	}
 	nodeSettings := dialog.NewNodeSettings(m.com)
 	m.dialog.OpenDialog(nodeSettings)
-	return nil
+	return func() tea.Msg {
+		node.DiscoverDevices()
+		return dialog.NodeSettingsUpdateMsg{Devices: node.Devices()}
+	}
 }
 
 // openPermissionsDialog opens the permissions dialog for a permission request.

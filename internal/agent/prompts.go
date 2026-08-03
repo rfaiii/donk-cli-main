@@ -4,8 +4,8 @@ import (
 	"context"
 	_ "embed"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/prompt"
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/agent/prompt"
+	"github.com/charmbracelet/crush/internal/config"
 )
 
 //go:embed templates/coder.md.tpl

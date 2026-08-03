@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/shell"
 )
 
 const (

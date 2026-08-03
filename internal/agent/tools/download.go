@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/filepathext"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
+	"github.com/charmbracelet/crush/internal/filepathext"
+	"github.com/charmbracelet/crush/internal/permission"
 )
 
 type DownloadParams struct {

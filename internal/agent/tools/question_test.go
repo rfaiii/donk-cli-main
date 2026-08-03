@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/question"
+	"github.com/charmbracelet/crush/internal/question"
 	"github.com/stretchr/testify/require"
 )
 

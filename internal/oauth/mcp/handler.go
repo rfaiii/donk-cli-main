@@ -15,8 +15,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
-	"github.com/rfaiii/donk-cli-main/internal/oauth/callback"
+	"github.com/charmbracelet/crush/internal/oauth"
+	"github.com/charmbracelet/crush/internal/oauth/callback"
 	"github.com/modelcontextprotocol/go-sdk/auth"
 	"github.com/modelcontextprotocol/go-sdk/oauthex"
 	"github.com/pkg/browser"

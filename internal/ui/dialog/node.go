@@ -1,62 +1,74 @@
 package dialog
 
-import "github.com/rfaiii/donk-cli-main/internal/node"
+import (
+	"fmt"
+	"strings"
 
-// NodeSettingsID is the identifier for the node settings dialog.
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/crush/internal/node"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	uv "github.com/charmbracelet/ultraviolet"
+)
+
 const NodeSettingsID = "node-settings"
 
-// ActionNodeRename requests renaming the selected node.
-type ActionNodeRename struct {
-	DeviceID string
-	Current  string
-	Nickname string
-}
-// ActionRunNpmScript requests running an npm script for the selected node.
-type ActionRunNpmScript struct {
-	DeviceID string
-	Script   string
-	Args     map[string]string
+type NodeSettingsUpdateMsg struct{ Devices []node.Device }
+
+type NodeSettings struct {
+	com     *common.Common
+	devices []node.Device
 }
 
-// ActionNodeUpdateStatus requests updating a node status.
-type ActionNodeUpdateStatus struct {
-	DeviceID string
-	Status   node.DeviceStatus
+func NewNodeSettings(com *common.Common) *NodeSettings {
+	return &NodeSettings{com: com, devices: node.Devices()}
 }
 
-// NodeSettingsUpdateMsg is emitted when the node registry changes while the
-// settings dialog is open.
-type NodeSettingsUpdateMsg struct {
-	Devices []node.Device
+func (n *NodeSettings) ID() string { return NodeSettingsID }
+
+func (n *NodeSettings) HandleMsg(msg tea.Msg) Action {
+	switch msg := msg.(type) {
+	case NodeSettingsUpdateMsg:
+		n.devices = msg.Devices
+	case tea.KeyPressMsg:
+		switch {
+		case strings.EqualFold(msg.String(), "esc"):
+			return ActionClose{}
+		case strings.EqualFold(msg.String(), "r"):
+			return ActionCmd{Cmd: discoverNodesCmd()}
+		}
+	}
+	return nil
 }
 
-// NodeSettingsConfirmMsg is emitted when the settings dialog is closed with
-// a durable selection.
-type NodeSettingsConfirmMsg struct {
-	SelectedDeviceID string
+func discoverNodesCmd() tea.Cmd {
+	return func() tea.Msg {
+		// Discovery is intentionally performed off the Bubble Tea update path.
+		node.DiscoverDevices()
+		return NodeSettingsUpdateMsg{Devices: node.Devices()}
+	}
 }
 
-// NodeSettingsCloseMsg closes the dialog.
-type NodeSettingsCloseMsg struct{}
-
-// NodeRenamePromptMsg requests the rename input for a device.
-type NodeRenamePromptMsg struct {
-	DeviceID string
-	Current  string
-}
-
-// ToNodeRenameAction converts a NodeRenamePromptMsg into an action for the
-// command palette/dialog dispatcher.
-func (msg NodeRenamePromptMsg) ToNodeRenameAction() Action {
-	return ActionOpenDialog{DialogID: NodeSettingsID}
-}
-
-// ToNodeSettingsOpenAction opens the node settings dialog.
-func ToNodeSettingsOpenAction() Action {
-	return ActionOpenDialog{DialogID: NodeSettingsID}
-}
-
-// NodeSlashCommand returns the slash command string for node settings.
-func NodeSlashCommand() string {
-	return "/node"
+func (n *NodeSettings) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
+	t := n.com.Styles
+	lines := []string{"NODE CONNECTIONS", "", "r refresh  esc close", ""}
+	for _, device := range n.devices {
+		status := t.Resource.OfflineIcon.Render("○")
+		if device.Status == node.DeviceStatusOnline {
+			status = t.Resource.OnlineIcon.Render("●")
+		} else if device.Status == node.DeviceStatusError {
+			status = t.Resource.ErrorIcon.Render("●")
+		}
+		endpoint := device.Address
+		if device.TransportURL != "" {
+			endpoint = device.TransportURL
+		}
+		lines = append(lines, fmt.Sprintf("%s %s  %s  %s", status, device.DisplayName(), device.ConnectionLabel(), endpoint))
+	}
+	if len(n.devices) == 0 {
+		lines = append(lines, t.Resource.AdditionalText.Render("No devices discovered"))
+	}
+	view := t.Dialog.View.Width(min(72, max(1, area.Dx()-4))).Render(lipgloss.JoinVertical(lipgloss.Left, lines...))
+	DrawCenter(scr, area, view)
+	return nil
 }

@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/fsext"
+	"github.com/charmbracelet/crush/internal/fsext"
 )
 
 const (

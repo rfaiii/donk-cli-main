@@ -17,10 +17,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/event"
-	"github.com/rfaiii/donk-cli-main/internal/projects"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/event"
+	"github.com/charmbracelet/crush/internal/projects"
 	"github.com/pkg/browser"
 	"github.com/spf13/cobra"
 )

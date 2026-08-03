@@ -4,7 +4,7 @@ version: "3"
 
 vars:
   VERSION:
-    sh: git describe --long 2>/dev/null || echo ""
+    sh: git describe --long 2>/dev/null || echo "1.1.1"
   RACE:
     sh: test -f race.log && echo "1" || echo ""
 
@@ -120,6 +120,11 @@ tasks:
     cmds:
       - task: fetch-tags
       - go build {{.LDFLAGS}} -o "$(go env GOPATH)/bin/donk-cli{{exeExt}}" .
+
+  install:latest:
+    desc: Replace the PATH-installed donk-cli with the current source build
+    cmds:
+      - ./scripts/install-donk-cli.sh
     sources:
       - ./**/*.go
       - go.mod

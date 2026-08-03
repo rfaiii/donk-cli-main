@@ -10,13 +10,13 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/diff"
-	"github.com/rfaiii/donk-cli-main/internal/filepathext"
-	"github.com/rfaiii/donk-cli-main/internal/filetracker"
-	"github.com/rfaiii/donk-cli-main/internal/fsext"
-	"github.com/rfaiii/donk-cli-main/internal/history"
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
+	"github.com/charmbracelet/crush/internal/diff"
+	"github.com/charmbracelet/crush/internal/filepathext"
+	"github.com/charmbracelet/crush/internal/filetracker"
+	"github.com/charmbracelet/crush/internal/fsext"
+	"github.com/charmbracelet/crush/internal/history"
+	"github.com/charmbracelet/crush/internal/lsp"
+	"github.com/charmbracelet/crush/internal/permission"
 )
 
 type MultiEditOperation struct {

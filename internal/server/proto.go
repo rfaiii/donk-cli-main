@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/rfaiii/donk-cli-main/internal/backend"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/session"
+	"github.com/charmbracelet/crush/internal/backend"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/session"
 	"github.com/google/uuid"
 )
 

@@ -13,7 +13,7 @@ import (
 	"charm.land/glamour/v2/ansi"
 	"charm.land/lipgloss/v2"
 	"github.com/alecthomas/chroma/v2"
-	"github.com/rfaiii/donk-cli-main/internal/ui/diffview"
+	"github.com/charmbracelet/crush/internal/ui/diffview"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -512,6 +512,11 @@ type Styles struct {
 		}
 
 		ImagePreview lipgloss.Style
+
+		FileBrowser struct {
+			Panel, Border, Title, Close, Rule                  lipgloss.Style
+			Directory, Entry, Selected, Preview, Footer, Error lipgloss.Style
+		}
 
 		Sessions struct {
 			// styles for when we are in delete mode

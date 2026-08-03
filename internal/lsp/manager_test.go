@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/csync"
+	"github.com/charmbracelet/crush/internal/csync"
 	powernapconfig "github.com/charmbracelet/x/powernap/pkg/config"
 	"github.com/stretchr/testify/require"
 )

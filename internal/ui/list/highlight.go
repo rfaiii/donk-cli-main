@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/stringext"
+	"github.com/charmbracelet/crush/internal/stringext"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 

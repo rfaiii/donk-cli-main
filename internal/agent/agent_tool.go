@@ -7,9 +7,9 @@ import (
 
 	"charm.land/fantasy"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/prompt"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools"
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/agent/prompt"
+	"github.com/charmbracelet/crush/internal/agent/tools"
+	"github.com/charmbracelet/crush/internal/config"
 )
 
 //go:embed templates/agent_tool.md

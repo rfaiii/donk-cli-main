@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/google/uuid"
 )
 

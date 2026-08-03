@@ -4,52 +4,29 @@ import (
 	"slices"
 
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/node"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/node"
+	"github.com/charmbracelet/crush/internal/ui/common"
 )
 
-// nodeInfo renders the Node connection status section showing connected devices
-// and their connection status with colored status dots.
-func (m *UI) nodeInfo(width, maxItems int, isSection bool) string {
+func (m *UI) nodeInfo(width, maxItems int) string {
 	t := m.com.Styles
 	devices := node.Devices()
 	if len(devices) == 0 {
-		return common.Section(t, t.Resource.Heading.Render("Node")+"\n"+t.Resource.AdditionalText.Render("No devices"), width)
+		return common.Section(t, t.Resource.Heading.Render("NODE")+"\n"+t.Resource.AdditionalText.Render("No devices"), width)
 	}
-
-	title := t.Resource.Heading.Render("Node")
-	var items []string
-	for _, d := range devices {
-		var icon, color string
-		switch d.Status {
+	items := make([]string, 0, len(devices))
+	for _, device := range devices {
+		icon := t.Resource.OfflineIcon.Render("○")
+		switch device.Status {
 		case node.DeviceStatusOnline:
-			icon = "●"
-			color = "#3BF66B"
+			icon = t.Resource.OnlineIcon.Render("●")
 		case node.DeviceStatusError:
-			icon = "●"
-			color = "#FF4444"
-		default:
-			icon = "○"
-			color = "#888888"
+			icon = t.Resource.ErrorIcon.Render("●")
 		}
-
-		name := d.DisplayName()
-		if name == "" {
-			name = d.ID
-		}
-
-		itemStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(color))
-		label := itemStyle.Render(icon + " " + name)
-		desc := t.Resource.AdditionalText.Render(d.ConnectionLabel())
-		items = append(items, label+" "+desc)
+		items = append(items, icon+" "+t.Resource.Name.Render(device.DisplayName())+" "+t.Resource.AdditionalText.Render(device.ConnectionLabel()))
 	}
-
-	// Limit displayed items to available height
 	if maxItems > 0 && len(items) > maxItems {
-		items = slices.Delete(items, maxItems-1, len(items))
-		items = append(items, t.Resource.AdditionalText.Render("..."))
+		items = append(slices.Delete(items, maxItems-1, len(items)), t.Resource.AdditionalText.Render("…"))
 	}
-
-	body := lipgloss.JoinVertical(lipgloss.Left, items...)
-	return common.Section(t, title+"\n"+body, width)
+	return common.Section(t, t.Resource.Heading.Render("NODE")+"\n"+lipgloss.JoinVertical(lipgloss.Left, items...), width)
 }

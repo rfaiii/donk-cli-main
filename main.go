@@ -6,7 +6,7 @@
 //	@contact.name	Charm
 //	@contact.url	https://charm.sh
 //	@license.name	MIT
-//	@license.url	https://github.com/rfaiii/donk-cli-main/blob/main/LICENSE
+//	@license.url	https://github.com/charmbracelet/crush/blob/main/LICENSE
 //	@BasePath		/v1
 package main
 
@@ -16,8 +16,8 @@ import (
 	_ "net/http/pprof"
 	"os"
 
-	"github.com/rfaiii/donk-cli-main/internal/cmd"
-	_ "github.com/rfaiii/donk-cli-main/internal/dns"
+	"github.com/charmbracelet/crush/internal/cmd"
+	_ "github.com/charmbracelet/crush/internal/dns"
 	_ "github.com/joho/godotenv/autoload"
 )
 

@@ -5,13 +5,13 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/notify"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools/mcp"
-	"github.com/rfaiii/donk-cli-main/internal/app"
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
+	"github.com/charmbracelet/crush/internal/agent/notify"
+	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
+	"github.com/charmbracelet/crush/internal/app"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/skills"
 	"github.com/stretchr/testify/require"
 )
 

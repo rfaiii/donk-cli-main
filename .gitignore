@@ -48,10 +48,12 @@ Thumbs.db
 **/.crush/**
 
 /crush
+/donk-cli
+/donk-cli-*
 /tmp/
 
 manpages/
 completions/crush.*sh
+completions/donk-cli.*sh
 .prettierignore
 .task
-donk-cli-main

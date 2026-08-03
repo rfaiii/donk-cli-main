@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/question"
+	"github.com/charmbracelet/crush/internal/question"
 )
 
 const QuestionToolName = "question"

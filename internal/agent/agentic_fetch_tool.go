@@ -11,9 +11,9 @@ import (
 
 	"charm.land/fantasy"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/prompt"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
+	"github.com/charmbracelet/crush/internal/agent/prompt"
+	"github.com/charmbracelet/crush/internal/agent/tools"
+	"github.com/charmbracelet/crush/internal/permission"
 )
 
 //go:embed templates/agentic_fetch.md

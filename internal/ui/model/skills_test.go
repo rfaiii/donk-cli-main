@@ -3,10 +3,10 @@ package model
 import (
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	uistyles "github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	uistyles "github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

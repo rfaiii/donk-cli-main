@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/ui/chat"
+	"github.com/charmbracelet/crush/internal/ui/chat"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/stretchr/testify/require"

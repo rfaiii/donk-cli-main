@@ -5,12 +5,12 @@ import (
 	"errors"
 	"os"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent"
-	"github.com/rfaiii/donk-cli-main/internal/agent/notify"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/agent"
+	"github.com/charmbracelet/crush/internal/agent/notify"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/shell"
 )
 
 // SendMessage validates and accepts a prompt for the workspace's agent,

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/shell"
 	"github.com/stretchr/testify/require"
 )
 

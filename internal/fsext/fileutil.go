@@ -12,8 +12,8 @@ import (
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/charlievieth/fastwalk"
-	"github.com/rfaiii/donk-cli-main/internal/csync"
-	"github.com/rfaiii/donk-cli-main/internal/home"
+	"github.com/charmbracelet/crush/internal/csync"
+	"github.com/charmbracelet/crush/internal/home"
 	"github.com/charmbracelet/x/ansi"
 )
 

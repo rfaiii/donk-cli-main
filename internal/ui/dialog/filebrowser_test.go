@@ -1,8 +1,17 @@
 package dialog
 
 import (
+	"errors"
+	"fmt"
+	"image"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/styles"
+	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/stretchr/testify/require"
 )
@@ -93,4 +102,75 @@ func TestFinderPaneWidthsHandlesNarrowContent(t *testing.T) {
 	require.GreaterOrEqual(t, left, 1)
 	require.GreaterOrEqual(t, right, 1)
 	require.GreaterOrEqual(t, list, 1)
+}
+
+func TestFileBrowserIgnoresStaleAsyncResults(t *testing.T) {
+	f := &FileBrowser{
+		dir:      "/project",
+		loadSeq:  2,
+		entries:  []fileBrowserEntry{{name: "new.txt", path: "/project/new.txt"}},
+		selected: 0,
+		preview:  "new preview",
+	}
+
+	f.HandleMsg(fileBrowserLoadMsg{
+		seq:     1,
+		dir:     "/project",
+		entries: []fileBrowserEntry{{name: "old.txt", path: "/project/old.txt"}},
+		preview: "old preview",
+	})
+
+	require.Equal(t, "new preview", f.preview)
+	require.Equal(t, "new.txt", f.entries[0].name)
+
+	f.HandleMsg(fileBrowserPreviewMsg{seq: 1, path: "/project/new.txt", preview: "old preview"})
+	require.Equal(t, "new preview", f.preview)
+}
+
+func TestFileBrowserReloadCommandLoadsDirectoryOffUpdatePath(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "example.txt")
+	require.NoError(t, os.WriteFile(path, []byte("hello"), 0o600))
+	f := &FileBrowser{dir: dir}
+
+	cmd := f.requestReload()
+	require.True(t, f.loading)
+	msg := cmd()
+	load, ok := msg.(fileBrowserLoadMsg)
+	require.True(t, ok)
+	require.NoError(t, load.err)
+	require.Len(t, load.entries, 1)
+	require.Equal(t, "hello", load.preview)
+}
+
+func TestFileBrowserLoadErrorIsVisible(t *testing.T) {
+	f := &FileBrowser{dir: "/missing", loadSeq: 1}
+	f.HandleMsg(fileBrowserLoadMsg{seq: 1, dir: "/missing", err: errors.New("directory unavailable")})
+
+	require.False(t, f.loading)
+	require.Equal(t, "directory unavailable", f.preview)
+	require.Equal(t, "Metadata: unavailable", f.metadata)
+}
+
+func TestFileBrowserDrawStaysInsideScreenBounds(t *testing.T) {
+	for _, size := range []image.Point{{X: 120, Y: 32}, {X: 42, Y: 10}, {X: 12, Y: 6}} {
+		t.Run(fmt.Sprintf("%dx%d", size.X, size.Y), func(t *testing.T) {
+			t.Parallel()
+			theme := styles.DarkDonkTheme()
+			f := &FileBrowser{
+				com:      &common.Common{Styles: &theme},
+				dir:      "/project/with/a/very/long/path",
+				preview:  strings.Repeat("long preview token ", 100),
+				metadata: "Metadata: a file",
+				entries:  []fileBrowserEntry{{name: strings.Repeat("filename", 20), path: "/project/file.txt"}},
+			}
+			scr := uv.NewScreenBuffer(size.X, size.Y)
+			f.Draw(scr, image.Rect(0, 0, size.X, size.Y))
+
+			for _, line := range strings.Split(scr.Render(), "\n") {
+				require.LessOrEqual(t, ansi.StringWidth(line), size.X)
+			}
+			require.True(t, f.closeRect.In(image.Rect(0, 0, size.X, size.Y)) || f.closeRect.Empty())
+		})
+	}
 }

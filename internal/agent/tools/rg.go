@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/log"
+	"github.com/charmbracelet/crush/internal/log"
 )
 
 var getRg = sync.OnceValue(func() string {

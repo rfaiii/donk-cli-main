@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/agent/tools/mcp"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
+	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/lsp"
+	"github.com/charmbracelet/crush/internal/skills"
 )
 
 const CrushInfoToolName = "crush_info"

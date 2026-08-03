@@ -7,12 +7,12 @@ import (
 	"os/signal"
 
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/clipboard"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
-	"github.com/rfaiii/donk-cli-main/internal/oauth/copilot"
-	"github.com/rfaiii/donk-cli-main/internal/oauth/hyper"
-	"github.com/rfaiii/donk-cli-main/internal/workspace"
+	"github.com/charmbracelet/crush/internal/clipboard"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/oauth"
+	"github.com/charmbracelet/crush/internal/oauth/copilot"
+	"github.com/charmbracelet/crush/internal/oauth/hyper"
+	"github.com/charmbracelet/crush/internal/workspace"
 	"github.com/pkg/browser"
 	"github.com/spf13/cobra"
 )

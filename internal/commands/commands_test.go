@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/skills"
+	"github.com/charmbracelet/crush/internal/skills"
 	"github.com/stretchr/testify/require"
 )
 

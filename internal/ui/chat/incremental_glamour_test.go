@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"charm.land/glamour/v2"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/common"
 )
 
 // inputFilterInterval targets roughly one filtered sample per 60 Hz frame.

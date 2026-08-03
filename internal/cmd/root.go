@@ -6,6 +6,7 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
+	"image/color"
 	"io"
 	"io/fs"
 	"log/slog"
@@ -24,22 +25,22 @@ import (
 	fang "charm.land/fang/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/colorprofile"
-	"github.com/rfaiii/donk-cli-main/internal/app"
-	"github.com/rfaiii/donk-cli-main/internal/client"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/db"
-	"github.com/rfaiii/donk-cli-main/internal/event"
-	"github.com/rfaiii/donk-cli-main/internal/lock"
-	crushlog "github.com/rfaiii/donk-cli-main/internal/log"
-	"github.com/rfaiii/donk-cli-main/internal/projects"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/server"
-	"github.com/rfaiii/donk-cli-main/internal/session"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	ui "github.com/rfaiii/donk-cli-main/internal/ui/model"
-	"github.com/rfaiii/donk-cli-main/internal/version"
-	"github.com/rfaiii/donk-cli-main/internal/workspace"
+	"github.com/charmbracelet/crush/internal/app"
+	"github.com/charmbracelet/crush/internal/client"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/db"
+	"github.com/charmbracelet/crush/internal/event"
+	"github.com/charmbracelet/crush/internal/lock"
+	crushlog "github.com/charmbracelet/crush/internal/log"
+	"github.com/charmbracelet/crush/internal/projects"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/server"
+	"github.com/charmbracelet/crush/internal/session"
+	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	ui "github.com/charmbracelet/crush/internal/ui/model"
+	"github.com/charmbracelet/crush/internal/version"
+	"github.com/charmbracelet/crush/internal/workspace"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/exp/charmtone"
@@ -142,7 +143,7 @@ donk-cli --continue
 		if _, err := program.Run(); err != nil {
 			event.Error(err)
 			slog.Error("TUI run error", "error", err)
-			return errors.New("Donk crashed. If metrics are enabled, we were notified about it. If you'd like to report it, please copy the stacktrace above and open an issue at https://github.com/rfaiii/donk-cli-main/issues/new?template=bug.yml") //nolint:staticcheck
+			return errors.New("Donk crashed. If metrics are enabled, we were notified about it. If you'd like to report it, please copy the stacktrace above and open an issue at https://github.com/charmbracelet/crush/issues/new?template=bug.yml") //nolint:staticcheck
 		}
 		return nil
 	},
@@ -194,9 +195,36 @@ func Execute() {
 		context.Background(),
 		rootCmd,
 		fang.WithVersion(version.Version),
+		fang.WithColorSchemeFunc(donkHelpColorScheme),
 		fang.WithNotifySignal(os.Interrupt),
 	); err != nil {
 		os.Exit(1)
+	}
+}
+
+func donkHelpColorScheme(_ lipgloss.LightDarkFunc) fang.ColorScheme {
+	green := lipgloss.Color("#3BF66B")
+	purple := lipgloss.Color("#C69CFF")
+	pink := lipgloss.Color("#E0C2FF")
+	muted := lipgloss.Color("#8C9691")
+	dark := lipgloss.Color("#0C0E0D")
+	return fang.ColorScheme{
+		Base:           muted,
+		Title:          green,
+		Description:    muted,
+		Codeblock:      pink,
+		Program:        green,
+		DimmedArgument: muted,
+		Comment:        purple,
+		Flag:           pink,
+		FlagDefault:    purple,
+		Command:        green,
+		QuotedString:   pink,
+		Argument:       purple,
+		Help:           muted,
+		Dash:           green,
+		ErrorHeader:    [2]color.Color{lipgloss.Color("#FFFFFF"), lipgloss.Color("#FF5F56")},
+		ErrorDetails:   dark,
 	}
 }
 

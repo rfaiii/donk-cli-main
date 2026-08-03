@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/shell"
 )
 
 func init() {

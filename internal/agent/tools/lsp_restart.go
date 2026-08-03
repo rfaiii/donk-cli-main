@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
+	"github.com/charmbracelet/crush/internal/lsp"
 )
 
 const LSPRestartToolName = "lsp_restart"

@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/google/uuid"
 )
 

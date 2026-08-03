@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
+	"github.com/charmbracelet/crush/internal/oauth"
 )
 
 const (

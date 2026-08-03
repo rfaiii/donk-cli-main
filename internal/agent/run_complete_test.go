@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/agent/notify"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/agent/notify"
+	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/proto"
+	"github.com/charmbracelet/crush/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

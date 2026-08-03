@@ -10,7 +10,7 @@ import (
 // Build-time parameters set via -ldflags.
 
 var (
-	Version = "devel"
+	Version = "1.1.1"
 	Commit  = "unknown"
 	// BuildID is a unique identifier for this build. For release builds it
 	// equals Commit; for development builds (go run / go build without
@@ -19,7 +19,7 @@ var (
 	BuildID = ""
 )
 
-// A user may install crush using `go install github.com/rfaiii/donk-cli-main@latest`.
+// A user may install crush using `go install github.com/charmbracelet/crush@latest`.
 // without -ldflags, in which case the version above is unset. As a workaround
 // we use the embedded build version that *is* set when using `go install` (and
 // is only set for `go install` and not for `go build`).

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/env"
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/env"
+	"github.com/charmbracelet/crush/internal/shell"
 )
 
 // resolveTimeout bounds how long a single ResolveValue call may spend

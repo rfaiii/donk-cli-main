@@ -2,7 +2,59 @@ package styles
 
 import (
 	"charm.land/lipgloss/v2"
+	"image/color"
 )
+
+const DefaultTheme = "rich-aizen-green"
+
+type ThemeDefinition struct {
+	ID, Name           string
+	Primary, Secondary color.Color
+}
+
+var themeDefinitions = []ThemeDefinition{
+	{DefaultTheme, "Rich Aizen Green", lipgloss.Color("#3BF66B"), lipgloss.Color("#3BF66B")},
+	{"crazy-jeff-pink", "Crazy Jeff Pink", lipgloss.Color("#FF4FA3"), lipgloss.Color("#FF86C8")},
+	{"kobe-yang-purple", "Kobe Yang Purple", lipgloss.Color("#B56CFF"), lipgloss.Color("#E0B3FF")},
+	{"steve-dabeav-blue", "Steve DaBeav Blue", lipgloss.Color("#5CC8FF"), lipgloss.Color("#A9E7FF")},
+	{"jenny-ann-orange", "Jenny Ann Orange", lipgloss.Color("#FF8A3D"), lipgloss.Color("#FFC078")},
+	{"felix-tornado-white", "Felix Tornado White", lipgloss.Color("#FFFFFF"), lipgloss.Color("#E8EEF2")},
+	{"luis-mellow-yellow", "Luis Mellow Yellow", lipgloss.Color("#D6C84A"), lipgloss.Color("#F2E98B")},
+}
+
+func Themes() []ThemeDefinition { return append([]ThemeDefinition(nil), themeDefinitions...) }
+func ThemeByID(id string) ThemeDefinition {
+	for _, theme := range themeDefinitions {
+		if theme.ID == id {
+			return theme
+		}
+	}
+	return themeDefinitions[0]
+}
+func ThemeForName(id string) Styles {
+	theme := ThemeByID(id)
+	s := DarkDonkTheme()
+	return applyThemeAccent(s, theme.Primary, theme.Secondary)
+}
+
+func applyThemeAccent(s Styles, primary, secondary color.Color) Styles {
+	s.Header.LogoGradFromColor, s.Header.LogoGradToColor = secondary, primary
+	s.Header.HypercreditIcon = s.Header.HypercreditIcon.Foreground(secondary)
+	s.Header.Percentage = s.Header.Percentage.Foreground(primary)
+	s.Editor.PromptNormalFocused = s.Editor.PromptNormalFocused.Foreground(primary)
+	s.Editor.PromptBeastmodeIconFocused = s.Editor.PromptBeastmodeIconFocused.Foreground(primary)
+	s.Editor.PromptBangIconFocused = s.Editor.PromptBangIconFocused.Foreground(primary)
+	s.ModelInfo.HypercreditIcon = s.ModelInfo.HypercreditIcon.Foreground(secondary)
+	s.Resource.OnlineIcon = s.Resource.OnlineIcon.Foreground(primary)
+	s.Dialog.Title = s.Dialog.Title.Foreground(primary)
+	s.Dialog.TitleText = s.Dialog.TitleText.Foreground(primary)
+	s.Dialog.SelectedItem = s.Dialog.SelectedItem.BorderForeground(primary)
+	s.Messages.UserFocused = s.Messages.UserFocused.BorderForeground(primary)
+	s.Messages.ShellBarFocused = s.Messages.ShellBarFocused.BorderForeground(primary)
+	s.Logo.TitleColorA, s.Logo.TitleColorB = secondary, primary
+	s.Logo.FieldColor = primary
+	return s
+}
 
 // ThemeKeyForProvider returns a stable identifier for the theme
 // associated with the given provider ID. Providers that share a theme

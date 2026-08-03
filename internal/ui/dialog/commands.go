@@ -9,11 +9,11 @@ import (
 	"charm.land/bubbles/v2/spinner"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
-	"github.com/rfaiii/donk-cli-main/internal/commands"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/list"
-	"github.com/rfaiii/donk-cli-main/internal/ui/styles"
+	"github.com/charmbracelet/crush/internal/commands"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/list"
+	"github.com/charmbracelet/crush/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -449,8 +449,11 @@ func (c *Commands) defaultCommands() []*CommandItem {
 		NewCommandItem(c.com.Styles, "switch_session", "Sessions", "ctrl+s", ActionOpenDialog{SessionsID}),
 		NewCommandItem(c.com.Styles, "switch_model", "Switch Model", "ctrl+l", ActionOpenDialog{ModelsID}),
 		NewCommandItem(c.com.Styles, "file_browser", "Open File Finder", "ctrl+shift+f", ActionOpenDialog{FileBrowserID}).WithAliases("finder", "/finder"),
-		NewCommandItem(c.com.Styles, "node_settings", "Node Settings", "ctrl+shift+n", ActionOpenDialog{NodeSettingsID}).WithAliases("node", "/node"),
-		NewCommandItem(c.com.Styles, "npm_script", "Run npm Script", "ctrl+shift+m", ActionRunNpmScript{}).WithAliases("npm", "/npm"),
+		NewCommandItem(c.com.Styles, "change_project", "Change Project", "", ActionOpenDialog{FileBrowserID}).WithAliases("cd", "/cd", "project"),
+		NewCommandItem(c.com.Styles, "node_settings", "NODE Connections", "ctrl+shift+n", ActionOpenDialog{NodeSettingsID}).WithAliases("node", "/node"),
+		NewCommandItem(c.com.Styles, "ollama_models", "Ollama Models", "", ActionOpenDialog{ModelsID}).WithAliases("ollama", "/ollama"),
+		NewCommandItem(c.com.Styles, "ollama_how_to", "Ollama How To", "", ActionOpenDialog{OllamaHowToID}),
+		NewCommandItem(c.com.Styles, "themes", "Themes", "ctrl+shift+t", ActionOpenDialog{ThemesID}).WithAliases("themes", "/themes"),
 	}
 
 	// Only show compact command if there's an active session

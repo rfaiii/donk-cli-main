@@ -2,18 +2,22 @@ package dialog
 
 import (
 	"cmp"
+	"context"
 	"fmt"
 	"slices"
+	"strconv"
 
 	"charm.land/bubbles/v2/help"
 	"charm.land/bubbles/v2/key"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/localmodel"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/util"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/charmbracelet/x/ansi"
 )
 
 // ModelType represents the type of model to select.
@@ -76,8 +80,9 @@ type Models struct {
 	com          *common.Common
 	isOnboarding bool
 
-	modelType ModelType
-	providers []catwalk.Provider
+	modelType   ModelType
+	providers   []catwalk.Provider
+	localModels []localmodel.Model
 
 	keyMap struct {
 		Tab      key.Binding
@@ -87,10 +92,16 @@ type Models struct {
 		Next     key.Binding
 		Previous key.Binding
 		Close    key.Binding
+		Refresh  key.Binding
+		Pull     key.Binding
+		Start    key.Binding
 	}
-	list  *ModelsList
-	input textinput.Model
-	help  help.Model
+	list       *ModelsList
+	input      textinput.Model
+	help       help.Model
+	pulling    bool
+	pullStatus localmodel.PullProgress
+	pullCancel context.CancelFunc
 }
 
 var _ Dialog = (*Models)(nil)
@@ -141,6 +152,9 @@ func NewModels(com *common.Common, isOnboarding bool) (*Models, error) {
 		key.WithHelp("↑", "previous item"),
 	)
 	m.keyMap.Close = CloseKey
+	m.keyMap.Refresh = key.NewBinding(key.WithKeys("r"), key.WithHelp("r", "refresh local models"))
+	m.keyMap.Pull = key.NewBinding(key.WithKeys("p"), key.WithHelp("p", "pull selected model"))
+	m.keyMap.Start = key.NewBinding(key.WithKeys("s"), key.WithHelp("s", "start Ollama"))
 
 	var err error
 	m.providers, err = config.Providers(m.com.Config())
@@ -163,10 +177,50 @@ func (m *Models) ID() string {
 // HandleMsg implements Dialog.
 func (m *Models) HandleMsg(msg tea.Msg) Action {
 	switch msg := msg.(type) {
+	case LocalModelsMsg:
+		m.localModels = append(msg.Models, msg.Additional...)
+		if err := m.setProviderItems(); err != nil {
+			return util.ReportError(err)
+		}
+		return nil
+	case OllamaPullMsg:
+		m.pullStatus = msg.Progress
+		if msg.Done {
+			m.pulling = false
+			if m.pullCancel != nil {
+				m.pullCancel()
+				m.pullCancel = nil
+			}
+			if msg.Err != nil {
+				return ActionCmd{Cmd: util.ReportError(msg.Err)}
+			}
+			return ActionCmd{Cmd: tea.Batch(m.LocalModelsCmd(), util.ReportInfo("Ollama model pulled: "+msg.Model))}
+		}
+		return ActionCmd{Cmd: msg.Next}
 	case tea.KeyPressMsg:
 		switch {
 		case key.Matches(msg, m.keyMap.Close):
 			return ActionClose{}
+		case key.Matches(msg, m.keyMap.Refresh):
+			return ActionCmd{Cmd: m.LocalModelsCmd()}
+		case key.Matches(msg, m.keyMap.Start):
+			return ActionCmd{Cmd: startOllamaCmd()}
+		case key.Matches(msg, key.NewBinding(key.WithKeys("c"))):
+			if m.pulling && m.pullCancel != nil {
+				m.pullCancel()
+				m.pullCancel = nil
+				m.pulling = false
+				return ActionCmd{Cmd: util.ReportInfo("Ollama pull cancelled")}
+			}
+		case key.Matches(msg, m.keyMap.Pull):
+			if item, ok := m.list.SelectedItem().(*ModelItem); ok && item.prov.ID == "ollama-local" {
+				if m.pulling {
+					return nil
+				}
+				ctx, cancel := context.WithCancel(context.Background())
+				m.pullCancel, m.pulling, m.pullStatus = cancel, true, localmodel.PullProgress{Status: "starting"}
+				return ActionCmd{Cmd: pullOllamaCmd(ctx, item.model.ID)}
+			}
 		case key.Matches(msg, m.keyMap.Previous):
 			m.list.Focus()
 			if m.list.IsSelectedFirst() {
@@ -201,6 +255,7 @@ func (m *Models) HandleMsg(msg tea.Msg) Action {
 				Model:          modelItem.SelectedModel(),
 				ModelType:      modelItem.SelectedModelType(),
 				ReAuthenticate: isEdit,
+				LocalModel:     modelItem.prov.ID == "ollama-local",
 			}
 		case key.Matches(msg, m.keyMap.Tab):
 			if m.isOnboarding {
@@ -226,6 +281,42 @@ func (m *Models) HandleMsg(msg tea.Msg) Action {
 		}
 	}
 	return nil
+}
+
+type LocalModelsMsg struct {
+	Models     []localmodel.Model
+	Additional []localmodel.Model
+	Status     localmodel.RuntimeStatus
+	Err        error
+}
+
+type OllamaPullMsg struct {
+	Model    string
+	Progress localmodel.PullProgress
+	Done     bool
+	Err      error
+	Next     tea.Cmd
+}
+
+func (m *Models) LocalModelsCmd() tea.Cmd {
+	return func() tea.Msg {
+		runtime := localmodel.NewOllama("")
+		status := runtime.Status(context.Background())
+		if status.Status != localmodel.StatusOnline {
+			return LocalModelsMsg{Status: status, Err: status.Error}
+		}
+		models, err := runtime.Models(context.Background())
+		if err != nil {
+			return LocalModelsMsg{Status: status, Err: err}
+		}
+		additional := make([]localmodel.Model, 0)
+		for _, compatible := range []*localmodel.CompatibleRuntime{localmodel.NewLMStudio(""), localmodel.NewLlamaCPP("")} {
+			if discovered, discoverErr := compatible.ListModels(context.Background()); discoverErr == nil {
+				additional = append(additional, discovered...)
+			}
+		}
+		return LocalModelsMsg{Models: models, Additional: additional, Status: status}
+	}
 }
 
 // Cursor returns the cursor for the dialog.
@@ -266,6 +357,16 @@ func (m *Models) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	rc := NewRenderContext(t, width)
 	rc.Title = "Switch Model"
 	rc.TitleInfo = m.modelTypeRadioView()
+	if m.pulling {
+		progress := "Pulling: " + m.pullStatus.Status
+		if m.pullStatus.Total > 0 {
+			progress += " " + strconv.Itoa(int(m.pullStatus.Completed*100/m.pullStatus.Total)) + "%"
+		}
+		if m.pullStatus.Digest != "" {
+			progress += " " + ansi.Truncate(m.pullStatus.Digest, 18, "…")
+		}
+		rc.AddPart(t.Dialog.PrimaryText.Render(progress + "  (c cancel)"))
+	}
 
 	if m.isOnboarding {
 		titleText := t.Dialog.PrimaryText.Render("To start, let's choose a provider and model.")
@@ -314,7 +415,48 @@ func (m *Models) ShortHelp() []key.Binding {
 		h = append(h, m.keyMap.Edit)
 	}
 	h = append(h, m.keyMap.Close)
+	h = append(h, m.keyMap.Refresh, m.keyMap.Pull, m.keyMap.Start)
+	if m.pulling {
+		h = append(h, key.NewBinding(key.WithKeys("c"), key.WithHelp("c", "cancel pull")))
+	}
 	return h
+}
+
+func startOllamaCmd() tea.Cmd {
+	return func() tea.Msg {
+		runtime := localmodel.NewOllama("")
+		if err := runtime.Start(context.Background()); err != nil {
+			return util.NewErrorMsg(err)
+		}
+		return util.NewInfoMsg("Ollama started")
+	}
+}
+func pullOllamaCmd(ctx context.Context, name string) tea.Cmd {
+	progressCh := make(chan localmodel.PullProgress, 32)
+	doneCh := make(chan error, 1)
+	go func() {
+		err := localmodel.NewOllama("").Pull(ctx, name, func(progress localmodel.PullProgress) {
+			select {
+			case progressCh <- progress:
+			case <-ctx.Done():
+			}
+		})
+		doneCh <- err
+		close(progressCh)
+	}()
+	var read tea.Cmd
+	read = func() tea.Msg {
+		select {
+		case progress, ok := <-progressCh:
+			if !ok {
+				return OllamaPullMsg{Model: name, Done: true, Err: <-doneCh}
+			}
+			return OllamaPullMsg{Model: name, Progress: progress, Next: read}
+		case <-ctx.Done():
+			return OllamaPullMsg{Model: name, Done: true, Err: context.Canceled}
+		}
+	}
+	return read
 }
 
 // FullHelp returns the full help view.
@@ -364,6 +506,15 @@ func (m *Models) setProviderItems() error {
 	// itemsMap contains the keys of added model items.
 	itemsMap := make(map[string]*ModelItem)
 	groups := []ModelGroup{}
+	if len(m.localModels) > 0 {
+		provider := catwalk.Provider{ID: "ollama-local", Name: "Ollama (Local)"}
+		group := NewModelGroup(t, "Ollama (Local)", true)
+		for _, local := range m.localModels {
+			model := catwalk.Model{ID: local.Name, Name: local.DisplayName, ContextWindow: local.ContextWindow, DefaultMaxTokens: local.MaxTokens, SupportsImages: slices.Contains(local.Capabilities, "vision")}
+			group.AppendItems(NewModelItem(t, provider, model, m.modelType, false))
+		}
+		groups = append(groups, group)
+	}
 	for id, p := range cfg.Providers.Seq2() {
 		if p.Disable {
 			continue

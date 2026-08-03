@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/config"
 	"github.com/invopop/jsonschema"
 	"github.com/stretchr/testify/require"
 )

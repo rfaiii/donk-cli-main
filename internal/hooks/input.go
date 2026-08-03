@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/shell"
+	"github.com/charmbracelet/crush/internal/shell"
 	"github.com/tidwall/gjson"
 )
 

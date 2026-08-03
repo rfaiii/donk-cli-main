@@ -14,9 +14,9 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/rfaiii/donk-cli-main/internal/commands"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/commands"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/util"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -211,7 +211,14 @@ func (a *Arguments) HandleMsg(msg tea.Msg) Action {
 					return ActionCmd{Cmd: warning}
 				}
 
-				return Args(a.resultAction, args)
+				switch action := a.resultAction.(type) {
+				case ActionRunCustomCommand:
+					action.Args = args
+					return action
+				case ActionRunMCPPrompt:
+					action.Args = args
+					return action
+				}
 			}
 			a.focusInput(a.focused + 1)
 		case key.Matches(msg, a.keyMap.Next):
@@ -368,21 +375,7 @@ func (a *Arguments) StopLoading() {
 	a.loading = false
 }
 
-// Args sets the collected argument map on actions that accept it.
-func Args(action Action, args map[string]string) Action {
-	switch action := action.(type) {
-	case ActionRunCustomCommand:
-		action.Args = args
-		return action
-	case ActionRunMCPPrompt:
-		action.Args = args
-		return action
-	case ActionRunNpmScript:
-		action.Args = args
-		return action
-	}
-	return action
-}
+// ShortHelp implements help.KeyMap.
 func (a *Arguments) ShortHelp() []key.Binding {
 	return []key.Binding{
 		a.keyMap.Confirm,

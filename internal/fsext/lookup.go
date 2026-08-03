@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rfaiii/donk-cli-main/internal/home"
+	"github.com/charmbracelet/crush/internal/home"
 )
 
 // Lookup searches for a target files or directories starting from dir

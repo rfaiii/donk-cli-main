@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/config"
 )
 
 const projectsFileName = "projects.json"

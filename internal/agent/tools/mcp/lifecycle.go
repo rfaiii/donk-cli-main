@@ -7,7 +7,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/rfaiii/donk-cli-main/internal/config"
+	"github.com/charmbracelet/crush/internal/config"
 )
 
 // reinitAction describes how to reconcile one MCP server against the

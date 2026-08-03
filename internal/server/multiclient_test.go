@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/backend"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
+	"github.com/charmbracelet/crush/internal/backend"
+	"github.com/charmbracelet/crush/internal/proto"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )

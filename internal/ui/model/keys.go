@@ -69,7 +69,10 @@ type KeyMap struct {
 	Tab             key.Binding
 	ToggleBeastmode key.Binding
 	Finder          key.Binding
-	Node            key.Binding
+	NodeSettings    key.Binding
+	Themes          key.Binding
+	ThemePrev       key.Binding
+	ThemeNext       key.Binding
 }
 
 func DefaultKeyMap() KeyMap {
@@ -110,10 +113,13 @@ func DefaultKeyMap() KeyMap {
 			key.WithKeys("ctrl+shift+f"),
 			key.WithHelp("ctrl+shift+f", "file finder"),
 		),
-		Node: key.NewBinding(
+		NodeSettings: key.NewBinding(
 			key.WithKeys("ctrl+shift+n"),
-			key.WithHelp("ctrl+shift+n", "node settings"),
+			key.WithHelp("ctrl+shift+n", "NODE connections"),
 		),
+		Themes:    key.NewBinding(key.WithKeys("ctrl+shift+t"), key.WithHelp("ctrl+shift+t", "themes")),
+		ThemePrev: key.NewBinding(key.WithKeys("ctrl+shift+<")),
+		ThemeNext: key.NewBinding(key.WithKeys("ctrl+shift+>")),
 	}
 
 	km.Editor.SendMessage = key.NewBinding(

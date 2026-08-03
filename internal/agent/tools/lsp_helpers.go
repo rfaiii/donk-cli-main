@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
+	"github.com/charmbracelet/crush/internal/lsp"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
 )
 

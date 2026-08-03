@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/message"
+	"github.com/charmbracelet/crush/internal/message"
 )
 
 // CreateMessageParams represents parameters for creating a message.

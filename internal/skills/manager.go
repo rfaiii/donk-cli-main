@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/rfaiii/donk-cli-main/internal/home"
-	"github.com/rfaiii/donk-cli-main/internal/pubsub"
+	"github.com/charmbracelet/crush/internal/home"
+	"github.com/charmbracelet/crush/internal/pubsub"
 )
 
 // Manager owns per-workspace skill discovery state: the latest discovery

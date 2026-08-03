@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/agent/hyper"
+	"github.com/charmbracelet/crush/internal/agent/hyper"
 	xetag "github.com/charmbracelet/x/etag"
 )
 

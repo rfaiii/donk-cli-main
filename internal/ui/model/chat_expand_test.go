@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/ui/chat"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/ui/chat"
 	"github.com/stretchr/testify/require"
 )
 

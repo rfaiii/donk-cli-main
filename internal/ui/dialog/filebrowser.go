@@ -11,8 +11,8 @@ import (
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/rfaiii/donk-cli-main/internal/clipboard"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/clipboard"
+	"github.com/charmbracelet/crush/internal/ui/common"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 )
@@ -27,8 +27,8 @@ type fileBrowserEntry struct {
 }
 
 // FileBrowser is a focused, in-app file finder with preview, metadata, and
-// clipboard panes. It intentionally omits Superfile's process and pinned-tab
-// panes so it stays useful alongside the agent conversation.
+// clipboard panes. It stays intentionally compact so it remains useful beside
+// the agent conversation.
 type FileBrowser struct {
 	com        *common.Common
 	dir        string
@@ -37,10 +37,14 @@ type FileBrowser struct {
 	scroll     int
 	showHidden bool
 	preview    string
+	metadata   string
 	clipboard  string
+	loading    bool
+	loadError  string
+	loadSeq    uint64
 
-	up, down, pageUp, pageDown, first, last, toggleHidden, open, back, copy, close key.Binding
-	contentRect, closeRect                                                         image.Rectangle
+	up, down, pageUp, pageDown, first, last, toggleHidden, refresh, open, back, copy, attach, external, changeProject, close key.Binding
+	contentRect, closeRect                                                                                                   image.Rectangle
 }
 
 var _ Dialog = (*FileBrowser)(nil)
@@ -58,38 +62,65 @@ func NewFileBrowser(com *common.Common) (*FileBrowser, tea.Cmd) {
 	f.first = key.NewBinding(key.WithKeys("home", "g"))
 	f.last = key.NewBinding(key.WithKeys("end", "G"))
 	f.toggleHidden = key.NewBinding(key.WithKeys("."), key.WithHelp(".", "show hidden"))
+	f.refresh = key.NewBinding(key.WithKeys("r"), key.WithHelp("r", "refresh"))
 	f.open = key.NewBinding(key.WithKeys("enter", "right", "l"))
 	f.back = key.NewBinding(key.WithKeys("left", "h", "backspace"))
 	f.copy = key.NewBinding(key.WithKeys("y"), key.WithHelp("y", "copy path"))
+	f.attach = key.NewBinding(key.WithKeys("a"), key.WithHelp("a", "attach"))
+	f.external = key.NewBinding(key.WithKeys("o"), key.WithHelp("o", "open editor"))
+	f.changeProject = key.NewBinding(key.WithKeys("s"), key.WithHelp("s", "switch project"))
 	f.close = CloseKey
-	f.reload()
 	if b, err := clipboard.Read(clipboard.FormatText); err == nil {
 		f.clipboard = strings.TrimSpace(string(b))
 	}
-	return f, nil
+	return f, f.requestReload()
 }
 
 func (f *FileBrowser) ID() string { return FileBrowserID }
 
-func (f *FileBrowser) reload() {
-	items, err := os.ReadDir(f.dir)
-	if err != nil {
-		f.entries = nil
-		f.preview = err.Error()
-		return
-	}
-	f.entries = f.entries[:0]
-	for _, item := range items {
-		if !f.showHidden && strings.HasPrefix(item.Name(), ".") {
-			continue
+type fileBrowserLoadMsg struct {
+	seq      uint64
+	dir      string
+	entries  []fileBrowserEntry
+	preview  string
+	metadata string
+	err      error
+}
+
+type fileBrowserPreviewMsg struct {
+	seq      uint64
+	path     string
+	preview  string
+	metadata string
+	err      error
+}
+
+func (f *FileBrowser) requestReload() tea.Cmd {
+	f.loadSeq++
+	seq := f.loadSeq
+	f.loading = true
+	f.loadError = ""
+	dir, showHidden, selected := f.dir, f.showHidden, f.selected
+	return func() tea.Msg {
+		items, err := os.ReadDir(dir)
+		if err != nil {
+			return fileBrowserLoadMsg{seq: seq, dir: dir, err: err}
 		}
-		f.entries = append(f.entries, fileBrowserEntry{name: item.Name(), path: filepath.Join(f.dir, item.Name()), dir: item.IsDir()})
+		entries := make([]fileBrowserEntry, 0, len(items))
+		for _, item := range items {
+			if !showHidden && strings.HasPrefix(item.Name(), ".") {
+				continue
+			}
+			entries = append(entries, fileBrowserEntry{name: item.Name(), path: filepath.Join(dir, item.Name()), dir: item.IsDir()})
+		}
+		selected = min(max(0, selected), max(0, len(entries)-1))
+		preview, metadata := "(empty directory)", "Metadata: (none selected)"
+		if len(entries) > 0 {
+			preview = previewForEntry(entries[selected])
+			metadata = metadataForEntry(entries[selected])
+		}
+		return fileBrowserLoadMsg{seq: seq, dir: dir, entries: entries, preview: preview, metadata: metadata}
 	}
-	if f.selected >= len(f.entries) {
-		f.selected = max(0, len(f.entries)-1)
-	}
-	f.ensureSelectedVisible(f.visibleEntryRows())
-	f.updatePreview()
 }
 
 func (f *FileBrowser) visibleEntryRows() int {
@@ -120,32 +151,74 @@ func (f *FileBrowser) ensureSelectedVisible(viewport int) {
 	f.scroll = min(max(0, f.scroll), max(0, len(f.entries)-viewport))
 }
 
-func (f *FileBrowser) updatePreview() {
-	if len(f.entries) == 0 {
-		f.preview = "(empty directory)"
-		return
-	}
-	e := f.entries[f.selected]
+func previewForEntry(e fileBrowserEntry) string {
 	if e.dir {
-		f.preview = "directory\n\nPress enter to open"
-		return
+		return "directory\n\nPress enter to open"
 	}
 	b, err := os.ReadFile(e.path)
 	if err != nil {
-		f.preview = err.Error()
-		return
+		return err.Error()
 	}
 	if len(b) > 12000 {
 		b = b[:12000]
 	}
 	if strings.IndexByte(string(b), 0) >= 0 {
-		f.preview = "(binary file)"
-		return
+		return "(binary file)"
 	}
-	f.preview = string(b)
+	return string(b)
+}
+
+func metadataForEntry(e fileBrowserEntry) string {
+	info, err := os.Stat(e.path)
+	if err != nil {
+		return "Metadata: " + err.Error()
+	}
+	return fmt.Sprintf("Metadata: %s  •  %d bytes  •  %s", e.name, info.Size(), info.ModTime().Format("2006-01-02 15:04"))
+}
+
+func (f *FileBrowser) requestPreview() tea.Cmd {
+	if len(f.entries) == 0 || f.selected < 0 || f.selected >= len(f.entries) {
+		f.preview = "(empty directory)"
+		return nil
+	}
+	f.loadSeq++
+	seq, entry := f.loadSeq, f.entries[f.selected]
+	f.loading = true
+	f.loadError = ""
+	return func() tea.Msg {
+		return fileBrowserPreviewMsg{seq: seq, path: entry.path, preview: previewForEntry(entry), metadata: metadataForEntry(entry)}
+	}
+}
+
+func fileBrowserAction(cmd tea.Cmd) Action {
+	if cmd == nil {
+		return nil
+	}
+	return ActionCmd{Cmd: cmd}
 }
 
 func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
+	switch msg := msg.(type) {
+	case fileBrowserLoadMsg:
+		if msg.seq != f.loadSeq || msg.dir != f.dir {
+			return nil
+		}
+		f.loading = false
+		f.entries, f.preview, f.metadata, f.loadError = msg.entries, msg.preview, msg.metadata, ""
+		if msg.err != nil {
+			f.loadError, f.preview, f.metadata = msg.err.Error(), msg.err.Error(), "Metadata: unavailable"
+		}
+		f.selected = min(max(0, f.selected), max(0, len(f.entries)-1))
+		f.ensureSelectedVisible(f.visibleEntryRows())
+		return nil
+	case fileBrowserPreviewMsg:
+		if msg.seq != f.loadSeq || len(f.entries) == 0 || f.entries[f.selected].path != msg.path {
+			return nil
+		}
+		f.loading = false
+		f.preview, f.metadata, f.loadError = msg.preview, msg.metadata, ""
+		return nil
+	}
 	if mouse, ok := msg.(tea.MouseClickMsg); ok {
 		if mouse.Button == uv.MouseLeft && image.Pt(mouse.X, mouse.Y).In(f.closeRect) {
 			return ActionClose{}
@@ -164,13 +237,13 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 			return nil
 		}
 		f.selected = index
-		f.updatePreview()
+		cmd := f.requestPreview()
 		if f.entries[f.selected].dir {
 			f.dir = f.entries[f.selected].path
 			f.selected = 0
-			f.reload()
+			cmd = f.requestReload()
 		}
-		return nil
+		return fileBrowserAction(cmd)
 	}
 	if wheel, ok := msg.(tea.MouseWheelMsg); ok {
 		if !image.Pt(wheel.X, wheel.Y).In(f.contentRect) || len(f.entries) == 0 {
@@ -185,8 +258,7 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 			return nil
 		}
 		f.ensureSelectedVisible(f.visibleEntryRows())
-		f.updatePreview()
-		return nil
+		return fileBrowserAction(f.requestPreview())
 	}
 	if k, ok := msg.(tea.KeyPressMsg); ok {
 		switch {
@@ -196,37 +268,63 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 			if f.selected > 0 {
 				f.selected--
 				f.ensureSelectedVisible(f.visibleEntryRows())
-				f.updatePreview()
+				if action := fileBrowserAction(f.requestPreview()); action != nil {
+					return action
+				}
 			}
 		case key.Matches(k, f.down):
 			if f.selected+1 < len(f.entries) {
 				f.selected++
 				f.ensureSelectedVisible(f.visibleEntryRows())
-				f.updatePreview()
+				if action := fileBrowserAction(f.requestPreview()); action != nil {
+					return action
+				}
 			}
 		case key.Matches(k, f.pageUp):
 			f.selected = max(0, f.selected-f.visibleEntryRows())
 			f.ensureSelectedVisible(f.visibleEntryRows())
-			f.updatePreview()
+			if action := fileBrowserAction(f.requestPreview()); action != nil {
+				return action
+			}
 		case key.Matches(k, f.pageDown):
 			f.selected = min(max(0, len(f.entries)-1), f.selected+f.visibleEntryRows())
 			f.ensureSelectedVisible(f.visibleEntryRows())
-			f.updatePreview()
+			if action := fileBrowserAction(f.requestPreview()); action != nil {
+				return action
+			}
 		case key.Matches(k, f.first):
 			f.selected, f.scroll = 0, 0
-			f.updatePreview()
+			if action := fileBrowserAction(f.requestPreview()); action != nil {
+				return action
+			}
 		case key.Matches(k, f.last):
 			f.selected = max(0, len(f.entries)-1)
 			f.ensureSelectedVisible(f.visibleEntryRows())
-			f.updatePreview()
+			if action := fileBrowserAction(f.requestPreview()); action != nil {
+				return action
+			}
 		case key.Matches(k, f.toggleHidden):
 			f.showHidden = !f.showHidden
 			f.selected, f.scroll = 0, 0
-			f.reload()
+			return fileBrowserAction(f.requestReload())
+		case key.Matches(k, f.refresh):
+			return fileBrowserAction(f.requestReload())
 		case key.Matches(k, f.copy):
 			if len(f.entries) > 0 {
 				clipboard.WriteText(f.entries[f.selected].path)
 				f.clipboard = f.entries[f.selected].path
+			}
+		case key.Matches(k, f.attach):
+			if len(f.entries) > 0 && !f.entries[f.selected].dir {
+				return ActionFileBrowserSelected{Path: f.entries[f.selected].path}
+			}
+		case key.Matches(k, f.external):
+			if len(f.entries) > 0 && !f.entries[f.selected].dir {
+				return ActionFileBrowserOpenExternal{Path: f.entries[f.selected].path}
+			}
+		case key.Matches(k, f.changeProject):
+			if len(f.entries) > 0 && f.entries[f.selected].dir {
+				return ActionChangeProject{Path: f.entries[f.selected].path}
 			}
 		case key.Matches(k, f.back):
 			parent := filepath.Dir(f.dir)
@@ -234,14 +332,14 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 				f.dir = parent
 				f.selected = 0
 				f.scroll = 0
-				f.reload()
+				return fileBrowserAction(f.requestReload())
 			}
 		case key.Matches(k, f.open):
 			if len(f.entries) > 0 && f.entries[f.selected].dir {
 				f.dir = f.entries[f.selected].path
 				f.selected = 0
 				f.scroll = 0
-				f.reload()
+				return fileBrowserAction(f.requestReload())
 			}
 		}
 	}
@@ -252,10 +350,10 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	// Calculate the outer rectangle first. Lip Gloss Width/Height apply to the
 	// content box, so subtract the border and padding before rendering. This
 	// keeps the final panel inside the terminal regardless of file contents.
-	panelStyle := lipgloss.NewStyle().
+	panelTheme := f.com.Styles.Dialog.FileBrowser
+	panelStyle := panelTheme.Panel.
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#b8bec8")).
-		Background(lipgloss.Color("#111415")).
+		BorderForeground(panelTheme.Border.GetForeground()).
 		Padding(1)
 	// Use the available vertical space while retaining a small terminal inset.
 	// This intentionally covers the large application banner while the Finder is
@@ -307,13 +405,11 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		// fixedLines has already made this row exactly listW cells wide. Do not
 		// apply a second Lip Gloss width here: it can wrap long styled rows and
 		// break the scrollbar into disconnected pieces.
-		style := lipgloss.NewStyle()
+		style := panelTheme.Entry
 		if i > 0 && start+i-1 == f.selected {
-			style = style.Background(lipgloss.Color("#f5bde6")).Foreground(lipgloss.Color("#1b1d20"))
+			style = panelTheme.Selected
 		} else if i == 0 {
-			style = style.Foreground(lipgloss.Color("#3bf66b"))
-		} else {
-			style = style.Foreground(lipgloss.Color("#d0d4d8"))
+			style = panelTheme.Directory
 		}
 		leftRendered[i] = style.Render(line)
 	}
@@ -325,7 +421,7 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	rightLines := fixedLines(strings.Split(preview, "\n"), rightW, bodyH)
 	rightRendered := make([]string, len(rightLines))
 	for i, line := range rightLines {
-		rightRendered[i] = lipgloss.NewStyle().Foreground(lipgloss.Color("#d0d4d8")).Render(line)
+		rightRendered[i] = panelTheme.Preview.Render(line)
 	}
 	bodyLines := make([]string, bodyH)
 	for i := range bodyLines {
@@ -335,39 +431,33 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 		bodyLines[i] = strings.Repeat(" ", contentW)
 	}
 
-	meta := "Metadata: (none selected)"
-	if len(f.entries) > 0 {
-		e := f.entries[f.selected]
-		if info, err := os.Stat(e.path); err == nil {
-			meta = fmt.Sprintf("Metadata: %s  •  %d bytes  •  %s", e.name, info.Size(), info.ModTime().Format("2006-01-02 15:04"))
-		}
+	meta := f.metadata
+	if meta == "" {
+		meta = "Metadata: (loading)"
+	}
+	if f.loading {
+		meta += "  •  loading…"
 	}
 	clip := "Clipboard: (empty)"
 	if f.clipboard != "" {
 		clip = "Clipboard: " + f.clipboard
 	}
-	footerLines := fixedLines([]string{meta, clip, "↑↓ navigate  pgup/pgdn scroll  enter open  ← up  y copy  esc close"}, contentW, footerH)
+	footerLines := fixedLines([]string{meta, clip, "↑↓ navigate  a attach  o editor  r refresh  enter open  y copy  esc close"}, contentW, footerH)
 	titleW := max(1, contentW-closeW-1)
 	titleText := padRight(ansi.Truncate("DONK FILE FINDER", titleW, "…"), titleW) + strings.Repeat(" ", contentW-titleW)
-	titleCell := lipgloss.NewStyle().Foreground(lipgloss.Color("#3bf66b")).Bold(true).Render(titleText)
+	titleCell := panelTheme.Title.Render(titleText)
 	contentLines := make([]string, 0, contentH)
 	contentLines = append(contentLines, titleCell)
 	if paneHeaderH > 0 {
 		paneW := leftW + 1 + rightW
-		contentLines = append(contentLines, lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render(strings.Repeat("─", paneW)+strings.Repeat(" ", max(0, contentW-paneW))))
+		contentLines = append(contentLines, panelTheme.Rule.Render(strings.Repeat("─", paneW)+strings.Repeat(" ", max(0, contentW-paneW))))
 	}
 	contentLines = append(contentLines, bodyLines...)
 	if dividerH > 0 {
-		contentLines = append(contentLines, lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render(strings.Repeat("─", contentW)))
+		contentLines = append(contentLines, panelTheme.Rule.Render(strings.Repeat("─", contentW)))
 	}
-	footerStyles := []lipgloss.Style{
-		lipgloss.NewStyle().Foreground(lipgloss.Color("#d0d4d8")),
-		lipgloss.NewStyle().Foreground(lipgloss.Color("#3bf66b")),
-		lipgloss.NewStyle().Foreground(lipgloss.Color("#8c9691")),
-	}
-	for i, line := range footerLines {
-		style := footerStyles[min(i, len(footerStyles)-1)]
-		contentLines = append(contentLines, style.Render(line))
+	for _, line := range footerLines {
+		contentLines = append(contentLines, panelTheme.Footer.Render(line))
 	}
 	// Every row is fixed before styling; apply the known content dimensions once
 	// so the outer panel cannot grow when preview text changes.
@@ -386,19 +476,19 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	for i := range leftRendered {
 		y := actualContentY + titleH + paneHeaderH + i
 		uv.NewStyledString(leftRendered[i]).Draw(scr, image.Rect(actualContentX, y, actualContentX+listW, y+1))
-		uv.NewStyledString(lipgloss.NewStyle().Foreground(lipgloss.Color("#59645e")).Render("│")).Draw(scr, image.Rect(actualContentX+leftW, y, actualContentX+leftW+1, y+1))
+		uv.NewStyledString(panelTheme.Rule.Render("│")).Draw(scr, image.Rect(actualContentX+leftW, y, actualContentX+leftW+1, y+1))
 		uv.NewStyledString(rightRendered[i]).Draw(scr, image.Rect(actualContentX+leftW+1, y, actualContentX+leftW+1+rightW, y+1))
 	}
 
 	// Draw controls after the fixed panel so text layout cannot wrap or move
 	// them. These rectangles are the same ones used by HandleMsg.
-	lipglossClose := lipgloss.NewStyle().Foreground(lipgloss.Color("#ff5fb7")).Bold(true).Render(closeText)
+	lipglossClose := panelTheme.Close.Render(closeText)
 	uv.NewStyledString(lipglossClose).Draw(scr, f.closeRect)
 	if visibleEntries > 0 {
 		bar := scrollbarLines(visibleEntries, len(f.entries), f.scroll)
 		barX := actualContentX + listW
 		for i, glyph := range bar {
-			uv.NewStyledString(lipgloss.NewStyle().Foreground(lipgloss.Color("#ff5fb7")).Render(glyph)).Draw(scr, image.Rect(barX, actualContentY+titleH+paneHeaderH+i, barX+1, actualContentY+titleH+paneHeaderH+i+1))
+			uv.NewStyledString(panelTheme.Close.Render(glyph)).Draw(scr, image.Rect(barX, actualContentY+titleH+paneHeaderH+i, barX+1, actualContentY+titleH+paneHeaderH+i+1))
 		}
 	}
 	return nil

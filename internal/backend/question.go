@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"github.com/rfaiii/donk-cli-main/internal/proto"
-	"github.com/rfaiii/donk-cli-main/internal/question"
+	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/charmbracelet/crush/internal/question"
 )
 
 // AnswerQuestion submits answers for a question. The returned bool

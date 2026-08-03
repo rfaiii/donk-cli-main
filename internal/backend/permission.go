@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/proto"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/proto"
 )
 
 // GrantPermission grants, denies, or persistently grants a permission

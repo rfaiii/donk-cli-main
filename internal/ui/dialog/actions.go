@@ -9,15 +9,15 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/rfaiii/donk-cli-main/internal/commands"
-	"github.com/rfaiii/donk-cli-main/internal/config"
-	"github.com/rfaiii/donk-cli-main/internal/message"
-	"github.com/rfaiii/donk-cli-main/internal/oauth"
-	"github.com/rfaiii/donk-cli-main/internal/permission"
-	"github.com/rfaiii/donk-cli-main/internal/session"
-	"github.com/rfaiii/donk-cli-main/internal/skills"
-	"github.com/rfaiii/donk-cli-main/internal/ui/common"
-	"github.com/rfaiii/donk-cli-main/internal/ui/util"
+	"github.com/charmbracelet/crush/internal/commands"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/crush/internal/message"
+	"github.com/charmbracelet/crush/internal/oauth"
+	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/crush/internal/session"
+	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/charmbracelet/crush/internal/ui/util"
 )
 
 // ActionClose is a message to close the current dialog.
@@ -42,6 +42,7 @@ type ActionSelectModel struct {
 	Model          config.SelectedModel
 	ModelType      config.SelectedModelType
 	ReAuthenticate bool
+	LocalModel     bool
 }
 
 // Messages for commands
@@ -161,6 +162,23 @@ type ActionCmd struct {
 // ActionFilePickerSelected is a message indicating a file has been selected in
 // the file picker dialog.
 type ActionFilePickerSelected struct {
+	Path string
+}
+
+// ActionFileBrowserSelected hands a selected file from the project finder to
+// the conversation editor for explicit context handoff.
+type ActionFileBrowserSelected struct {
+	Path string
+}
+
+// ActionFileBrowserOpenExternal requests opening the selected file in the
+// configured external editor.
+type ActionFileBrowserOpenExternal struct {
+	Path string
+}
+
+// ActionChangeProject requests restarting DONK in a selected directory.
+type ActionChangeProject struct {
 	Path string
 }
 

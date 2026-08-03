@@ -3,7 +3,7 @@ package session
 import (
 	"testing"
 
-	"github.com/rfaiii/donk-cli-main/internal/db"
+	"github.com/charmbracelet/crush/internal/db"
 	"github.com/stretchr/testify/require"
 )
 

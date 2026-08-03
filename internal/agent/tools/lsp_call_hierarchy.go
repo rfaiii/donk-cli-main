@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/rfaiii/donk-cli-main/internal/lsp"
+	"github.com/charmbracelet/crush/internal/lsp"
 )
 
 type CallHierarchyParams struct {
