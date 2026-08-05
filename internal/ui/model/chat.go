@@ -7,15 +7,15 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/chat"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/list"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/clipperhouse/displaywidth"
 	"github.com/clipperhouse/uax29/v2/words"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/ui/anim"
+	"github.com/richavery/donk-cli/internal/ui/chat"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/list"
 )
 
 // Constants for multi-click detection.

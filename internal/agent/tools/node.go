@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/node"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/richavery/donk-cli/internal/node"
+	"github.com/richavery/donk-cli/internal/permission"
 )
 
 const (

@@ -14,10 +14,10 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/util"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/util"
 )
 
 // ArgumentsID is the identifier for the arguments dialog.

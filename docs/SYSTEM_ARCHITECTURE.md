@@ -114,6 +114,7 @@ internal/
   ├── config/      settings and configuration loading
   ├── db/          local persistence
   ├── session/     session history and state
+  ├── skills/      skill discovery, embedding, and agentskills.io catalog
   ├── lsp/         language-server integration
   └── workspace/   project, LSP, and context services
   └── node/        device registry, transports, health, and execution

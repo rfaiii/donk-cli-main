@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/oauth"
-	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/donk-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

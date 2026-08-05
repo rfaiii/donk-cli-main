@@ -9,12 +9,12 @@ import (
 	"charm.land/bubbles/v2/spinner"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 // CommandsID is the identifier for the commands dialog.
@@ -230,6 +230,11 @@ func (c *Commands) HandleMsg(msg tea.Msg) Action {
 			}
 			c.input, cmd = c.input.Update(msg)
 			value := c.input.Value()
+			if value == "" {
+				c.list.SetItems(c.buildCommandItems(c.selected)...)
+			} else {
+				c.list.SetItems(c.allCommandItems()...)
+			}
 			c.list.SetFilter(value)
 			c.list.ScrollToTop()
 			c.list.SetSelected(0)
@@ -394,33 +399,17 @@ func (c *Commands) previousCommandType() CommandType {
 	}
 }
 
-// setCommandItems sets the command items based on the specified command type.
-func (c *Commands) setCommandItems(commandType CommandType) {
-	c.selected = commandType
-
-	commandItems := []list.FilterableItem{}
-	switch c.selected {
+// buildCommandItems builds the command items for the given command type.
+func (c *Commands) buildCommandItems(commandType CommandType) []list.FilterableItem {
+	items := []list.FilterableItem{}
+	switch commandType {
 	case SystemCommands:
 		for _, cmd := range c.defaultCommands() {
-			commandItems = append(commandItems, cmd)
+			items = append(items, cmd)
 		}
 	case UserCommands:
 		for _, cmd := range c.customCommands {
-			var action Action
-			if cmd.Skill != nil {
-				action = ActionAttachSkill{ID: cmd.Skill.SkillFilePath, Name: cmd.Skill.Name}
-			} else {
-				action = ActionRunCustomCommand{
-					Content:   cmd.Content,
-					Arguments: cmd.Arguments,
-					Skill:     cmd.Skill,
-				}
-			}
-			item := NewCommandItem(c.com.Styles, "custom_"+cmd.ID, cmd.Name, "", action)
-			if cmd.Skill != nil {
-				item = item.WithDescription(cmd.Skill.Description)
-			}
-			commandItems = append(commandItems, item)
+			items = append(items, c.newUserCommandItem(cmd))
 		}
 	case MCPPrompts:
 		for _, cmd := range c.mcpPrompts {
@@ -431,11 +420,57 @@ func (c *Commands) setCommandItems(commandType CommandType) {
 				ClientID:    cmd.ClientID,
 				Arguments:   cmd.Arguments,
 			}
-			commandItems = append(commandItems, NewCommandItem(c.com.Styles, "mcp_"+cmd.ID, cmd.PromptID, "", action))
+			items = append(items, NewCommandItem(c.com.Styles, "mcp_"+cmd.ID, cmd.PromptID, "", action))
 		}
 	}
+	return items
+}
 
-	c.list.SetItems(commandItems...)
+// newUserCommandItem builds a CommandItem for a custom (and user-invocable
+// skill) command. Skill commands are rendered title-cased with <name> and
+// /<name> aliases so they are reachable from the palette by /cline, /hermes, etc.
+func (c *Commands) newUserCommandItem(cmd commands.CustomCommand) *CommandItem {
+	title := cmd.Name
+	var aliases []string
+	var action Action
+	if cmd.Skill != nil {
+		action = ActionAttachSkill{ID: cmd.Skill.SkillFilePath, Name: cmd.Skill.Name}
+		if cmd.Skill.Name != "" {
+			title = capitalizeFirst(cmd.Skill.Name)
+			aliases = []string{cmd.Skill.Name, "/" + cmd.Skill.Name}
+		}
+	} else {
+		action = ActionRunCustomCommand{
+			Content:   cmd.Content,
+			Arguments: cmd.Arguments,
+			Skill:     cmd.Skill,
+		}
+	}
+	item := NewCommandItem(c.com.Styles, "custom_"+cmd.ID, title, "", action)
+	if cmd.Skill != nil {
+		item = item.WithDescription(cmd.Skill.Description)
+	}
+	if len(aliases) > 0 {
+		item = item.WithAliases(aliases...)
+	}
+	return item
+}
+
+// allCommandItems returns every command item across all tabs for palette-wide
+// filtering, so entries like /cline (User commands) are found from any tab.
+func (c *Commands) allCommandItems() []list.FilterableItem {
+	items := append([]list.FilterableItem(nil), c.buildCommandItems(SystemCommands)...)
+	items = append(items, c.buildCommandItems(UserCommands)...)
+	items = append(items, c.buildCommandItems(MCPPrompts)...)
+	return items
+}
+
+// setCommandItems sets the command items based on the specified command type.
+func (c *Commands) setCommandItems(commandType CommandType) {
+	c.selected = commandType
+
+	items := c.buildCommandItems(commandType)
+	c.list.SetItems(items...)
 	c.list.SetFilter("")
 	c.list.ScrollToTop()
 	c.list.SetSelected(0)
@@ -540,6 +575,7 @@ func (c *Commands) defaultCommands() []*CommandItem {
 	commands = append(
 		commands,
 		NewCommandItem(c.com.Styles, "toggle_beastmode", "Toggle Beast Mode", "ctrl+y", ActionToggleBeastmodeMode{}),
+		NewCommandItem(c.com.Styles, "toggle_code_mode", "Toggle Code Mode", "ctrl+shift+c", ActionToggleCodeMode{}),
 		NewCommandItem(c.com.Styles, "toggle_help", "Toggle Help", "ctrl+g", ActionToggleHelp{}),
 		NewCommandItem(c.com.Styles, "init", "Initialize Project", "", ActionInitializeProject{}),
 	)
@@ -573,6 +609,13 @@ func (c *Commands) SetMCPPrompts(mcpPrompts []commands.MCPPrompt) {
 	if c.selected == MCPPrompts {
 		c.setCommandItems(c.selected)
 	}
+}
+
+func capitalizeFirst(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToUpper(s[:1]) + s[1:]
 }
 
 // StartLoading implements [LoadingDialog].

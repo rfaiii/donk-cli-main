@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
+	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

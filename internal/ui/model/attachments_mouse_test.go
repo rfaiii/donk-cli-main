@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/question"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/dialog"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/question"
+	"github.com/richavery/donk-cli/internal/ui/attachments"
+	"github.com/richavery/donk-cli/internal/ui/dialog"
 	"github.com/stretchr/testify/require"
 )
 

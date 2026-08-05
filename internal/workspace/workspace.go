@@ -11,18 +11,18 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
-	mcptools "github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/oauth"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/question"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
+	mcptools "github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/history"
+	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/question"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/skills"
 )
 
 // Reasons the coder agent may be unavailable, returned by
@@ -35,7 +35,7 @@ var (
 	// ErrServerUnreachable means the client could not reach the server
 	// to determine the agent's status (server down, or the workspace was
 	// torn down out from under the client).
-	ErrServerUnreachable = errors.New("lost connection to the crush server")
+	ErrServerUnreachable = errors.New("lost connection to the donk server")
 )
 
 // LSPClientInfo holds information about an LSP client's state. This is

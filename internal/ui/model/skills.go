@@ -8,9 +8,9 @@ import (
 	"sync"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 type skillStatusItem struct {

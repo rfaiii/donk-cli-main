@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/agent/tools"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 // QuestionToolMessageItem renders question tool calls in the chat.

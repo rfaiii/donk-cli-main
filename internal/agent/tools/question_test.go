@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/question"
+	"github.com/richavery/donk-cli/internal/question"
 	"github.com/stretchr/testify/require"
 )
 

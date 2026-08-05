@@ -272,14 +272,14 @@ td {
   display: block;
 }
 
-/* Override charm brand colors in footer */
+/* Override DONK brand colors in footer */
 .footer-container .st2 {
   fill: #fffaf1 !important;
 }
 
 @media (prefers-color-scheme: light) {
 
-  /* Override charm brand colors in footer */
+  /* Override DONK brand colors in footer */
   .footer-container .st2 {
     fill: #644ced !important;
   }

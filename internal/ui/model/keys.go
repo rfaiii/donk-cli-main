@@ -68,6 +68,7 @@ type KeyMap struct {
 	Sessions        key.Binding
 	Tab             key.Binding
 	ToggleBeastmode key.Binding
+	ToggleCodeMode  key.Binding
 	Finder          key.Binding
 	NodeSettings    key.Binding
 	Themes          key.Binding
@@ -108,6 +109,10 @@ func DefaultKeyMap() KeyMap {
 		ToggleBeastmode: key.NewBinding(
 			key.WithKeys("ctrl+y"),
 			key.WithHelp("ctrl+y", "toggle beastmode"),
+		),
+		ToggleCodeMode: key.NewBinding(
+			key.WithKeys("ctrl+shift+c"),
+			key.WithHelp("ctrl+shift+c", "toggle code mode"),
 		),
 		Finder: key.NewBinding(
 			key.WithKeys("ctrl+shift+f"),

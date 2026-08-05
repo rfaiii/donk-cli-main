@@ -160,7 +160,7 @@ func DarkDonkTheme() Styles {
 // tests and callers. New code should use DarkDonkTheme.
 func CharmtonePantera() Styles { return DarkDonkTheme() }
 
-// HypercrushObsidiana returns the Hypercrush dark theme.
-func HypercrushObsidiana() Styles {
+// HyperdonkObsidiana returns the Hyperdonk dark theme.
+func HyperdonkObsidiana() Styles {
 	return DarkDonkTheme()
 }

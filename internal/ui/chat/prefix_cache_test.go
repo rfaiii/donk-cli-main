@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/ui/attachments"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

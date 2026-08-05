@@ -10,15 +10,15 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/stretchr/testify/require"
 
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/dialog"
-	"github.com/charmbracelet/crush/internal/workspace"
+	"github.com/richavery/donk-cli/internal/agent/notify"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/ui/attachments"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/dialog"
+	"github.com/richavery/donk-cli/internal/workspace"
 )
 
 // countingWorkspace is a workspace.Workspace stub that counts every probe

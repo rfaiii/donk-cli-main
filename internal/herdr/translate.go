@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/agent/notify"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/pubsub"
 )
 
 // Translate converts a pub/sub event (domain or proto) into a herdr

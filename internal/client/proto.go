@@ -13,11 +13,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/pubsub"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/pubsub"
 )
 
 // ListWorkspaces retrieves all workspaces from the server.

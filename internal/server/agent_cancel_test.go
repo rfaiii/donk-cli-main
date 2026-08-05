@@ -12,12 +12,12 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent"
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/backend"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/proto"
 	"github.com/google/uuid"
+	"github.com/richavery/donk-cli/internal/agent"
+	"github.com/richavery/donk-cli/internal/app"
+	"github.com/richavery/donk-cli/internal/backend"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

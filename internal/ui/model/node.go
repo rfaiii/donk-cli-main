@@ -4,8 +4,8 @@ import (
 	"slices"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/node"
-	"github.com/charmbracelet/crush/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/node"
+	"github.com/richavery/donk-cli/internal/ui/common"
 )
 
 func (m *UI) nodeInfo(width, maxItems int) string {

@@ -4,10 +4,10 @@ import (
 	"image"
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/node"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/richavery/donk-cli/internal/node"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

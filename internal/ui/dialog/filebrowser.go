@@ -11,10 +11,10 @@ import (
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/clipboard"
-	"github.com/charmbracelet/crush/internal/ui/common"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/clipboard"
+	"github.com/richavery/donk-cli/internal/ui/common"
 )
 
 // FileBrowserID identifies the project file browser overlay.

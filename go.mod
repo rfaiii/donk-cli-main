@@ -1,4 +1,4 @@
-module github.com/charmbracelet/crush
+module github.com/richavery/donk-cli
 
 go 1.26.5
 

@@ -12,14 +12,14 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/client"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/richavery/donk-cli/internal/app"
+	"github.com/richavery/donk-cli/internal/client"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/skills"
 	"github.com/stretchr/testify/require"
 )
 

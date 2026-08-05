@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/proto"
+	"github.com/richavery/donk-cli/internal/agent/tools"
+	"github.com/richavery/donk-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 )
 

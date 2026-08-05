@@ -11,20 +11,20 @@ import (
 	"time"
 
 	"charm.land/log/v2"
-	"github.com/charmbracelet/crush/internal/client"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/format"
-	"github.com/charmbracelet/crush/internal/herdr"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/styles"
-	"github.com/charmbracelet/crush/internal/workspace"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/term"
 	"github.com/google/uuid"
+	"github.com/richavery/donk-cli/internal/client"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/event"
+	"github.com/richavery/donk-cli/internal/format"
+	"github.com/richavery/donk-cli/internal/herdr"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/ui/anim"
+	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/workspace"
 	"github.com/spf13/cobra"
 )
 
@@ -36,28 +36,28 @@ var runCmd = &cobra.Command{
 The prompt can be provided as arguments or piped from stdin.`,
 	Example: `
 # Run a simple prompt
-crush run "Guess my 5 favorite Pokémon"
+donk-cli run "Guess my 5 favorite Pokémon"
 
 # Pipe input from stdin
-curl https://charm.land | crush run "Summarize this website"
+curl https://example.com | donk-cli run "Summarize this website"
 
 # Read from a file
-crush run "What is this code doing?" <<< prrr.go
+donk-cli run "What is this code doing?" <<< prrr.go
 
 # Redirect output to a file
-crush run "Generate a hot README for this project" > MY_HOT_README.md
+donk-cli run "Generate a hot README for this project" > MY_HOT_README.md
 
 # Run in quiet mode (hide the spinner)
-crush run --quiet "Generate a README for this project"
+donk-cli run --quiet "Generate a README for this project"
 
 # Run in verbose mode (show logs)
-crush run --verbose "Generate a README for this project"
+donk-cli run --verbose "Generate a README for this project"
 
 # Continue a previous session
-crush run --session {session-id} "Follow up on your last response"
+donk-cli run --session {session-id} "Follow up on your last response"
 
 # Continue the most recent session
-crush run --continue "Follow up on your last response"
+donk-cli run --continue "Follow up on your last response"
 
   `,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -105,7 +105,7 @@ crush run --continue "Follow up on your last response"
 			event.AppInitialized()
 
 			if !ws.Config.IsConfigured() {
-				return fmt.Errorf("no providers configured - please run 'crush' to set up a provider interactively")
+				return fmt.Errorf("no providers configured - please run 'donk-cli' to set up a provider interactively")
 			}
 
 			clientWs := workspace.NewClientWorkspace(c, *ws)
@@ -137,7 +137,7 @@ crush run --continue "Follow up on your last response"
 		event.AppInitialized()
 
 		if !ws.Config().IsConfigured() {
-			return fmt.Errorf("no providers configured - please run 'crush' to set up a provider interactively")
+			return fmt.Errorf("no providers configured - please run 'donk-cli' to set up a provider interactively")
 		}
 
 		if verbose {
@@ -310,7 +310,7 @@ func runNonInteractive(
 
 // runStream tracks the per-message stdout cursor and the
 // reconciliation state used by [runNonInteractive] to translate
-// streaming SSE events into a final, complete stdout for `crush run`.
+// streaming SSE events into a final, complete stdout for `donk-cli run`.
 // It is split out so the state machine can be exercised in unit tests
 // without spinning up the full server/client harness.
 //
@@ -377,7 +377,7 @@ func (s *runStream) handle(ev any, stopSpinner func()) (done bool, err error) {
 		// RunComplete is the authoritative end-of-run signal. We
 		// exit on it instead of guessing from message finish parts,
 		// which fire on every tool-call step too and were the
-		// source of the regression where `crush run` exited
+		// source of the regression where `donk-cli run` exited
 		// mid-turn on finish.reason == tool_use.
 		//
 		// Correlation:
@@ -635,7 +635,7 @@ func resolveSession(ctx context.Context, c *client.Client, wsID, continueSession
 }
 
 // resolveSessionByID resolves a session ID that may be a full UUID or a hash
-// prefix returned by crush session list.
+// prefix returned by donk-cli session list.
 func resolveSessionByID(ctx context.Context, c *client.Client, wsID, id string) (*proto.Session, error) {
 	if sess, err := c.GetSession(ctx, wsID, id); err == nil {
 		return sess, nil

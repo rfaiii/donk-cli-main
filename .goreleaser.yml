@@ -11,7 +11,7 @@ includes:
 metadata:
   mod_timestamp: "{{ .CommitTimestamp }}"
   license: "FSL-1.1-MIT"
-  homepage: "https://github.com/charmbracelet/donk-cli"
+  homepage: "https://github.com/richavery/donk-cli"
   description: "DONK is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
   full_description: "DONK is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
   maintainers:
@@ -56,7 +56,7 @@ builds:
       - goos: darwin
         goarch: arm
     ldflags:
-      - -s -w -X github.com/charmbracelet/crush/internal/version.Version={{.Version}}
+      - -s -w -X github.com/richavery/donk-cli/internal/version.Version={{.Version}}
     flags:
       - -trimpath
 
@@ -88,8 +88,8 @@ aur_sources:
     disable: "{{ with .Prerelease }}true{{ end }}"
     git_url: "ssh://aur@aur.archlinux.org/donk-cli.git"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
     makedepends:
       - go
       - git
@@ -103,7 +103,7 @@ aur_sources:
       export CGO_CXXFLAGS="${CXXFLAGS}"
       export CGO_LDFLAGS="${LDFLAGS}"
       export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
-      go build -ldflags="-w -s -buildid='' -linkmode=external -X github.com/charmbracelet/crush/internal/version.Version=v${pkgver}" .
+      go build -ldflags="-w -s -buildid='' -linkmode=external -X github.com/richavery/donk-cli/internal/version.Version=v${pkgver}" .
       ./donk-cli completion bash >./completions/donk-cli.bash
       ./donk-cli completion zsh >./completions/donk-cli.zsh
       ./donk-cli completion fish >./completions/donk-cli.fish
@@ -132,8 +132,8 @@ aurs:
     disable: "{{ with .Prerelease }}true{{ end }}"
     git_url: "ssh://aur@aur.archlinux.org/donk-cli-bin.git"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
     provides:
       - donk-cli
     conflicts:
@@ -167,7 +167,7 @@ aurs:
 
 furies:
   - disable: "{{ if (or .Prerelease .IsNightly) }}true{{ end }}"
-    account: "{{ with .Env.FURY_TOKEN }}charmcli{{ else }}{{ end }}"
+    account: "{{ with .Env.FURY_TOKEN }}donkcli{{ else }}{{ end }}"
     secret_name: FURY_TOKEN
 
 brews:
@@ -177,8 +177,8 @@ brews:
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
     goarm: 7
     extra_install: |-
       bash_completion.install "completions/{{ .ProjectName }}.bash" => "{{ .ProjectName }}"
@@ -193,13 +193,13 @@ scoops:
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
 
 npms:
-  - name: "@charmland/donk-cli"
-    repository: "git+https://github.com/charmbracelet/donk-cli.git"
-    bugs: https://github.com/charmbracelet/donk-cli/issues
+  - name: "@donkcli/donk-cli"
+    repository: "git+https://github.com/richavery/donk-cli.git"
+    bugs: https://github.com/richavery/donk-cli/issues
     access: public
     disable: "{{ with .Prerelease }}true{{ end }}"
 
@@ -251,8 +251,8 @@ nix:
       name: nur
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
     license: fsl11Mit
     formatter: nixfmt
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
@@ -261,15 +261,15 @@ nix:
       installShellCompletion ./completions/*
 
 winget:
-  - publisher: charmbracelet
-    copyright: Charmbracelet, Inc
-    publisher_url: https://charm.land
-    release_notes_url: "https://github.com/charmbracelet/donk-cli/releases/tag/{{.Tag}}"
-    license_url: https://github.com/charmbracelet/donk-cli/blob/main/LICENSE.md
+  - publisher: donk-cli
+    copyright: DONK, Inc
+    publisher_url: https://github.com/richavery/donk-cli
+    release_notes_url: "https://github.com/richavery/donk-cli/releases/tag/{{.Tag}}"
+    license_url: https://github.com/richavery/donk-cli/blob/main/LICENSE.md
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "Charm"
-      email: "charmcli@users.noreply.github.com"
+      name: "DONK"
+      email: "donkcli@users.noreply.github.com"
     repository:
       owner: "charmbracelet"
       name: winget-pkgs

@@ -12,13 +12,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/home"
 	powernap "github.com/charmbracelet/x/powernap/pkg/lsp"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
 	"github.com/charmbracelet/x/powernap/pkg/transport"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/donk-cli/internal/home"
 )
 
 // DiagnosticCounts holds the count of diagnostics by severity.

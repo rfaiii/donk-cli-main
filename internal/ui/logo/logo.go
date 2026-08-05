@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 // letterform represents a letterform. It can be stretched horizontally by
@@ -65,7 +65,7 @@ type Opts struct {
 
 // donkCLIWordmark is the compact block-letter suffix used by the Donk brand.
 // Keeping it in the logo package makes the branding independent from terminal
-// fonts while preserving the existing Crush letterform treatment.
+// fonts while preserving the existing DONK letterform treatment.
 func donkCLIWordmark(stretch bool) string {
 	cli := "█▀▀▀  █  █\n█     █  █\n▀▀▀▀  ▀  ▀"
 	if stretch {
@@ -124,7 +124,7 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 		donk = b.String()
 	}
 
-	// The Donk-CLI wordmark stands alone; no upstream Charm/Crush metadata row.
+	// The Donk-CLI wordmark stands alone; no upstream metadata row.
 	_ = version
 
 	// Narrow version.

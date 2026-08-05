@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/charmbracelet/crush/internal/config/config",
+  "$id": "https://github.com/richavery/donk-cli/internal/config/config",
   "$ref": "#/$defs/Config",
   "$defs": {
     "Attribution": {
@@ -22,7 +22,7 @@
         },
         "generated_with": {
           "type": "boolean",
-          "description": "Add Generated with Crush line to commit messages and issues and PRs",
+          "description": "Add Generated with DONK line to commit messages and issues and PRs",
           "default": true
         }
       },
@@ -437,7 +437,7 @@
             "type": "string",
             "examples": [
               ".cursorrules",
-              "CRUSH.md"
+              "DONK.md"
             ]
           },
           "type": "array",
@@ -450,7 +450,7 @@
           "type": "array",
           "description": "Paths to files containing global context information for the AI",
           "default": [
-            "~/.config/crush/CRUSH.md",
+            "~/.config/donk/DONK.md",
             "~/.config/AGENTS.md"
           ]
         },
@@ -458,7 +458,7 @@
           "items": {
             "type": "string",
             "examples": [
-              "~/.config/crush/skills",
+              "~/.config/donk/skills",
               "./skills"
             ]
           },
@@ -487,9 +487,9 @@
         "data_directory": {
           "type": "string",
           "description": "Directory for storing application data. Relative paths are resolved against the working directory; absolute paths are used as-is.",
-          "default": ".crush",
+          "default": ".donk",
           "examples": [
-            ".crush"
+            ".donk"
           ]
         },
         "disabled_tools": {
@@ -528,7 +528,7 @@
           "default": "AGENTS.md",
           "examples": [
             "AGENTS.md",
-            "CRUSH.md",
+            "DONK.md",
             "CLAUDE.md",
             "docs/LLMs.md"
           ]
@@ -559,7 +559,7 @@
           "items": {
             "type": "string",
             "examples": [
-              "crush-config"
+              "donk-config"
             ]
           },
           "type": "array",
@@ -799,6 +799,11 @@
           ],
           "description": "Chat scrollbar visibility",
           "default": "default"
+        },
+        "theme": {
+          "type": "string",
+          "description": "Color theme name",
+          "default": "rich-aizen-green"
         }
       },
       "additionalProperties": false,

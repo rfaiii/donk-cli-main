@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/workspace"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/workspace"
 	"github.com/stretchr/testify/require"
 )
 

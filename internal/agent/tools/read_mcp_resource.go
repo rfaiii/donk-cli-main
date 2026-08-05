@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/filepathext"
+	"github.com/richavery/donk-cli/internal/permission"
 )
 
 type ReadMCPResourceParams struct {

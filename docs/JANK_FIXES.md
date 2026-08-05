@@ -1,7 +1,7 @@
 # Jank Fixes
 
 This document tracks UI/UX "jank" issues that were identified and fixed in the
-Crush TUI, so future contributors can understand the context and avoid regressions.
+DONK TUI, so future contributors can understand the context and avoid regressions.
 
 ## 1. LSP "unstarted" status text
 
@@ -41,7 +41,7 @@ colons. The parser itself is behaving correctly per the YAML spec.
 
 ## 3. Banner version display (pseudo-versions)
 
-**Problem:** When Crush is installed via `go install`, the version is set to a
+**Problem:** When DONK is installed via `go install`, the version is set to a
 Go pseudo-version like `v0.87.1-0.20260731174531-4d...`. This long string
 overflowed the logo banner and looked janky.
 

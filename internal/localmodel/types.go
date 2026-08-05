@@ -33,4 +33,5 @@ type Model struct {
 	ContextWindow int64
 	MaxTokens     int64
 	Capabilities  []string
+	CodingCapable bool
 }

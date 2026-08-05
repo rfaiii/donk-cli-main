@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent"
-	"github.com/charmbracelet/crush/internal/agent/agenttest"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/session"
+	"github.com/richavery/donk-cli/internal/agent"
+	"github.com/richavery/donk-cli/internal/agent/agenttest"
+	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

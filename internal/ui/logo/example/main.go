@@ -7,9 +7,9 @@ import (
 	"os"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/ui/logo"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	"github.com/charmbracelet/x/term"
+	"github.com/richavery/donk-cli/internal/ui/logo"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 func main() {

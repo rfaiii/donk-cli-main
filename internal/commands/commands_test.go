@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/richavery/donk-cli/internal/skills"
 	"github.com/stretchr/testify/require"
 )
 
@@ -107,8 +107,14 @@ func TestFromSkillCatalog_UsesDiscoveredSymlinkedSkills(t *testing.T) {
 	entries := skills.Catalog(activeSkills, []string{root}, "")
 	cmds := FromSkillCatalog(entries)
 
-	require.Len(t, cmds, 1)
-	require.Equal(t, "user:linked-skill", cmds[0].ID)
-	require.Equal(t, "linked-skill", cmds[0].Skill.Name)
-	require.Equal(t, filepath.Join(link, skills.SkillFileName), cmds[0].Skill.SkillFilePath)
+	require.NotEmpty(t, cmds)
+	var linked *CustomCommand
+	for i := range cmds {
+		if cmds[i].ID == "user:linked-skill" {
+			linked = &cmds[i]
+		}
+	}
+	require.NotNil(t, linked, "symlinked user-invocable skill should be present in catalog commands")
+	require.Equal(t, "linked-skill", linked.Skill.Name)
+	require.Equal(t, filepath.Join(link, skills.SkillFileName), linked.Skill.SkillFilePath)
 }

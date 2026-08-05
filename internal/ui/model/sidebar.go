@@ -2,18 +2,19 @@ package model
 
 import (
 	"cmp"
+	"context"
 	"fmt"
 	"image"
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	mcp "github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/localmodel"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/logo"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
+	mcp "github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/localmodel"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/logo"
 )
 
 // modelInfo renders the current model information including reasoning
@@ -22,6 +23,7 @@ func (m *UI) modelInfo(width int) string {
 	model := m.selectedLargeModel()
 	reasoningInfo := ""
 	providerName := ""
+	var coderWarning string
 
 	if model != nil {
 		// Get provider name first
@@ -40,6 +42,18 @@ func (m *UI) modelInfo(width int) string {
 				} else {
 					reasoningEffort := cmp.Or(model.ModelCfg.ReasoningEffort, model.CatwalkCfg.DefaultReasoningEffort)
 					reasoningInfo = fmt.Sprintf("Reasoning %s", common.FormatReasoningEffort(reasoningEffort))
+				}
+			}
+		}
+
+		// Warn when the coder agent is assigned a local model that is not coding-capable.
+		cfg := m.com.Config()
+		if cfg != nil {
+			if agentCfg, ok := cfg.Agents[config.AgentCoder]; ok {
+				if agentCfg.Model == config.SelectedModelTypeLarge && model.ModelCfg.Provider == localmodel.ManagedOllamaProviderID {
+					if lm, err := localmodel.NewOllama("").ShowModel(context.Background(), model.ModelCfg.Model); err == nil && !lm.CodingCapable {
+						coderWarning = "Coder: chat model"
+					}
 				}
 			}
 		}
@@ -62,7 +76,11 @@ func (m *UI) modelInfo(width int) string {
 	if model != nil && model.ModelCfg.Provider == localmodel.ManagedOllamaProviderID {
 		runtime = m.ollamaRuntime
 	}
-	return common.ModelInfoWithRuntime(m.com.Styles, modelName, providerName, reasoningInfo, modelContext, width, m.hyperCredits, runtime)
+	info := common.ModelInfoWithRuntime(m.com.Styles, modelName, providerName, reasoningInfo, modelContext, width, m.hyperCredits, runtime)
+	if coderWarning != "" {
+		info = info + "\n" + m.com.Styles.Resource.ErrorIcon.Render("⚠") + " " + coderWarning
+	}
+	return info
 }
 
 // updateSidebarScrollState renders the sidebar content and computes scroll

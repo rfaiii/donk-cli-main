@@ -2,7 +2,7 @@ package localmodel
 
 import (
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/charmbracelet/crush/internal/config"
+	"github.com/richavery/donk-cli/internal/config"
 )
 
 const ManagedOllamaProviderID = "ollama-local"

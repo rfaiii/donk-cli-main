@@ -20,16 +20,16 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/discover"
-	"github.com/charmbracelet/crush/internal/env"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/home"
-	"github.com/charmbracelet/crush/internal/shellconfig"
 	powernapConfig "github.com/charmbracelet/x/powernap/pkg/config"
 	"github.com/qjebbs/go-jsons"
+	"github.com/richavery/donk-cli/internal/agent/hyper"
+	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/donk-cli/internal/discover"
+	"github.com/richavery/donk-cli/internal/env"
+	"github.com/richavery/donk-cli/internal/filepathext"
+	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/donk-cli/internal/shellconfig"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -153,7 +153,7 @@ func Load(workingDir, dataDir string, debug bool) (*ConfigStore, error) {
 	// Capture initial staleness snapshot
 	// Capture initial staleness snapshot. Track every discovered config path,
 	// not just the ones that loaded, so a config file created after startup
-	// (e.g. a crushrc added mid-session) is detected as a change.
+	// (e.g. a donkrc added mid-session) is detected as a change.
 	store.captureStalenessSnapshot(append(slices.Clone(configPaths), loadedPaths...))
 
 	return store, nil
@@ -169,15 +169,15 @@ func mustMarshalConfig(cfg *Config) []byte {
 	return data
 }
 
-func PushPopCrushEnv() func() {
+func PushPopDonkEnv() func() {
 	var found []string
 	for _, ev := range os.Environ() {
-		if strings.HasPrefix(ev, "CRUSH_") {
+		if strings.HasPrefix(ev, "DONK_") {
 			pair := strings.SplitN(ev, "=", 2)
 			if len(pair) != 2 {
 				continue
 			}
-			found = append(found, strings.TrimPrefix(pair[0], "CRUSH_"))
+			found = append(found, strings.TrimPrefix(pair[0], "DONK_"))
 		}
 	}
 	backups := make(map[string]string)
@@ -186,7 +186,7 @@ func PushPopCrushEnv() func() {
 	}
 
 	for _, ev := range found {
-		os.Setenv(ev, os.Getenv("CRUSH_"+ev))
+		os.Setenv(ev, os.Getenv("DONK_"+ev))
 	}
 
 	restore := func() {
@@ -199,7 +199,7 @@ func PushPopCrushEnv() func() {
 
 func (c *Config) configureProviders(ctx context.Context, store *ConfigStore, env env.Env, resolver VariableResolver, knownProviders []catwalk.Provider) error {
 	knownProviderNames := make(map[string]bool)
-	restore := PushPopCrushEnv()
+	restore := PushPopDonkEnv()
 	defer restore()
 
 	// When disable_default_providers is enabled, skip all default/embedded
@@ -512,10 +512,10 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 		c.Options.TUI = &TUIOptions{}
 	}
 	if len(c.Options.GlobalContextPaths) == 0 {
-		crushConfigDir := filepath.Dir(GlobalConfig())
+		donkConfigDir := filepath.Dir(GlobalConfig())
 		c.Options.GlobalContextPaths = []string{
-			filepath.Join(crushConfigDir, "CRUSH.md"),
-			filepath.Join(filepath.Dir(crushConfigDir), "AGENTS.md"),
+			filepath.Join(donkConfigDir, "DONK.md"),
+			filepath.Join(filepath.Dir(donkConfigDir), "AGENTS.md"),
 		}
 	}
 	slices.Sort(c.Options.GlobalContextPaths)
@@ -544,7 +544,7 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 		c.MCP = make(map[string]MCPConfig)
 	}
 	// Drop orphaned OAuth token entries left behind when a user removes
-	// an MCP from crush.json. See MCPConfig.isOrphanedToken.
+	// an MCP from donk.json. See MCPConfig.isOrphanedToken.
 	for name, m := range c.MCP {
 		if m.isOrphanedToken() {
 			delete(c.MCP, name)
@@ -573,11 +573,11 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 	// Project specific skills dirs.
 	c.Options.SkillsPaths = append(c.Options.SkillsPaths, ProjectSkillsDir(workingDir)...)
 
-	if str, ok := os.LookupEnv("CRUSH_DISABLE_PROVIDER_AUTO_UPDATE"); ok {
+	if str, ok := os.LookupEnv("DONK_DISABLE_PROVIDER_AUTO_UPDATE"); ok {
 		c.Options.DisableProviderAutoUpdate, _ = strconv.ParseBool(str)
 	}
 
-	if str, ok := os.LookupEnv("CRUSH_DISABLE_DEFAULT_PROVIDERS"); ok {
+	if str, ok := os.LookupEnv("DONK_DISABLE_DEFAULT_PROVIDERS"); ok {
 		c.Options.DisableDefaultProviders, _ = strconv.ParseBool(str)
 	}
 
@@ -877,12 +877,12 @@ func resolveSelectedModels(cfg *Config, knownProviders []catwalk.Provider) (reso
 // lookupConfigs searches config files starting at cwd and walking up
 // through the current project. The upward walk stops at the git
 // working tree root when one can be detected, otherwise at cwd itself,
-// so an unrelated crush.json placed above the project is never picked
+// so an unrelated donk.json placed above the project is never picked
 // up. Global user-level config locations are always included
 // regardless of the boundary.
 func lookupConfigs(cwd string) []string {
 	// Prepend global user config and machine-owned data JSON. Only the user
-	// config directory contributes a crushrc; the data directory is writable
+	// config directory contributes a donkrc; the data directory is writable
 	// machine state and must never be executed as Bash. Missing files are
 	// skipped when loaded.
 	configPaths := []string{
@@ -894,8 +894,8 @@ func lookupConfigs(cwd string) []string {
 
 	// Ordered high-to-low priority within a directory. LookupBounded returns
 	// matches in this order, and the later reverse + merge make the earliest
-	// listed name win on conflict. So: .crushrc beats crushrc, both beat the
-	// JSON configs, and .crush.json beats crush.json.
+	// listed name win on conflict. So: .donkrc beats donkrc, both beat the
+	// JSON configs, and .donk.json beats donk.json.
 	configNames := []string{
 		"." + appName + "rc",
 		appName + "rc",
@@ -919,7 +919,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 	var configs [][]byte
 	var loaded []string
 
-	// Track directories that have both crush.json and crushrc to warn
+	// Track directories that have both donk.json and donkrc to warn
 	// about potential confusion, along with the top-level keys each
 	// defines so we can report conflicts.
 	jsonDirKeys := make(map[string]map[string]bool)
@@ -964,7 +964,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 		}
 	}
 
-	// Warn if both a JSON config and a crushrc exist in the same directory
+	// Warn if both a JSON config and a donkrc exist in the same directory
 	// and define overlapping top-level keys. Disjoint coexistence is
 	// intentional and not worth warning about.
 	for dir, jKeys := range jsonDirKeys {
@@ -980,7 +980,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 		}
 		if len(conflicts) > 0 {
 			slices.Sort(conflicts)
-			slog.Warn("Found both a JSON config and a crushrc in the same directory; merging with crushrc taking precedence",
+			slog.Warn("Found both a JSON config and a donkrc in the same directory; merging with donkrc taking precedence",
 				"dir", dir, "conflicting_keys", strings.Join(conflicts, ", "))
 		}
 	}
@@ -1147,21 +1147,21 @@ func migrateDisableNotifications() {
 
 // GlobalConfig returns the global configuration file path for the application.
 func GlobalConfig() string {
-	if crushGlobal := os.Getenv("CRUSH_GLOBAL_CONFIG"); crushGlobal != "" {
-		return filepath.Join(crushGlobal, fmt.Sprintf("%s.json", appName))
+	if donkGlobal := os.Getenv("DONK_GLOBAL_CONFIG"); donkGlobal != "" {
+		return filepath.Join(donkGlobal, fmt.Sprintf("%s.json", appName))
 	}
 	return filepath.Join(home.Config(), appName, fmt.Sprintf("%s.json", appName))
 }
 
-// shellConfigSibling returns the crushrc path that sits alongside a given
-// crush.json path (same directory). Used so global config locations pick up a
+// shellConfigSibling returns the donkrc path that sits alongside a given
+// donk.json path (same directory). Used so global config locations pick up a
 // shell config, not just JSON.
 func shellConfigSibling(jsonPath string) string {
 	return filepath.Join(filepath.Dir(jsonPath), appName+"rc")
 }
 
-// isShellConfig reports whether a config path is a shell config (crushrc or
-// the hidden .crushrc), as opposed to a JSON config.
+// isShellConfig reports whether a config path is a shell config (donkrc or
+// the hidden .donkrc), as opposed to a JSON config.
 func isShellConfig(path string) bool {
 	base := filepath.Base(path)
 	return base == appName+"rc" || base == "."+appName+"rc"
@@ -1170,8 +1170,8 @@ func isShellConfig(path string) bool {
 // GlobalCacheDir returns the path to the global cache directory for the
 // application.
 func GlobalCacheDir() string {
-	if crushCache := os.Getenv("CRUSH_CACHE_DIR"); crushCache != "" {
-		return crushCache
+	if donkCache := os.Getenv("DONK_CACHE_DIR"); donkCache != "" {
+		return donkCache
 	}
 	if xdgCacheHome := os.Getenv("XDG_CACHE_HOME"); xdgCacheHome != "" {
 		return filepath.Join(xdgCacheHome, appName)
@@ -1194,16 +1194,16 @@ func ProjectConfigs(cwd string) []string {
 // GlobalConfigData returns the path to the main data directory for the application.
 // this config is used when the app overrides configurations instead of updating the global config.
 func GlobalConfigData() string {
-	if crushData := os.Getenv("CRUSH_GLOBAL_DATA"); crushData != "" {
-		return filepath.Join(crushData, fmt.Sprintf("%s.json", appName))
+	if donkData := os.Getenv("DONK_GLOBAL_DATA"); donkData != "" {
+		return filepath.Join(donkData, fmt.Sprintf("%s.json", appName))
 	}
 	if xdgDataHome := os.Getenv("XDG_DATA_HOME"); xdgDataHome != "" {
 		return filepath.Join(xdgDataHome, appName, fmt.Sprintf("%s.json", appName))
 	}
 
 	// return the path to the main data directory
-	// for windows, it should be in `%LOCALAPPDATA%/crush/`
-	// for linux and macOS, it should be in `$HOME/.local/share/crush/`
+	// for windows, it should be in `%LOCALAPPDATA%/donk/`
+	// for linux and macOS, it should be in `$HOME/.local/share/donk/`
 	if runtime.GOOS == "windows" {
 		localAppData := cmp.Or(
 			os.Getenv("LOCALAPPDATA"),
@@ -1283,7 +1283,7 @@ func computeWorktreeRoot(dir string) string {
 // projectBoundary returns the directory at which an upward configuration
 // search rooted at dir should stop. It is the git working tree root when
 // one can be detected, otherwise dir itself. Returning dir as a
-// fallback keeps Crush from silently adopting state files placed above
+// fallback keeps DONK from silently adopting state files placed above
 // the current project.
 func projectBoundary(dir string) string {
 	if root := worktreeRoot(dir); root != "" {
@@ -1300,8 +1300,8 @@ func projectBoundary(dir string) string {
 // Skills in these directories are auto-discovered and their files can be read
 // without permission prompts.
 func GlobalSkillsDirs() []string {
-	if crushSkills := os.Getenv("CRUSH_SKILLS_DIR"); crushSkills != "" {
-		return []string{crushSkills}
+	if donkSkills := os.Getenv("DONK_SKILLS_DIR"); donkSkills != "" {
+		return []string{donkSkills}
 	}
 
 	paths := []string{
@@ -1312,7 +1312,7 @@ func GlobalSkillsDirs() []string {
 		filepath.Join(home.Dir(), ".claude", "skills"),
 	}
 
-	// On Windows, also load from app data on top of `$HOME/.config/crush`.
+	// On Windows, also load from app data on top of `$HOME/.config/donk`.
 	// This is here mostly for backwards compatibility.
 	if runtime.GOOS == "windows" {
 		appData := cmp.Or(
@@ -1334,12 +1334,12 @@ func GlobalSkillsDirs() []string {
 // git-root lookups to prevent drift when a new convention is added.
 var projectSkillSubdirs = []string{
 	".agents/skills",
-	".crush/skills",
+	".donk/skills",
 	".claude/skills",
 	".cursor/skills",
 }
 
-// ProjectSkillsDir returns the default project directories for which Crush
+// ProjectSkillsDir returns the default project directories for which DONK
 // will look for skills. In addition to the working directory, it also
 // checks the git working tree root so that monorepo-level skills are
 // discovered when the user is inside a subdirectory.

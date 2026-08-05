@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/env"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/donk-cli/internal/env"
 	"github.com/stretchr/testify/require"
 )
 

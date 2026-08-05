@@ -12,11 +12,11 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/home"
-	"github.com/charmbracelet/crush/internal/shell"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/filepathext"
+	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/donk-cli/internal/skills"
 )
 
 // Prompt represents a template-based prompt generator.

@@ -364,8 +364,8 @@ func TestToPromptXMLBuiltinType(t *testing.T) {
 	t.Parallel()
 
 	skills := []*Skill{
-		{Name: "builtin-skill", Description: "A builtin.", SkillFilePath: "crush://skills/builtin-skill/SKILL.md", Builtin: true},
-		{Name: "user-skill", Description: "A user skill.", SkillFilePath: "/home/user/.config/crush/skills/user-skill/SKILL.md"},
+		{Name: "builtin-skill", Description: "A builtin.", SkillFilePath: "donk://skills/builtin-skill/SKILL.md", Builtin: true},
+		{Name: "user-skill", Description: "A user skill.", SkillFilePath: "/home/user/.config/donk/skills/user-skill/SKILL.md"},
 	}
 	xml := ToPromptXML(skills)
 	require.Contains(t, xml, "<type>builtin</type>")
@@ -408,25 +408,25 @@ func TestDiscoverBuiltin(t *testing.T) {
 
 	var found bool
 	for _, s := range discovered {
-		if s.Name == "crush-config" {
+		if s.Name == "donk-config" {
 			found = true
 			require.True(t, strings.HasPrefix(s.SkillFilePath, BuiltinPrefix))
 			require.True(t, strings.HasPrefix(s.Path, BuiltinPrefix))
-			require.Equal(t, "crush://skills/crush-config/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "crush://skills/crush-config", s.Path)
+			require.Equal(t, "donk://skills/donk-config/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "donk://skills/donk-config", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
 		}
 	}
-	require.True(t, found, "crush-config builtin skill not found")
+	require.True(t, found, "donk-config builtin skill not found")
 
 	var foundJQ bool
 	for _, s := range discovered {
 		if s.Name == "jq" {
 			foundJQ = true
-			require.Equal(t, "crush://skills/jq/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "crush://skills/jq", s.Path)
+			require.Equal(t, "donk://skills/jq/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "donk://skills/jq", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
@@ -436,16 +436,43 @@ func TestDiscoverBuiltin(t *testing.T) {
 
 	var foundHooks bool
 	for _, s := range discovered {
-		if s.Name == "crush-hooks" {
+		if s.Name == "donk-hooks" {
 			foundHooks = true
-			require.Equal(t, "crush://skills/crush-hooks/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "crush://skills/crush-hooks", s.Path)
+			require.Equal(t, "donk://skills/donk-hooks/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "donk://skills/donk-hooks", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
 		}
 	}
-	require.True(t, foundHooks, "crush-hooks builtin skill not found")
+	require.True(t, foundHooks, "donk-hooks builtin skill not found")
+
+	var foundCline bool
+	for _, s := range discovered {
+		if s.Name == "cline" {
+			foundCline = true
+			require.Equal(t, "donk://skills/cline/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "donk://skills/cline", s.Path)
+			require.NotEmpty(t, s.Description)
+			require.NotEmpty(t, s.Instructions)
+			require.True(t, s.Builtin)
+			require.True(t, s.UserInvocable)
+		}
+	}
+	require.True(t, foundCline, "cline builtin skill not found")
+
+	var foundHermes bool
+	for _, s := range discovered {
+		if s.Name == "hermes" {
+			foundHermes = true
+			require.Equal(t, "donk://skills/hermes/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "donk://skills/hermes", s.Path)
+			require.NotEmpty(t, s.Description)
+			require.NotEmpty(t, s.Instructions)
+			require.True(t, s.Builtin)
+		}
+	}
+	require.True(t, foundHermes, "hermes builtin skill not found")
 }
 
 func TestDeduplicate(t *testing.T) {
@@ -465,10 +492,10 @@ func TestDeduplicate(t *testing.T) {
 		},
 		{
 			name:     "user overrides builtin",
-			input:    []*Skill{{Name: "crush-config", Path: "crush://skills/crush-config"}, {Name: "crush-config", Path: "/user/crush-config"}},
+			input:    []*Skill{{Name: "donk-config", Path: "donk://skills/donk-config"}, {Name: "donk-config", Path: "/user/donk-config"}},
 			wantLen:  1,
-			wantName: "crush-config",
-			wantPath: "/user/crush-config",
+			wantName: "donk-config",
+			wantPath: "/user/donk-config",
 		},
 		{
 			name:    "empty",

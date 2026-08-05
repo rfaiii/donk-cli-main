@@ -9,19 +9,23 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/oauth"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/util"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/util"
 )
 
 // ActionClose is a message to close the current dialog.
 type ActionClose struct{}
+
+// ActionSkipOnboarding is a message to skip model selection during
+// onboarding and transition to the homescreen without a configured model.
+type ActionSkipOnboarding struct{}
 
 // ActionQuit is a message to quit the application.
 type ActionQuit = tea.QuitMsg
@@ -54,6 +58,7 @@ type (
 	ActionTogglePills             struct{}
 	ActionExternalEditor          struct{}
 	ActionToggleBeastmodeMode     struct{}
+	ActionToggleCodeMode          struct{}
 	ActionToggleNotifications     struct{}
 	ActionSelectNotificationStyle struct {
 		Style string

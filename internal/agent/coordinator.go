@@ -19,27 +19,27 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/agent/prompt"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/discover"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/hooks"
-	"github.com/charmbracelet/crush/internal/log"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/oauth"
-	"github.com/charmbracelet/crush/internal/oauth/copilot"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/question"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/richavery/donk-cli/internal/agent/hyper"
+	"github.com/richavery/donk-cli/internal/agent/notify"
+	"github.com/richavery/donk-cli/internal/agent/prompt"
+	"github.com/richavery/donk-cli/internal/agent/tools"
+	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/discover"
+	"github.com/richavery/donk-cli/internal/event"
+	"github.com/richavery/donk-cli/internal/filetracker"
+	"github.com/richavery/donk-cli/internal/history"
+	"github.com/richavery/donk-cli/internal/hooks"
+	"github.com/richavery/donk-cli/internal/log"
+	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/donk-cli/internal/oauth/copilot"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/question"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/skills"
 	"golang.org/x/sync/errgroup"
 
 	"charm.land/fantasy/providers/anthropic"
@@ -229,7 +229,7 @@ func (c *coordinator) run(ctx context.Context, accept *AcceptedRun, sessionID st
 	// Without this, slow-to-start MCP servers (e.g. stdio Python via uv) may
 	// not have registered their tools yet when buildTools reads the registry,
 	// so their tools silently never appear in the LLM tool palette — even
-	// though crush_info reports them as connected.
+	// though donk_info reports them as connected.
 	if err := mcp.WaitForInit(ctx); err != nil {
 		return nil, fmt.Errorf("failed to wait for MCP initialization: %w", err)
 	}
@@ -261,7 +261,7 @@ func (c *coordinator) run(ctx context.Context, accept *AcceptedRun, sessionID st
 	// Coalesce per-attempt RunComplete payloads so only the final
 	// outcome reaches subscribers. Without this, the first attempt's
 	// failed RunComplete (unauthorized) would race ahead of the
-	// retry's success, and `crush run` would exit on the stale error
+	// retry's success, and `donk-cli run` would exit on the stale error
 	// before ever seeing the retry result. Each attempt's
 	// SessionAgentCall.OnComplete hook overwrites latest; we publish
 	// exactly once after retries resolve, via PublishMustDeliver, so
@@ -623,6 +623,7 @@ func (c *coordinator) buildAgent(ctx context.Context, prompt *prompt.Prompt, age
 		IsSubAgent:           isSubAgent,
 		DisableAutoSummarize: c.cfg.Config().Options.DisableAutoSummarize,
 		IsBeastmode:          c.permissions.SkipRequests(),
+		IsCoderAgent:         agent.ID == config.AgentCoder,
 		Sessions:             c.sessions,
 		Messages:             c.messages,
 		Tools:                nil,
@@ -702,7 +703,7 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		}
 	}
 
-	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "crush.log")
+	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "donk.log")
 
 	// Build hook runner if PreToolUse hooks are configured.
 	var hookRunner *hooks.Runner
@@ -715,8 +716,8 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		tools.NewBashTool(c.permissions, c.cfg.WorkingDir(), c.cfg.Config().Options.Attribution, modelID),
 		tools.NewNodeTool(c.permissions, c.cfg.WorkingDir()),
 		tools.NewNPMTool(c.permissions, c.cfg.WorkingDir()),
-		tools.NewCrushInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
-		tools.NewCrushLogsTool(logFile),
+		tools.NewDonkInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
+		tools.NewDonkLogsTool(logFile),
 		tools.NewJobOutputTool(),
 		tools.NewJobKillTool(),
 		tools.NewDownloadTool(c.permissions, c.cfg.WorkingDir(), nil),
@@ -1145,7 +1146,7 @@ func (c *coordinator) buildProvider(providerCfg config.ProviderConfig, model con
 		switch providerCfg.ID {
 		case hyper.Name:
 			baseURL = hyper.BaseURL() + "/v1"
-			headers["x-crush-id"] = event.GetID()
+			headers["x-donk-id"] = event.GetID()
 		case string(catwalk.InferenceProviderZAI):
 			if providerCfg.ExtraBody == nil {
 				providerCfg.ExtraBody = map[string]any{}

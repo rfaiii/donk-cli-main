@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/ui/dialog"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/ui/dialog"
 	"github.com/stretchr/testify/require"
 )
 

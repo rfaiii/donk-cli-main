@@ -5,14 +5,14 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/logo"
-	"github.com/charmbracelet/crush/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/logo"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 )
 
 const (
@@ -66,6 +66,7 @@ func (h *header) drawHeader(
 	hyperCredits *int,
 	frame int,
 	animation string,
+	coderMode bool,
 ) {
 	t := h.com.Styles
 	if width != h.width || compact != h.compact || frame != h.frame {
@@ -100,6 +101,7 @@ func (h *header) drawHeader(
 		detailsOpen,
 		availDetailWidth,
 		hyperCredits,
+		coderMode,
 	)
 
 	remainingWidth := width -
@@ -132,6 +134,7 @@ func renderHeaderDetails(
 	detailsOpen bool,
 	availWidth int,
 	hyperCredits *int,
+	coderMode bool,
 ) string {
 	t := com.Styles
 
@@ -163,6 +166,10 @@ func renderHeaderDetails(
 		parts = append(parts, t.Header.Keystroke.Render(keystroke)+t.Header.KeystrokeTip.Render(" close"))
 	} else {
 		parts = append(parts, t.Header.Keystroke.Render(keystroke)+t.Header.KeystrokeTip.Render(" open "))
+	}
+
+	if coderMode {
+		parts = append(parts, t.Header.Percentage.Render("CODER"))
 	}
 
 	dot := t.Header.Separator.Render(" • ")

@@ -3,9 +3,9 @@ package chat
 import (
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

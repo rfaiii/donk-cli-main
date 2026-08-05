@@ -45,15 +45,15 @@ Thumbs.db
 # Nix/direnv
 .direnv/
 
-**/.crush/**
+**/.donk/**
 
-/crush
+/donk
 /donk-cli
 /donk-cli-*
 /tmp/
 
 manpages/
-completions/crush.*sh
+completions/donk.*sh
 completions/donk-cli.*sh
 .prettierignore
 .task

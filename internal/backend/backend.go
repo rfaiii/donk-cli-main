@@ -15,15 +15,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/ui/util"
-	"github.com/charmbracelet/crush/internal/version"
 	"github.com/google/uuid"
+	"github.com/richavery/donk-cli/internal/app"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/donk-cli/internal/ui/util"
+	"github.com/richavery/donk-cli/internal/version"
 )
 
 // Common errors returned by backend operations.
@@ -53,7 +53,7 @@ var DefaultCreateGrace = 30 * time.Second
 // new client can attach to — or create a workspace on — a server that is
 // already tearing down, and then observe its coder agent as "offline".
 // Any workspace create within the window cancels the pending shutdown.
-// Overridable via CRUSH_SERVER_IDLE_TIMEOUT (seconds; 0 restores the
+// Overridable via DONK_SERVER_IDLE_TIMEOUT (seconds; 0 restores the
 // old shut-down-immediately behavior).
 var DefaultIdleShutdownDelay = 60 * time.Second
 
@@ -61,7 +61,7 @@ var DefaultIdleShutdownDelay = 60 * time.Second
 // shutdown (e.g. when the last workspace is removed).
 type ShutdownFunc func()
 
-// Backend provides transport-agnostic business logic for the Crush
+// Backend provides transport-agnostic business logic for the DONK
 // server. It manages workspaces and delegates to [app.App] services.
 //
 // Locking order: when both [Backend.mu] and [Workspace.clientsMu] are
@@ -229,9 +229,9 @@ func New(ctx context.Context, cfg *config.ConfigStore, shutdownFn ShutdownFunc) 
 }
 
 // idleShutdownDelayFromEnv returns the idle-shutdown delay, honoring a
-// CRUSH_SERVER_IDLE_TIMEOUT override (in seconds; 0 disables lingering).
+// DONK_SERVER_IDLE_TIMEOUT override (in seconds; 0 disables lingering).
 func idleShutdownDelayFromEnv() time.Duration {
-	if v := os.Getenv("CRUSH_SERVER_IDLE_TIMEOUT"); v != "" {
+	if v := os.Getenv("DONK_SERVER_IDLE_TIMEOUT"); v != "" {
 		if secs, err := strconv.Atoi(v); err == nil && secs >= 0 {
 			return time.Duration(secs) * time.Second
 		}
@@ -355,7 +355,7 @@ func (b *Backend) CreateWorkspace(args proto.Workspace) (*Workspace, proto.Works
 	cfg.Overrides().SkipPermissionRequests = args.BEASTMODE
 	cfg.Overrides().EnabledChannels = args.Channels
 
-	if err := createDotCrushDir(cfg.Config().Options.DataDirectory); err != nil {
+	if err := createDotDonkDir(cfg.Config().Options.DataDirectory); err != nil {
 		return nil, proto.Workspace{}, fmt.Errorf("failed to create data directory: %w", err)
 	}
 

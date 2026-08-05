@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/lsp"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
+	"github.com/richavery/donk-cli/internal/lsp"
 )
 
 type SymbolsParams struct {

@@ -12,12 +12,12 @@ import (
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/localmodel"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/util"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/localmodel"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/util"
 )
 
 // ModelType represents the type of model to select.
@@ -200,6 +200,9 @@ func (m *Models) HandleMsg(msg tea.Msg) Action {
 	case tea.KeyPressMsg:
 		switch {
 		case key.Matches(msg, m.keyMap.Close):
+			if m.isOnboarding {
+				return ActionSkipOnboarding{}
+			}
 			return ActionClose{}
 		case key.Matches(msg, m.keyMap.Refresh):
 			return ActionCmd{Cmd: m.LocalModelsCmd()}
@@ -303,7 +306,15 @@ func (m *Models) LocalModelsCmd() tea.Cmd {
 		runtime := localmodel.NewOllama("")
 		status := runtime.Status(context.Background())
 		if status.Status != localmodel.StatusOnline {
-			return LocalModelsMsg{Status: status, Err: status.Error}
+			if status.Installed {
+				if startErr := runtime.Start(context.Background()); startErr != nil {
+					return LocalModelsMsg{Status: status, Err: startErr}
+				}
+				status = runtime.Status(context.Background())
+			}
+			if status.Status != localmodel.StatusOnline {
+				return LocalModelsMsg{Status: status, Err: status.Error}
+			}
 		}
 		models, err := runtime.Models(context.Background())
 		if err != nil {
@@ -370,7 +381,9 @@ func (m *Models) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 
 	if m.isOnboarding {
 		titleText := t.Dialog.PrimaryText.Render("To start, let's choose a provider and model.")
+		skipHint := t.Dialog.SecondaryText.Render("or press esc to skip and explore later.")
 		rc.AddPart(titleText)
+		rc.AddPart(skipHint)
 	}
 
 	inputView := t.Dialog.InputPrompt.Render(m.input.View())
@@ -404,6 +417,8 @@ func (m *Models) ShortHelp() []key.Binding {
 		return []key.Binding{
 			m.keyMap.UpDown,
 			m.keyMap.Select,
+			m.keyMap.Refresh,
+			m.keyMap.Start,
 		}
 	}
 	h := []key.Binding{
@@ -511,7 +526,7 @@ func (m *Models) setProviderItems() error {
 		group := NewModelGroup(t, "Ollama (Local)", true)
 		for _, local := range m.localModels {
 			model := catwalk.Model{ID: local.Name, Name: local.DisplayName, ContextWindow: local.ContextWindow, DefaultMaxTokens: local.MaxTokens, SupportsImages: slices.Contains(local.Capabilities, "vision")}
-			group.AppendItems(NewModelItem(t, provider, model, m.modelType, false))
+			group.AppendItems(NewModelItem(t, provider, model, m.modelType, false, local.CodingCapable))
 		}
 		groups = append(groups, group)
 	}

@@ -3,10 +3,10 @@ package shell
 import (
 	"testing"
 
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/session"
 	"github.com/google/uuid"
+	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

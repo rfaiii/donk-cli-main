@@ -7,32 +7,32 @@ import (
 	"os/signal"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/clipboard"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/oauth"
-	"github.com/charmbracelet/crush/internal/oauth/copilot"
-	"github.com/charmbracelet/crush/internal/oauth/hyper"
-	"github.com/charmbracelet/crush/internal/workspace"
 	"github.com/pkg/browser"
+	"github.com/richavery/donk-cli/internal/clipboard"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/donk-cli/internal/oauth/copilot"
+	"github.com/richavery/donk-cli/internal/oauth/hyper"
+	"github.com/richavery/donk-cli/internal/workspace"
 	"github.com/spf13/cobra"
 )
 
 var loginCmd = &cobra.Command{
 	Aliases: []string{"auth"},
 	Use:     "login [platform]",
-	Short:   "Login Crush to a platform",
-	Long: `Login Crush to a specified platform.
+	Short:   "Login DONK to a platform",
+	Long: `Login DONK to a specified platform.
 The platform should be provided as an argument.
 Available platforms are: hyper, copilot.`,
 	Example: `
 # Authenticate with Charm Hyper
-crush login
+donk-cli login
 
 # Authenticate with GitHub Copilot
-crush login copilot
+donk-cli login copilot
 
 # Force re-authentication even if already logged in
-crush login -f copilot
+donk-cli login -f copilot
   `,
 	ValidArgs: []cobra.Completion{
 		"hyper",

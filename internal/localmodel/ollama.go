@@ -110,7 +110,9 @@ func (o *Ollama) ListModels(ctx context.Context) ([]Model, error) {
 		if name == "" {
 			name = item.Model
 		}
-		models = append(models, Model{Name: name, DisplayName: name, Size: item.Size, ModifiedAt: item.ModifiedAt, Family: item.Details.Family, ParameterSize: item.Details.ParameterSize, Quantization: item.Details.QuantizationLevel})
+		lower := strings.ToLower(name)
+		coding := strings.Contains(lower, "coder") || strings.Contains(lower, "code") || strings.Contains(lower, "starcoder") || strings.Contains(lower, "codellama") || strings.Contains(lower, "qwen2.5-coder") || strings.Contains(lower, "deepseek-coder")
+		models = append(models, Model{Name: name, DisplayName: name, Size: item.Size, ModifiedAt: item.ModifiedAt, Family: item.Details.Family, ParameterSize: item.Details.ParameterSize, Quantization: item.Details.QuantizationLevel, CodingCapable: coding})
 	}
 	return models, nil
 }

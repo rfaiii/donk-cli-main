@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/ui/anim"
+	"github.com/richavery/donk-cli/internal/ui/attachments"
+	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/donk-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

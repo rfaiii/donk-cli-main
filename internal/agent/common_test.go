@@ -12,17 +12,17 @@ import (
 	"charm.land/fantasy"
 	"charm.land/fantasy/providers/openaicompat"
 	"charm.land/x/vcr"
-	"github.com/charmbracelet/crush/internal/agent/prompt"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/session"
+	"github.com/richavery/donk-cli/internal/agent/prompt"
+	"github.com/richavery/donk-cli/internal/agent/tools"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/donk-cli/internal/filetracker"
+	"github.com/richavery/donk-cli/internal/history"
+	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/session"
 	"github.com/stretchr/testify/require"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -62,7 +62,7 @@ func hyperBuilder(model string) builderFunc {
 }
 
 func testEnv(t *testing.T) fakeEnv {
-	workingDir := filepath.Join("/tmp/crush-test/", t.Name())
+	workingDir := filepath.Join("/tmp/donk-test/", t.Name())
 	os.RemoveAll(workingDir)
 
 	err := os.MkdirAll(workingDir, 0o755)
@@ -142,7 +142,7 @@ func coderAgent(r *vcr.Recorder, env fakeEnv, large, small fantasy.LanguageModel
 	}
 
 	// NOTE(@andreynering): Set a fixed config to ensure cassettes match
-	// independently of user config on `$HOME/.config/crush/crush.json`.
+	// independently of user config on `$HOME/.config/donk/donk.json`.
 	cfg.Config().Options.Attribution = &config.Attribution{
 		TrailerStyle:  "co-authored-by",
 		GeneratedWith: true,
@@ -150,7 +150,12 @@ func coderAgent(r *vcr.Recorder, env fakeEnv, large, small fantasy.LanguageModel
 
 	// Clear some fields to avoid issues with VCR cassette matching.
 	cfg.Config().Options.SkillsPaths = nil
-	cfg.Config().Options.DisabledSkills = []string{"crush-config"}
+	// Disable builtin skills whose presence would alter the recorded system
+	// prompt and break cassette body matching: donk-config (already), plus the
+	// autonomous coding-assistant skills cline and hermes which are added as
+	// builtin skills for production. They remain active (available) at app load
+	// in real runs; this only affects the VCR replay prompt.
+	cfg.Config().Options.DisabledSkills = []string{"donk-config", "cline", "hermes"}
 	cfg.Config().Options.ContextPaths = nil
 	cfg.Config().Options.GlobalContextPaths = nil
 	cfg.Config().LSP = nil

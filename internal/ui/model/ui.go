@@ -28,45 +28,45 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	agenttools "github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/clipboard"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/home"
-	"github.com/charmbracelet/crush/internal/localmodel"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/node"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/question"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/stringext"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/chat"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/completions"
-	"github.com/charmbracelet/crush/internal/ui/dialog"
-	fimage "github.com/charmbracelet/crush/internal/ui/image"
-	"github.com/charmbracelet/crush/internal/ui/logo"
-	"github.com/charmbracelet/crush/internal/ui/notification"
-	"github.com/charmbracelet/crush/internal/ui/styles"
-	"github.com/charmbracelet/crush/internal/ui/util"
-	"github.com/charmbracelet/crush/internal/version"
-	"github.com/charmbracelet/crush/internal/workspace"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
 	"github.com/charmbracelet/ultraviolet/screen"
 	"github.com/charmbracelet/x/editor"
 	xstrings "github.com/charmbracelet/x/exp/strings"
+	"github.com/richavery/donk-cli/internal/agent/hyper"
+	"github.com/richavery/donk-cli/internal/agent/notify"
+	agenttools "github.com/richavery/donk-cli/internal/agent/tools"
+	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/app"
+	"github.com/richavery/donk-cli/internal/clipboard"
+	"github.com/richavery/donk-cli/internal/commands"
+	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/event"
+	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/donk-cli/internal/history"
+	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/donk-cli/internal/localmodel"
+	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/donk-cli/internal/node"
+	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/donk-cli/internal/question"
+	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/donk-cli/internal/stringext"
+	"github.com/richavery/donk-cli/internal/ui/anim"
+	"github.com/richavery/donk-cli/internal/ui/attachments"
+	"github.com/richavery/donk-cli/internal/ui/chat"
+	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/donk-cli/internal/ui/completions"
+	"github.com/richavery/donk-cli/internal/ui/dialog"
+	fimage "github.com/richavery/donk-cli/internal/ui/image"
+	"github.com/richavery/donk-cli/internal/ui/logo"
+	"github.com/richavery/donk-cli/internal/ui/notification"
+	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/donk-cli/internal/ui/util"
+	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/donk-cli/internal/workspace"
 )
 
 // Compact mode breakpoints.
@@ -232,6 +232,9 @@ type UI struct {
 	// bangMode tracks whether the editor is in bang (!) shell mode.
 	bangMode     bool
 	bangWasEmpty bool // true when bang prompt became empty on last keystroke
+
+	// coderMode tracks whether the UI is in dedicated coder mode.
+	coderMode bool
 
 	// pendingBangCommand holds a shell command that was issued before
 	// the session finished loading. The loadSessionMsg handler creates
@@ -1859,6 +1862,13 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		if m.focus == uiFocusEditor {
 			cmds = append(cmds, m.textarea.Focus())
 		}
+	case dialog.ActionSkipOnboarding:
+		m.dialog.CloseDialog(dialog.ModelsID)
+		m.setState(uiLanding, uiFocusEditor)
+		m.com.Config().SetupAgents()
+		if err := m.com.Workspace.InitCoderAgent(context.TODO()); err != nil {
+			cmds = append(cmds, util.ReportError(err))
+		}
 	case dialog.ActionCmd:
 		if msg.Cmd != nil {
 			cmds = append(cmds, msg.Cmd)
@@ -1880,6 +1890,9 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 	// Command dialog messages.
 	case dialog.ActionToggleBeastmodeMode:
 		m.toggleBeastmodeMode()
+		m.dialog.CloseDialog(dialog.CommandsID)
+	case dialog.ActionToggleCodeMode:
+		m.coderMode = !m.coderMode
 		m.dialog.CloseDialog(dialog.CommandsID)
 	case dialog.ActionSelectNotificationStyle:
 		cfg := m.com.Config()
@@ -2444,6 +2457,14 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 			}
 			cmds = append(cmds, util.ReportInfo("Beastmode "+status))
 			return true
+		case key.Matches(msg, m.keyMap.ToggleCodeMode):
+			m.coderMode = !m.coderMode
+			status := "disabled"
+			if m.coderMode {
+				status = "enabled"
+			}
+			cmds = append(cmds, util.ReportInfo("Code mode "+status))
+			return true
 		}
 		return false
 	}
@@ -2929,6 +2950,7 @@ func (m *UI) drawHeader(scr uv.Screen, area uv.Rectangle) {
 		m.hyperCredits,
 		m.bannerFrame,
 		m.bannerAnimation(),
+		m.coderMode,
 	)
 	// Keep the compact finder affordance in chat/header views. The landing page
 	// has its own larger bordered button, so do not draw a duplicate there.
@@ -3062,7 +3084,7 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	}
 
 	// Debugging rendering (visually see when the tui rerenders)
-	if os.Getenv("CRUSH_UI_DEBUG") == "true" {
+	if os.Getenv("DONK_UI_DEBUG") == "true" {
 		debugView := lipgloss.NewStyle().Background(lipgloss.ANSIColor(rand.Intn(256))).Width(4).Height(2)
 		debug := uv.NewStyledString(debugView.String())
 		debug.Draw(scr, image.Rectangle{
@@ -3757,7 +3779,7 @@ func (m *UI) openEditor(value string) tea.Cmd {
 		return util.ReportError(err)
 	}
 	cmd, err := editor.Command(
-		"crush",
+		"donk",
 		tmpPath,
 		editor.AtPosition(
 			m.textarea.Line()+1,
@@ -3791,7 +3813,7 @@ func (m *UI) openEditor(value string) tea.Cmd {
 // openFileInExternalEditor hands an existing project file to the configured
 // editor without copying its path into a temporary message buffer.
 func (m *UI) openFileInExternalEditor(path string) tea.Cmd {
-	cmd, err := editor.Command("crush", path)
+	cmd, err := editor.Command("donk", path)
 	if err != nil {
 		return util.ReportError(err)
 	}

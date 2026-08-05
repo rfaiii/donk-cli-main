@@ -7,14 +7,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/agent/prompt"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
+	"github.com/richavery/donk-cli/internal/agent/prompt"
+	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
+	"github.com/richavery/donk-cli/internal/config"
 	"github.com/stretchr/testify/require"
 )
 
 // TestBuildAgentReadinessSurvivesCallerCancellation is a regression test for
-// the CRUSH_CLIENT_SERVER=1 "new session hangs" bug.
+// the DONK_CLIENT_SERVER=1 "new session hangs" bug.
 //
 // buildAgent starts readiness goroutines that run mcp.WaitForInit before
 // building the tool list. Several server entry points build an agent from a
@@ -39,7 +39,7 @@ func TestBuildAgentReadinessSurvivesCallerCancellation(t *testing.T) {
 	// succeed. No MCP servers are configured, so initialization would complete
 	// instantly if we let it — we deliberately do not, so WaitForInit stays
 	// blocked for the duration of the assertion.
-	crushJSON := `{
+	donkJSON := `{
   "options": {"disable_default_providers": true, "disable_provider_auto_update": true},
   "providers": {"mock": {"id": "mock", "name": "Mock", "type": "openai",
     "base_url": "http://127.0.0.1:9/v1", "api_key": "test-key",
@@ -47,7 +47,7 @@ func TestBuildAgentReadinessSurvivesCallerCancellation(t *testing.T) {
   "models": {"large": {"provider": "mock", "model": "mock-model"},
              "small": {"provider": "mock", "model": "mock-model"}}
 }`
-	require.NoError(t, os.WriteFile(filepath.Join(env.workingDir, "crush.json"), []byte(crushJSON), 0o644))
+	require.NoError(t, os.WriteFile(filepath.Join(env.workingDir, "donk.json"), []byte(donkJSON), 0o644))
 
 	cfg, err := config.Init(env.workingDir, "", false)
 	require.NoError(t, err)

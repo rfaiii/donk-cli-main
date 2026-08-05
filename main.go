@@ -1,12 +1,12 @@
-// Package main is the entry point for the Crush CLI.
+// Package main is the entry point for the DONK CLI.
 //
-//	@title			Crush API
-//	@version		1.0
-//	@description	Crush is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.
-//	@contact.name	Charm
-//	@contact.url	https://charm.sh
+//	@title			DONK API
+//	@version		1.1.2
+//	@description	DONK is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.
+//	@contact.name	DONK
+//	@contact.url	https://donk-cli.com
 //	@license.name	MIT
-//	@license.url	https://github.com/charmbracelet/crush/blob/main/LICENSE
+//	@license.url	https://github.com/richavery/donk-cli/blob/main/LICENSE
 //	@BasePath		/v1
 package main
 
@@ -16,13 +16,13 @@ import (
 	_ "net/http/pprof"
 	"os"
 
-	"github.com/charmbracelet/crush/internal/cmd"
-	_ "github.com/charmbracelet/crush/internal/dns"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/richavery/donk-cli/internal/cmd"
+	_ "github.com/richavery/donk-cli/internal/dns"
 )
 
 func main() {
-	if os.Getenv("CRUSH_PROFILE") != "" {
+	if os.Getenv("DONK_PROFILE") != "" {
 		go func() {
 			slog.Info("Serving pprof at localhost:6060")
 			if httpErr := http.ListenAndServe("localhost:6060", nil); httpErr != nil {

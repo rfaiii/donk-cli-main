@@ -43,7 +43,7 @@ tasks:
   build:
     desc: Run build
     vars:
-      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/charmbracelet/crush/internal/version.Version={{.VERSION}}"{{end}}'
+      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/donk-cli/internal/version.Version={{.VERSION}}"{{end}}'
     cmds:
       - "go build -v {{if .RACE}}-race{{end}} {{.LDFLAGS}} -o donk-cli{{exeExt}} ."
     sources:
@@ -72,8 +72,8 @@ tasks:
   run:onboarding:
     desc: Run build with custom config to test onboarding
     env:
-      CRUSH_GLOBAL_DATA: tmp/onboarding/data
-      CRUSH_GLOBAL_CONFIG: tmp/onboarding/config
+      DONK_GLOBAL_DATA: tmp/onboarding/data
+      DONK_GLOBAL_CONFIG: tmp/onboarding/config
     cmds:
       - task: build
       - rm -rf tmp/onboarding
@@ -109,14 +109,14 @@ tasks:
   dev:
     desc: Run with profiling enabled
     env:
-      CRUSH_PROFILE: true
+      DONK_PROFILE: true
     cmds:
       - go run .
 
   install:
     desc: Install the application
     vars:
-      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/charmbracelet/crush/internal/version.Version={{.VERSION}}"{{end}}'
+      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/donk-cli/internal/version.Version={{.VERSION}}"{{end}}'
     cmds:
       - task: fetch-tags
       - go build {{.LDFLAGS}} -o "$(go env GOPATH)/bin/donk-cli{{exeExt}}" .

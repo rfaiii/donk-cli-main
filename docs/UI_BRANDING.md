@@ -14,7 +14,7 @@ compact header, sidebar, and custom wide banner.
 
 ## Wide banner font
 
-The wide banner does not use the original Crush letterform list. Its glyphs are
+The wide banner does not use the original DONK letterform list. Its glyphs are
 defined in `donkCLIASCII`, a five-row map of block-character strings. The
 renderer assembles those glyphs with `renderASCIIWordmark`, applies the theme's
 title gradient, and places the result between the diagonal side fields.
