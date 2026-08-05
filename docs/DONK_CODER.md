@@ -15,6 +15,28 @@ making changes.
 3. Surface coder-agent state in the UI so the user always knows whether they
    are in "chat" or "code" mode.
 
+## Implemented native Ollama path
+
+Small local models can bypass the full `fantasy` tool contract through the native
+sidecar. The normal coder session remains unchanged; opt in explicitly:
+
+```sh
+DONK_CODETOOL="$HOME/bin/codetool" \
+  donk-cli code --native --model qwen2.5-coder:3b-instruct --stream \
+  "Read the relevant files and fix the failing test"
+```
+
+`donk code --native` forwards the working directory, model, and stream settings
+to `codetool`. The sidecar uses Ollama's native `/api/chat` endpoint and a small
+flat tool set (`bash`, `view`, `edit`, `write`, `glob`, `grep`, and `ls`). It also
+recovers the text-form tool calls commonly emitted by Qwen 3B models, including
+`file_path` aliases and truncated/fenced JSON.
+
+The streaming UX buffers likely JSON tool-call output and suppresses it after
+recovery. Normal assistant prose remains streamed immediately. Incomplete Ollama
+streams and stalled turns return explicit errors rather than silently appearing
+to load forever.
+
 ## Proposed items
 
 ### A. Dedicated coder entry point
@@ -82,11 +104,11 @@ making changes.
 - [x] Show model-fit tags in `/models` dialog and model picker.
 - [x] Add warning when a chat-tagged model is assigned to coder agent.
 - [x] Improve `internal/agent/templates/coder.md.tpl` for small local models.
-- [ ] Add fallback retry when coder model emits text instead of tool call.
+- [x] Add recovery when coder model emits text instead of a tool call (native path).
 - [x] Add coder agent status pill in header.
 - [x] Wire Cline & Hermes as coding-assistant skills surfaced via `<available_skills>`.
 - [x] Disable Cline/Hermes in VCR `TestCoderAgent` (keep recorded skill set stable).
-- [ ] Add tests for new coder mode, model tags, and header indicator.
+- [x] Add native coder integration and tool-call recovery tests.
 
 ## Next steps
 
@@ -114,7 +136,8 @@ cassettes only because of the pre-existing `coder.md.tpl` first-line change
 cassettes with a Hyper API key is the only way to clear that pre-existing
 failure; this change introduces no additional cassette diff.
 
-The remaining open item is the text-vs-tool-call fallback retry (Task list).
+The native sidecar path is implemented and live-validated with
+`qwen2.5-coder:3b-instruct`. Full multi-step coding benchmarks remain open.
 
 ## Startup and Cline menu (current)
 

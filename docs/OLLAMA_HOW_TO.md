@@ -92,6 +92,26 @@ is ready and red if loading fails.
 After that, prompts, MCP tools, LSP context, and normal agent coordination use
 the selected local model through Ollama's OpenAI-compatible endpoint.
 
+## 5a. Use the native small-model coder
+
+For Qwen coder models that are slow or unreliable with the full DONK tool
+surface, use the fantasy-free native path:
+
+```sh
+GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
+GOWORK=off go build -o "$HOME/bin/donk-cli" .
+
+DONK_CODETOOL="$HOME/bin/codetool" \
+  "$HOME/bin/donk-cli" code --native \
+  --model qwen2.5-coder:3b-instruct --stream \
+  "Read note.txt and tell me exactly what it contains."
+```
+
+The native path uses the current directory. Use `--cwd /path/to/project` when
+the files are elsewhere. `DONK_CODETOOL` may be omitted when `codetool` is on
+`PATH`. Streaming is on by default; raw JSON tool-call dumps are buffered and
+hidden after recovery, while normal assistant text remains live.
+
 ## 6. Environment and advanced configuration
 
 Set `OLLAMA_HOST` when the daemon listens somewhere other than the default. The
@@ -143,3 +163,27 @@ ollama pull qwen2.5:7b
 
 DONK reads architecture-specific context metadata from Ollama's `/api/show`.
 Refresh after changing a model or its runtime settings.
+
+### Native coder cannot find a file
+
+The native agent operates in its working directory. Confirm the file exists
+there, or provide the project explicitly:
+
+```sh
+ls -l /path/to/project/note.txt
+donk-cli code --native --cwd /path/to/project \
+  --model qwen2.5-coder:3b-instruct "Read note.txt"
+```
+
+### Native coder appears stuck loading
+
+Run with diagnostics:
+
+```sh
+CODETOOL_DEBUG=1 donk-cli code --native --stream \
+  --model qwen2.5-coder:3b-instruct "Inspect this project"
+```
+
+Each Ollama turn is bounded and incomplete streams produce an error. Verify the
+daemon directly with `curl http://127.0.0.1:11434/api/tags` and rebuild
+`codetool` after updating the source.
