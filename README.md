@@ -1,4 +1,4 @@
-# ◇ DONK-CLI 1.1.1
+# ◇ DONK-CLI 1.1.3
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,7 +6,8 @@ DONK brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Beta testing:** this is the `1.1.1` testing build. Report crashes, install
+> **Release 1.1.3:** this release adds a native Ollama coding path for smaller
+> local models. Report crashes, install
 > problems, stale UI, and model/runtime issues with your OS, CPU architecture,
 > terminal, and launch command.
 
@@ -55,6 +56,25 @@ DONK discovers all models available from Ollama’s local API. Open `/models`,
 
 The model diamond is gray when unknown, purple while loading, green when ready,
 and red if loading fails. Read [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md).
+
+For smaller Ollama coding models such as `qwen2.5-coder:3b-instruct`, use the
+fantasy-free native coder. It talks directly to Ollama with a small tool set,
+recovers Qwen-style text tool calls, and buffers raw tool-call JSON from the
+terminal display:
+
+```sh
+GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
+GOWORK=off go build -o "$HOME/bin/donk-cli" .
+
+DONK_CODETOOL="$HOME/bin/codetool" \
+  "$HOME/bin/donk-cli" code --native \
+  --model qwen2.5-coder:3b-instruct --stream \
+  "Read the relevant files and fix the failing test"
+```
+
+Use `--cwd /path/to/project` when the coding task is in another directory. See
+[`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) for diagnostics and
+troubleshooting.
 
 ## ✨ What DONK includes
 

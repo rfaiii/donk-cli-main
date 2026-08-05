@@ -1,7 +1,7 @@
 // Package main is the entry point for the DONK CLI.
 //
 //	@title			DONK API
-//	@version		1.1.2
+//	@version		1.1.3
 //	@description	DONK is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.
 //	@contact.name	DONK
 //	@contact.url	https://donk-cli.com
