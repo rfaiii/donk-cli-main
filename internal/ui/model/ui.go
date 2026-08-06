@@ -224,6 +224,10 @@ type UI struct {
 	dialog           *dialog.Overlay
 	fileBrowser      *dialog.FileBrowser
 	status           *Status
+	resourceSample   resourceSnapshotMsg
+	resourceReady    bool
+	resourceCPU      float64
+	resourceRAM      float64
 	finderButtonRect image.Rectangle
 
 	// isCanceling tracks whether the user has pressed escape once to cancel.
@@ -535,6 +539,7 @@ func (m *UI) Init() tea.Cmd {
 		cmds = append(cmds, cmd)
 	}
 	cmds = append(cmds, m.checkPendingMCPAuth())
+	cmds = append(cmds, m.resourceMonitorCmd())
 	if model := m.selectedOllamaModel(); model != "" {
 		m.ollamaRuntime = common.ModelRuntimeLoading
 		cmds = append(cmds, m.loadOllamaModelCmd(model))
@@ -985,6 +990,14 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.handleQuestionNotification(msg.Payload)
 	case cancelTimerExpiredMsg:
 		m.isCanceling = false
+	case resourceSnapshotMsg:
+		if m.resourceReady {
+			m.resourceCPU = resourceCPUPercent(m.resourceSample, msg)
+		}
+		m.resourceSample = msg
+		m.resourceRAM = msg.ramPercent
+		m.resourceReady = true
+		cmds = append(cmds, m.resourceMonitorCmd())
 	case tea.TerminalVersionMsg:
 		termVersion := strings.ToLower(msg.Name)
 		// Only enable progress bar for the following terminals.
@@ -3062,6 +3075,7 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	// Add status and help layer
 	m.status.SetHideHelp(isOnboarding)
 	m.status.Draw(scr, layout.status)
+	m.drawResourceMonitor(scr, layout.resource)
 
 	// Draw completions popup if open
 	if !isOnboarding && m.completionsOpen && m.completions.HasItems() {
@@ -3543,7 +3557,7 @@ func (m *UI) generateLayout(w, h int) uiLayout {
 	area := image.Rect(0, 0, w, h)
 
 	// The help height
-	helpHeight := 1
+	helpHeight := 2
 	// The editor height: textarea height + margin for attachments and bottom spacing.
 	// When an inline editor is active, use its height instead.
 	editorHeight := m.textarea.Height() + editorHeightMargin
@@ -3591,9 +3605,12 @@ func (m *UI) generateLayout(w, h int) uiLayout {
 		appRect.Max.X -= 1
 	}
 
+	resourceRect := helpRect
+	resourceRect.Min.Y++
 	uiLayout := uiLayout{
-		area:   area,
-		status: helpRect,
+		area:     area,
+		status:   helpRect,
+		resource: resourceRect,
 	}
 
 	// Handle different app states
@@ -3763,6 +3780,9 @@ type uiLayout struct {
 
 	// status is the area for the status view.
 	status uv.Rectangle
+
+	// resource is the bottom resource monitor line.
+	resource uv.Rectangle
 
 	// session details is the area for the session details overlay in compact mode.
 	sessionDetails uv.Rectangle

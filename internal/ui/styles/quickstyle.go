@@ -923,6 +923,11 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Messages.ThinkingFooterTitle = muted
 	s.Messages.ThinkingFooterDuration = subtle
 
+	s.Status.ResourceLabel = muted
+	s.Status.ResourceFilled = lipgloss.NewStyle().Foreground(o.primary)
+	s.Status.ResourceEmpty = lipgloss.NewStyle().Foreground(o.bgMostVisible)
+	s.Status.ResourceValue = subtle
+
 	// Text selection.
 	s.TextSelection = lipgloss.NewStyle().Foreground(o.onPrimary).Background(o.primary)
 

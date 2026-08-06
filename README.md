@@ -7,9 +7,7 @@ skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
 > **Release 1.1.3:** this release adds a native Ollama coding path for smaller
-> local models. Report crashes, install
-> problems, stale UI, and model/runtime issues with your OS, CPU architecture,
-> terminal, and launch command.
+> local models and a bottom resource bar that shows live CPU and RAM usage.
 
 ## ⚡ Quick start
 
@@ -79,6 +77,7 @@ troubleshooting.
 ## ✨ What DONK includes
 
 - Branded Bubble Tea TUI with bounded, responsive layouts
+- Bottom resource bar showing live CPU and RAM usage
 - Project File Finder with previews, metadata, hidden files, paging, clipboard,
   and project switching
 - Sessions, model/provider selection, permissions, MCP, LSP, and skills

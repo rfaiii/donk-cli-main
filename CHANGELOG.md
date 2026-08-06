@@ -16,6 +16,12 @@
 - Added installation, diagnostics, and local-model documentation for the native
   coder path.
 
+### Bottom resource bar
+
+- Added a live CPU and RAM resource monitor bar at the bottom of the TUI.
+- The bar updates every second and shows CPU usage percentage and heap RAM
+  usage percentage with token-driven theme colors.
+
 ### Validation
 
 The native path was live-tested with `qwen2.5-coder:3b-instruct` against a local

@@ -558,6 +558,11 @@ type Styles struct {
 		InfoMessage    lipgloss.Style
 		UpdateMessage  lipgloss.Style
 		SuccessMessage lipgloss.Style
+
+		ResourceLabel  lipgloss.Style
+		ResourceFilled lipgloss.Style
+		ResourceEmpty  lipgloss.Style
+		ResourceValue  lipgloss.Style
 	}
 
 	// Completions popup styles

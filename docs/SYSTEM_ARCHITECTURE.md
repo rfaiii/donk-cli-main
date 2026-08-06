@@ -88,6 +88,8 @@ these rules:
    rows to clip themselves.
 5. Derive mouse hitboxes from the final rectangles used to draw controls.
 6. Add a regression test for long tokens, narrow terminals, and resized layouts.
+7. Reserve fixed rows for persistent bottom surfaces such as the resource
+   monitor so they remain visible across resize and compact/non-compact modes.
 
 The File Finder is the reference implementation of this contract. See
 [`FILE_FINDER.md`](FILE_FINDER.md) for its detailed clipping and rollback notes.
@@ -99,12 +101,15 @@ main.go
   └── application bootstrap
 
 internal/ui/
-  ├── model/       root Bubble Tea model, layout, events, header, sidebar
-  ├── dialog/      modal surfaces, commands, sessions, Finder, permissions
-  ├── chat/        conversation rendering and prompt behavior
-  ├── common/      shared terminal/layout primitives
-  ├── logo/        DONK wordmark and banner treatments
-  └── styles/      theme and visual tokens
+  | `internal/ui/`                                                    ||
+  |  ├── model/       root Bubble Tea model, layout, events, header,      ||
+  |  │               sidebar, status, resource monitor                   ||
+  |  ├── dialog/      modal surfaces, commands, sessions, Finder,        ||
+  |  │               permissions                                         ||
+  |  ├── chat/        conversation rendering and prompt behavior         ||
+  |  ├── common/      shared terminal/layout primitives                  ||
+  |  ├── logo/        DONK wordmark and banner treatments                ||
+  |  └── styles/      theme and visual tokens                            ||
 
 internal/
   ├── agent/       orchestration and session-facing agent behavior
@@ -165,12 +170,16 @@ flowchart LR
 - Add refresh/reload and explicit loading/error states.
 - Send selected files and Finder actions into project context.
 - Make session, model, tool, and permission state visible while work runs.
+- Show live system resource usage in a bottom status bar.
 
 The first two items are now implemented in the Finder. Directory and preview
 commands run asynchronously, carry sequence/path identity, and ignore stale
 results when the user navigates quickly. Press `r` to refresh the current
 directory; the footer and metadata region expose loading state while reads are
 in flight. Context handoff and richer file actions are implemented.
+
+The bottom resource monitor draws CPU and RAM usage into a reserved help-area
+row so system telemetry remains visible without shrinking the main panes.
 
 ### NODE transport milestone
 

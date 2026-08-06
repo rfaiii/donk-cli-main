@@ -27,7 +27,8 @@ The UI uses a **hybrid rendering** approach:
    `uv.ScreenBuffer`, and components draw into sub-regions using
    `uv.NewStyledString(str).Draw(scr, rect)`. Layout is rectangle-based via
    a `uiLayout` struct with fields like `layout.header`, `layout.main`,
-   `layout.editor`, `layout.sidebar`, `layout.pills`, `layout.status`.
+   `layout.editor`, `layout.sidebar`, `layout.pills`, `layout.status`,
+   `layout.resource`.
 2. **String-based**: Sub-components like `list.List` and `completions` render
    to strings, which are painted onto the screen buffer.
 3. **`View()`** creates the screen buffer, calls `Draw()`, then
@@ -170,7 +171,7 @@ through all components that need access to app state or styles.
 ## File Organization
 
 - `model/` — Main UI model and major sub-models (chat, sidebar, header,
-  status, pills, session, onboarding, keys, etc.)
+  status, pills, session, onboarding, keys, resource monitor, etc.)
 - `chat/` — Chat message item types and tool renderers
 - `dialog/` — Dialog implementations (models, sessions, commands,
   permissions, API key, OAuth, filepicker, reasoning, quit)
