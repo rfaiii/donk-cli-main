@@ -1,4 +1,4 @@
-# ◇ DONK-CLI 1.1.3
+# ◇ DONK-CLI 1.1.4
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,8 +6,8 @@ DONK brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.3:** this release adds a native Ollama coding path for smaller
-> local models and a bottom resource bar that shows live CPU and RAM usage.
+> **Release 1.1.4:** this release adds the mobile companion bridge design and
+> iOS companion app scaffold for controlling Donk CLI sessions from a phone.
 
 ## ⚡ Quick start
 
@@ -115,6 +115,8 @@ GOOS=linux GOARCH=arm64 go build -o /tmp/donk-linux-arm64 .
 | [`docs/FILE_FINDER.md`](docs/FILE_FINDER.md) | File Finder behavior |
 | [`docs/SYSTEM_ARCHITECTURE.md`](docs/SYSTEM_ARCHITECTURE.md) | Architecture and roadmap |
 | [`docs/UI_BRANDING.md`](docs/UI_BRANDING.md) | DONK visual identity |
+| [`docs/MOBILE-CLI.md`](docs/MOBILE-CLI.md) | Mobile companion bridge and iOS/Android plans |
+| [`docs/DONK-SERVER.md`](docs/DONK-SERVER.md) | Host-side companion server design |
 
 ## 🧪 Beta report checklist
 

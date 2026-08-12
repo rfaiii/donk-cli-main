@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.4
+
+### Mobile companion bridge
+
+- Added mobile companion bridge planning and server design.
+- Added `docs/MOBILE-CLI.md` for the iOS/Android companion roadmap.
+- Added `docs/DONK-SERVER.md` for the host-side companion server.
+- Added iOS companion app scaffold under `mobile-cli/ios/`.
+
+### Validation
+
+- Documented companion server architecture and protocol requirements.
+- Added mobile companion app scaffolding with SwiftUI.
+
 ## 1.1.3
 
 ### Native Ollama coding

@@ -210,6 +210,17 @@ states. Protocol details are in [`NODE_TRANSPORTS.md`](NODE_TRANSPORTS.md).
 - Workspace profiles and reusable layouts.
 - Team/project policy surfaces that remain understandable in a terminal.
 
+### Mobile companion bridge
+
+- Host-side companion server in Go that exposes session control over HTTP and
+  WebSockets.
+- iOS companion app scaffolded in `mobile-cli/ios/` for remote control of the
+  host CLI.
+- Shared companion protocol and data model defined in `docs/DONK-SERVER.md`
+  and `docs/MOBILE-CLI.md`.
+- Initial implementation focuses on server-side scaffolding, mobile client
+  discovery, and session/telemetry bridging.
+
 ## Decision log
 
 - **Native dialog:** keeping the Finder inside the main Bubble Tea program gives
