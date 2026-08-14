@@ -8,7 +8,6 @@ import (
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/home"
 	"github.com/richavery/donk-cli/internal/ui/common"
 	"github.com/richavery/donk-cli/internal/ui/dialog"
 	"github.com/richavery/donk-cli/internal/ui/util"
@@ -18,11 +17,11 @@ type onboardingStep int
 
 const (
 	onboardingStepWelcome onboardingStep = iota
-	onboardingStepDependencies
-	onboardingStepProvider
-	onboardingStepModel
-	onboardingStepProject
-	onboardingStepSkills
+	onboardingStepHome
+	onboardingStepModels
+	onboardingStepFileFinder
+	onboardingStepNotifications
+	onboardingStepThemes
 	onboardingStepComplete
 )
 
@@ -125,16 +124,13 @@ func (o *onboardingModel) HandleMsg(msg tea.Msg) dialog.Action {
 	case dependencyCheckMsg:
 		o.hasGit = msg.hasGit
 		o.hasOllama = msg.hasOllama
-		o.nextStep()
 		return nil
 	case providerDetectMsg:
 		o.providers = msg.providers
-		o.nextStep()
 		return nil
 	case skillsSyncedMsg:
 		o.skillsCount = msg.count
 		o.skillsSynced = true
-		o.nextStep()
 		return nil
 	case util.InfoMsg:
 		if msg.Type == util.InfoTypeError {
@@ -159,6 +155,8 @@ func (o *onboardingModel) handleKey(msg tea.KeyPressMsg) dialog.Action {
 			o.nextStep()
 			return nil
 		}
+	case "o", "O":
+		return dialog.ActionSkipOnboarding{}
 	}
 	return nil
 }
@@ -166,16 +164,16 @@ func (o *onboardingModel) handleKey(msg tea.KeyPressMsg) dialog.Action {
 func (o *onboardingModel) nextStep() {
 	switch o.step {
 	case onboardingStepWelcome:
-		o.step = onboardingStepDependencies
-	case onboardingStepDependencies:
-		o.step = onboardingStepProvider
-	case onboardingStepProvider:
-		o.step = onboardingStepModel
-	case onboardingStepModel:
-		o.step = onboardingStepProject
-	case onboardingStepProject:
-		o.step = onboardingStepSkills
-	case onboardingStepSkills:
+		o.step = onboardingStepHome
+	case onboardingStepHome:
+		o.step = onboardingStepModels
+	case onboardingStepModels:
+		o.step = onboardingStepFileFinder
+	case onboardingStepFileFinder:
+		o.step = onboardingStepNotifications
+	case onboardingStepNotifications:
+		o.step = onboardingStepThemes
+	case onboardingStepThemes:
 		o.step = onboardingStepComplete
 	case onboardingStepComplete:
 		o.done = true
@@ -197,83 +195,82 @@ func (o *onboardingModel) render() string {
 
 	switch o.step {
 	case onboardingStepWelcome:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Let's get you set up."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Let's take a quick tour."))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("This will take about a minute."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("You'll see the home screen, models, file finder, notifications, and themes."))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
 
-	case onboardingStepDependencies:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Checking dependencies..."))
+	case onboardingStepHome:
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Home"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("The home view is your cockpit."))
 		b.WriteString("\n")
-		if o.hasGit {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("• Git detected"))
-		} else {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("• Git not found"))
-		}
-		b.WriteString("\n")
-		if o.hasOllama {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("• Ollama detected"))
-		} else {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("• Ollama not found"))
-			b.WriteString("\n")
-			b.WriteString(o.com.Styles.Initialize.Content.Render("  Install from https://ollama.com"))
-		}
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Pick a project, start a session, and choose a model from one place."))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Screenshot: resources/screenshots/home-menu.jpg"))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
 
-	case onboardingStepProvider:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Providers:"))
+	case onboardingStepModels:
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Models"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Open the models menu to switch providers and models."))
 		b.WriteString("\n")
-		if len(o.providers) == 0 {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("No providers configured yet."))
-			b.WriteString("\n")
-			b.WriteString(o.com.Styles.Initialize.Content.Render("Use /login or configure a provider in your config."))
-		} else {
-			for _, p := range o.providers {
-				b.WriteString(o.com.Styles.Initialize.Content.Render("• " + p))
-				b.WriteString("\n")
-			}
-		}
-		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
-
-	case onboardingStepModel:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Model setup:"))
-		b.WriteString("\n")
-		if o.hasOllama {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("Ollama is available. Open /models to select a local model."))
-		} else {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("Add a cloud provider to select a model."))
-		}
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Use /models or the models shortcut to browse local and cloud models."))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Screenshot: resources/screenshots/menu-models.jpg"))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
 
-	case onboardingStepProject:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Project initialization:"))
+	case onboardingStepFileFinder:
+		b.WriteString(o.com.Styles.Initialize.Content.Render("File Finder"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Browse project files, previews, metadata, and hidden files."))
 		b.WriteString("\n")
-		cwd := home.Short(o.com.Workspace.WorkingDir())
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Current directory: " + cwd))
-		b.WriteString("\n")
-		needsInit, _ := o.com.Workspace.ProjectNeedsInitialization()
-		if needsInit {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("This project has not been initialized."))
-			b.WriteString("\n")
-			b.WriteString(o.com.Styles.Initialize.Content.Render("Press Ctrl+P in the app to initialize it."))
-		} else {
-			b.WriteString(o.com.Styles.Initialize.Content.Render("Project already initialized."))
-		}
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Use the finder to pull files into context without leaving the TUI."))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Screenshot: resources/screenshots/file-finder.jpg"))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
 
-	case onboardingStepSkills:
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Skills:"))
+	case onboardingStepNotifications:
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Notifications"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("DONK shows status updates, model warm-up, and task progress in the notification area."))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render(fmt.Sprintf("Installed skills: %d", o.skillsCount)))
-		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Run install-master-skills.sh to sync the catalog."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Watch for provider, model, and workflow updates here."))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Screenshot: resources/screenshots/notification-select.jpg"))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+
+	case onboardingStepThemes:
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Themes"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("DONK includes multiple themes."))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Available theme screenshots:"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("- Pink: resources/screenshots/theme-pink.jpg"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("- Purple: resources/screenshots/theme-purple.jpg"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("- Default green home: resources/screenshots/home-green.jpg"))
+		b.WriteString("\n\n")
+		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
 
 	case onboardingStepComplete:
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Setup complete!"))
@@ -283,6 +280,8 @@ func (o *onboardingModel) render() string {
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Open /models to choose a model, then start chatting."))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to launch DONK"))
+		b.WriteString("\n")
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to skip and explore later"))
 	}
 
 	if o.error != "" {
@@ -293,9 +292,6 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render(o.info))
 	}
-
-	b.WriteString("\n\n")
-	b.WriteString(o.com.Styles.Initialize.Content.Render("Press Esc to skip setup"))
 
 	return b.String()
 }
