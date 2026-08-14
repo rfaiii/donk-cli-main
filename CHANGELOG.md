@@ -23,6 +23,9 @@
 - Added packaging wrappers under `packaging/` for Homebrew, NPM, macOS, and Windows.
 - Added `.goreleaser.dist.windows.yaml` for Windows archive packaging.
 - Updated `.goreleaser.yml` tap/scoop ownership and metadata for distribution.
+- Added macOS DMG with compiled Swift launcher.
+- Launcher auto-detects terminal preference: Ghostty first, then Alacritty, Kitty, WezTerm, iTerm2, Terminal.app.
+- Added app icon assets: `.icns` for macOS, `.ico` for Windows, iOS icon exports.
 
 ## 1.1.3
 

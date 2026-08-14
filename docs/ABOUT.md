@@ -8,15 +8,16 @@ DONK is a keyboard-first AI coding assistant for terminal workflows.
 - **Website:** https://donk-cli.com
 - **GitHub:** https://github.com/richavery/donk-cli-main
 
-## Contact
+## Contact & support
 
-- **Email:** support@donk-cli.com
+- **Email:** averydevz@outlook.com
+- **GitHub:** https://github.com/richavery/donk-cli-main
 - **Issues:** https://github.com/richavery/donk-cli-main/issues
 
 ## Maintainer
 
 - **Name:** Richard Aizen Avery III
-- **Email:** rich@donk-cli.com
+- **Email:** averydevz@outlook.com
 
 ## Licensing
 

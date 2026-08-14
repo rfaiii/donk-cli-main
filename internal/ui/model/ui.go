@@ -4128,6 +4128,28 @@ func (m *UI) cacheSidebarLogo(width int) {
 	m.sidebarLogo = renderLogo(m.com.Styles, true, m.com.IsHyper(), width, m.bannerFrame, m.bannerAnimation())
 }
 
+// startOnboarding opens the onboarding dialog when requested.
+func (m *UI) startOnboarding() tea.Cmd {
+	model := newOnboardingModel(m.com)
+	m.onboardingDialog = model
+	return nil
+}
+
+// initializeProject starts project initialization.
+func (m *UI) initializeProject() tea.Cmd {
+	return func() tea.Msg { return nil }
+}
+
+// updateInitializeView updates the initialize view based on a message.
+func (m *UI) updateInitializeView(msg tea.Msg) []tea.Cmd {
+	return nil
+}
+
+// initializeView returns the current initialize view text.
+func (m *UI) initializeView() string {
+	return "Initializing project..."
+}
+
 // applyThemeForProvider swaps the active theme to the one associated with
 // the given provider, but only when that theme differs from the one
 // already applied. Most providers share a single theme, so re-selecting a

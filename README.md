@@ -31,6 +31,35 @@ donk-cli --help
 When testing changes, prefer `./donk-cli`; a bare `donk-cli` can launch an old
 binary from another directory.
 
+## 📦 Install
+
+### macOS
+
+Use the DMG for a normal Mac app experience.
+
+1. Open `dist/donk-cli_dev_darwin_arm64.dmg`
+2. Drag `DONK.app` to `Applications`
+3. Double-click `DONK.app`
+
+If macOS blocks it:
+- Right-click `DONK.app` → Open
+- Or run: `xattr -cr /Applications/DONK.app`
+
+The DMG launcher auto-detects your terminal:
+- Ghostty first, then Alacritty, Kitty, WezTerm, iTerm2
+- Falls back to Terminal.app
+
+### Windows
+
+Use the EXE/MSI installer or ZIP archive.
+
+### Linux
+
+Use deb/rpm/apk/arch packages, AUR, Nix, or release archives.
+
+See [`docs/ONBOARDING.md`](docs/ONBOARDING.md) for the full onboarding and
+installer guide.
+
 ## 🧭 Move between projects
 
 ```sh

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/charmbracelet/ultraviolet"
+	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/richavery/donk-cli/internal/config"
 	"github.com/richavery/donk-cli/internal/home"
 	"github.com/richavery/donk-cli/internal/ui/common"
@@ -182,10 +182,10 @@ func (o *onboardingModel) nextStep() {
 	}
 }
 
-func (o *onboardingModel) Draw(scr ultraviolet.Screen, area ultraviolet.Rectangle) *tea.Cursor {
+func (o *onboardingModel) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	view := o.render()
 	cur := &tea.Cursor{}
-	styled := ultraviolet.NewStyledString(view)
+	styled := uv.NewStyledString(view)
 	styled.Draw(scr, area)
 	return cur
 }
