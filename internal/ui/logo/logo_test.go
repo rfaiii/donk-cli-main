@@ -55,7 +55,7 @@ func TestRenderWideWordmarkUsesTextAndGlitchFramesChange(t *testing.T) {
 	})
 
 	plainFirst := ansi.Strip(first)
-	if strings.Count(plainFirst, "████") < 3 {
+	if strings.Count(plainFirst, "█") < 20 {
 		t.Fatalf("wide Render() = %q, want the custom ASCII banner", first)
 	}
 	if strings.Contains(plainFirst, Wordmark) {
