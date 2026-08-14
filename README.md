@@ -6,8 +6,10 @@ DONK brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.4:** this release adds the mobile companion bridge design and
-> iOS companion app scaffold for controlling Donk CLI sessions from a phone.
+> **Release 1.1.5:** this release adds the onboarding wizard with ASCII previews,
+> terminal-aware macOS DMG launcher, beta testing docs, and updated packaging.
+> The mobile companion scaffold is present for testing, but the mobile version
+> is currently in **test mode** and not yet ready for general use.
 
 ## ⚡ Quick start
 

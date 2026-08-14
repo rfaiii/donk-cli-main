@@ -8,6 +8,8 @@
 - Added `docs/MOBILE-CLI.md` for the iOS/Android companion roadmap.
 - Added `docs/DONK-SERVER.md` for the host-side companion server.
 - Added iOS companion app scaffold under `mobile-cli/ios/`.
+- **Note:** the mobile companion is present for testing, but the mobile version
+  is currently in **test mode** and not yet ready for general use.
 
 ### Validation
 
