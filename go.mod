@@ -2,6 +2,45 @@ module github.com/richavery/donk-cli
 
 go 1.26.5
 
+replace (
+	charm.land/bubbles/v2 => /Users/richavery/Projects/CRUSH/CRUSH-CLI-REF/bubbles-main
+	charm.land/bubbletea/v2 => /Users/richavery/Projects/CRUSH/bubbletea
+	charm.land/catwalk => /Users/richavery/Projects/CRUSH/catwalk
+	charm.land/fang/v2 => /Users/richavery/Projects/CRUSH/fang
+	charm.land/fantasy => /Users/richavery/Projects/CRUSH/fantasy
+	charm.land/glamour/v2 => /Users/richavery/Projects/CRUSH/glamour
+	charm.land/lipgloss/v2 => /Users/richavery/Projects/CRUSH/lipgloss
+	charm.land/log/v2 => /Users/richavery/Projects/CRUSH/log
+	charm.land/x/vcr => /Users/richavery/Projects/CRUSH/x/vcr
+	github.com/charmbracelet/ultraviolet => /Users/richavery/Projects/CRUSH/ultraviolet
+	github.com/charmbracelet/x/ansi => /Users/richavery/Projects/CRUSH/x/ansi
+	github.com/charmbracelet/x/editor => /Users/richavery/Projects/CRUSH/x/editor
+	github.com/charmbracelet/x/etag => /Users/richavery/Projects/CRUSH/x/etag
+	github.com/charmbracelet/x/exp/charmtone => /Users/richavery/Projects/CRUSH/x/exp/charmtone
+	github.com/charmbracelet/x/exp/golden => /Users/richavery/Projects/CRUSH/x/exp/golden
+	github.com/charmbracelet/x/exp/ordered => /Users/richavery/Projects/CRUSH/x/exp/ordered
+	github.com/charmbracelet/x/exp/slice => /Users/richavery/Projects/CRUSH/x/exp/slice
+	github.com/charmbracelet/x/exp/strings => /Users/richavery/Projects/CRUSH/x/exp/strings
+	github.com/charmbracelet/x/powernap => /Users/richavery/Projects/CRUSH/x/powernap
+	github.com/charmbracelet/x/term => /Users/richavery/Projects/CRUSH/x/term
+	github.com/charmbracelet/x/termios => /Users/richavery/Projects/CRUSH/x/termios
+	github.com/charmbracelet/x/windows => /Users/richavery/Projects/CRUSH/x/windows
+	github.com/charmbracelet/x/cellbuf => /Users/richavery/Projects/CRUSH/x/cellbuf
+	github.com/charmbracelet/x/vt => /Users/richavery/Projects/CRUSH/x/vt
+	github.com/charmbracelet/x/wcwidth => /Users/richavery/Projects/CRUSH/x/wcwidth
+	github.com/charmbracelet/x/input => /Users/richavery/Projects/CRUSH/x/input
+	github.com/charmbracelet/x/mosaic => /Users/richavery/Projects/CRUSH/x/mosaic
+	github.com/charmbracelet/x/pony => /Users/richavery/Projects/CRUSH/x/pony
+	github.com/charmbracelet/x/conpty => /Users/richavery/Projects/CRUSH/x/conpty
+	github.com/charmbracelet/x/xpty => /Users/richavery/Projects/CRUSH/x/xpty
+	github.com/charmbracelet/x/json => /Users/richavery/Projects/CRUSH/x/json
+	github.com/charmbracelet/x/vttest => /Users/richavery/Projects/CRUSH/x/vttest
+	github.com/charmbracelet/x/colors => /Users/richavery/Projects/CRUSH/x/colors
+	github.com/charmbracelet/x/sshkey => /Users/richavery/Projects/CRUSH/x/sshkey
+	github.com/charmbracelet/x/gitignore => /Users/richavery/Projects/CRUSH/x/gitignore
+	github.com/charmbracelet/x/errors => /Users/richavery/Projects/CRUSH/x/errors
+)
+
 require (
 	charm.land/bubbles/v2 v2.1.1
 	charm.land/bubbletea/v2 v2.0.8

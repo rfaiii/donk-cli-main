@@ -27,7 +27,7 @@ struct ContentView: View {
             }
             .navigationTitle("Donk Companion")
             .scrollContentBackground(.hidden)
-            .background(Theme.background.ignoresSafeArea())
+            .background(Color.background.ignoresSafeArea())
         }
     }
 }

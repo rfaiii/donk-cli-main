@@ -293,6 +293,9 @@ type UI struct {
 		yesInitializeSelected bool
 	}
 
+	// onboardingDialog is the active onboarding flow dialog, if any.
+	onboardingDialog dialog.Dialog
+
 	// lsp
 	lspStates map[string]workspace.LSPClientInfo
 
@@ -517,7 +520,7 @@ func (m *UI) Init() tea.Cmd {
 	var cmds []tea.Cmd
 	cmds = append(cmds, m.bannerAnim.Start())
 	if m.state == uiOnboarding {
-		if cmd := m.openModelsDialog(); cmd != nil {
+		if cmd := m.startOnboarding(); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
 	}
@@ -2543,6 +2546,11 @@ func (m *UI) handleKeyPressMsg(msg tea.KeyPressMsg) tea.Cmd {
 
 	switch m.state {
 	case uiOnboarding:
+		if m.onboardingDialog != nil {
+			if action := m.onboardingDialog.HandleMsg(msg); action != nil {
+				cmds = append(cmds, m.handleDialogAction(action))
+			}
+		}
 		return tea.Batch(cmds...)
 	case uiInitialize:
 		cmds = append(cmds, m.updateInitializeView(msg)...)
@@ -3002,8 +3010,9 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	case uiOnboarding:
 		m.drawHeader(scr, layout.header)
 
-		// NOTE: Onboarding flow will be rendered as dialogs below, but
-		// positioned at the bottom left of the screen.
+		if m.onboardingDialog != nil {
+			m.onboardingDialog.Draw(scr, layout.main)
+		}
 
 	case uiInitialize:
 		m.drawHeader(scr, layout.header)

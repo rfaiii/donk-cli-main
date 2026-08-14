@@ -1,0 +1,30 @@
+{
+  "name": "@donkcli/donk-cli",
+  "version": "1.1.4",
+  "description": "DONK is a keyboard-first terminal AI workspace.",
+  "bin": {
+    "donk-cli": "./bin/donk-cli"
+  },
+  "scripts": {
+    "postinstall": "node ./scripts/install.js",
+    "preuninstall": "node ./scripts/uninstall.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "darwin",
+    "win32",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richavery/donk-cli.git"
+  },
+  "homepage": "https://donk-cli.com",
+  "license": "MIT"
+}

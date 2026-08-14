@@ -172,9 +172,11 @@ furies:
 
 brews:
   - repository:
-      owner: charmbracelet
+      owner: richavery
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: "https://donk-cli.com"
+    description: "DONK is a keyboard-first terminal AI workspace."
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
       name: "DONK"
@@ -188,9 +190,11 @@ brews:
 
 scoops:
   - repository:
-      owner: charmbracelet
+      owner: richavery
       name: scoop-bucket
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    description: "DONK is a keyboard-first terminal AI workspace."
+    homepage: "https://donk-cli.com"
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
       name: "DONK"

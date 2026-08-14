@@ -14,6 +14,16 @@
 - Documented companion server architecture and protocol requirements.
 - Added mobile companion app scaffolding with SwiftUI.
 
+### Packaging & onboarding
+
+- Added `docs/ONBOARDING.md` for first-run setup and dependency guidance.
+- Added `docs/DEPENDENCIES.md` for concrete macOS/Windows install requirements.
+- Added `docs/IMG-RESOURCES.md` for screenshot, video, and icon asset guidance.
+- Added `docs/ABOUT.md` for company and maintainer contact info.
+- Added packaging wrappers under `packaging/` for Homebrew, NPM, macOS, and Windows.
+- Added `.goreleaser.dist.windows.yaml` for Windows archive packaging.
+- Updated `.goreleaser.yml` tap/scoop ownership and metadata for distribution.
+
 ## 1.1.3
 
 ### Native Ollama coding

@@ -1,4 +1,4 @@
-# ◇ DONK-CLI 1.1.4
+# ◇ DONK-CLI 1.1.4 by richard izn avery
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -105,11 +105,25 @@ GOOS=linux GOARCH=amd64 go build -o /tmp/donk-linux-amd64 .
 GOOS=linux GOARCH=arm64 go build -o /tmp/donk-linux-arm64 .
 ```
 
+## 📦 Install
+
+- **macOS** — use the DMG, Homebrew, or NPM wrapper.
+- **Windows** — use the EXE/MSI installer or ZIP archive.
+- **Linux** — use deb/rpm/apk/arch packages, AUR, Nix, or release archives.
+
+See [`docs/ONBOARDING.md`](docs/ONBOARDING.md) for the full onboarding and
+installer guide.
+
 ## 📚 Documentation map
 
 | Document | Use it for |
 | --- | --- |
 | [`docs/installation.md`](docs/installation.md) | Installation, testing, paths, troubleshooting |
+| [`docs/ONBOARDING.md`](docs/ONBOARDING.md) | First-run setup, dependencies, and packaging |
+| [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Concrete macOS/Windows dependency list |
+| [`docs/IMG-RESOURCES.md`](docs/IMG-RESOURCES.md) | Screenshots, videos, and app icon assets |
+| [`docs/PACKAGING.md`](docs/PACKAGING.md) | Release automation and packaging configs |
+| [`docs/ABOUT.md`](docs/ABOUT.md) | Company and maintainer contact info |
 | [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) | Ollama setup and local models |
 | [`docs/SKILLS.md`](docs/SKILLS.md) | Agent Skills discovery and syncing |
 | [`docs/FILE_FINDER.md`](docs/FILE_FINDER.md) | File Finder behavior |
