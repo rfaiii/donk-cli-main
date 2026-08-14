@@ -14,31 +14,31 @@ replace (
 	charm.land/x/vcr => /Users/richavery/Projects/CRUSH/x/vcr
 	github.com/charmbracelet/ultraviolet => /Users/richavery/Projects/CRUSH/ultraviolet
 	github.com/charmbracelet/x/ansi => /Users/richavery/Projects/CRUSH/x/ansi
+	github.com/charmbracelet/x/cellbuf => /Users/richavery/Projects/CRUSH/x/cellbuf
+	github.com/charmbracelet/x/colors => /Users/richavery/Projects/CRUSH/x/colors
+	github.com/charmbracelet/x/conpty => /Users/richavery/Projects/CRUSH/x/conpty
 	github.com/charmbracelet/x/editor => /Users/richavery/Projects/CRUSH/x/editor
+	github.com/charmbracelet/x/errors => /Users/richavery/Projects/CRUSH/x/errors
 	github.com/charmbracelet/x/etag => /Users/richavery/Projects/CRUSH/x/etag
 	github.com/charmbracelet/x/exp/charmtone => /Users/richavery/Projects/CRUSH/x/exp/charmtone
 	github.com/charmbracelet/x/exp/golden => /Users/richavery/Projects/CRUSH/x/exp/golden
 	github.com/charmbracelet/x/exp/ordered => /Users/richavery/Projects/CRUSH/x/exp/ordered
 	github.com/charmbracelet/x/exp/slice => /Users/richavery/Projects/CRUSH/x/exp/slice
 	github.com/charmbracelet/x/exp/strings => /Users/richavery/Projects/CRUSH/x/exp/strings
-	github.com/charmbracelet/x/powernap => /Users/richavery/Projects/CRUSH/x/powernap
-	github.com/charmbracelet/x/term => /Users/richavery/Projects/CRUSH/x/term
-	github.com/charmbracelet/x/termios => /Users/richavery/Projects/CRUSH/x/termios
-	github.com/charmbracelet/x/windows => /Users/richavery/Projects/CRUSH/x/windows
-	github.com/charmbracelet/x/cellbuf => /Users/richavery/Projects/CRUSH/x/cellbuf
-	github.com/charmbracelet/x/vt => /Users/richavery/Projects/CRUSH/x/vt
-	github.com/charmbracelet/x/wcwidth => /Users/richavery/Projects/CRUSH/x/wcwidth
+	github.com/charmbracelet/x/gitignore => /Users/richavery/Projects/CRUSH/x/gitignore
 	github.com/charmbracelet/x/input => /Users/richavery/Projects/CRUSH/x/input
+	github.com/charmbracelet/x/json => /Users/richavery/Projects/CRUSH/x/json
 	github.com/charmbracelet/x/mosaic => /Users/richavery/Projects/CRUSH/x/mosaic
 	github.com/charmbracelet/x/pony => /Users/richavery/Projects/CRUSH/x/pony
-	github.com/charmbracelet/x/conpty => /Users/richavery/Projects/CRUSH/x/conpty
-	github.com/charmbracelet/x/xpty => /Users/richavery/Projects/CRUSH/x/xpty
-	github.com/charmbracelet/x/json => /Users/richavery/Projects/CRUSH/x/json
-	github.com/charmbracelet/x/vttest => /Users/richavery/Projects/CRUSH/x/vttest
-	github.com/charmbracelet/x/colors => /Users/richavery/Projects/CRUSH/x/colors
+	github.com/charmbracelet/x/powernap => /Users/richavery/Projects/CRUSH/x/powernap
 	github.com/charmbracelet/x/sshkey => /Users/richavery/Projects/CRUSH/x/sshkey
-	github.com/charmbracelet/x/gitignore => /Users/richavery/Projects/CRUSH/x/gitignore
-	github.com/charmbracelet/x/errors => /Users/richavery/Projects/CRUSH/x/errors
+	github.com/charmbracelet/x/term => /Users/richavery/Projects/CRUSH/x/term
+	github.com/charmbracelet/x/termios => /Users/richavery/Projects/CRUSH/x/termios
+	github.com/charmbracelet/x/vt => /Users/richavery/Projects/CRUSH/x/vt
+	github.com/charmbracelet/x/vttest => /Users/richavery/Projects/CRUSH/x/vttest
+	github.com/charmbracelet/x/wcwidth => /Users/richavery/Projects/CRUSH/x/wcwidth
+	github.com/charmbracelet/x/windows => /Users/richavery/Projects/CRUSH/x/windows
+	github.com/charmbracelet/x/xpty => /Users/richavery/Projects/CRUSH/x/xpty
 )
 
 require (
@@ -163,7 +163,7 @@ require (
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.9.0 // indirect
 	github.com/go-json-experiment/json v0.0.0-20260623181947-01eb4420fa68 // indirect
-	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
@@ -235,7 +235,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.44.0 // indirect
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.yaml.in/yaml/v4 v4.0.0-rc.3 // indirect
+	go.yaml.in/yaml/v4 v4.0.0-rc.6 // indirect
 	golang.design/x/x11 v0.2.0 // indirect
 	golang.org/x/exp v0.0.0-20260718201538-764159d718ef // indirect
 	golang.org/x/exp/shiny v0.0.0-20250606033433-dcc06ee1d476 // indirect
@@ -250,7 +250,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260729162451-8efbd57d26e0 // indirect
 	google.golang.org/grpc v1.83.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
-	gopkg.in/dnaeon/go-vcr.v4 v4.0.6-0.20251110073552-01de4eb40290 // indirect
+	gopkg.in/dnaeon/go-vcr.v4 v4.0.7 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
