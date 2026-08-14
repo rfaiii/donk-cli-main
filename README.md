@@ -158,6 +158,7 @@ installer guide.
 | [`docs/IMG-RESOURCES.md`](docs/IMG-RESOURCES.md) | Screenshots, videos, and app icon assets |
 | [`docs/PACKAGING.md`](docs/PACKAGING.md) | Release automation and packaging configs |
 | [`docs/ABOUT.md`](docs/ABOUT.md) | Company and maintainer contact info |
+| [`docs/BETA.md`](docs/BETA.md) | Beta testing program, invites, distribution, and feedback |
 | [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) | Ollama setup and local models |
 | [`docs/SKILLS.md`](docs/SKILLS.md) | Agent Skills discovery and syncing |
 | [`docs/FILE_FINDER.md`](docs/FILE_FINDER.md) | File Finder behavior |
