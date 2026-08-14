@@ -1,4 +1,4 @@
-# ◇ DONK-CLI 1.1.4 by richard izn avery
+# ◇ DONK-CLI 1.1.5 by richard izn avery
 
 **The keyboard-first AI workspace for your projects.**
 

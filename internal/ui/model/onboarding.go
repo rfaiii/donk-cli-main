@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
@@ -210,7 +211,9 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Pick a project, start a session, and choose a model from one place."))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Screenshot: resources/screenshots/home-menu.jpg"))
+		b.WriteString(o.renderPreview("resources/screenshots/home-menu.jpg"))
+		b.WriteString("\n")
+		b.WriteString(o.renderASCIIPreview("home-menu"))
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
@@ -306,4 +309,61 @@ func lookPath(name string) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("%s not found", name)
+}
+
+func (o *onboardingModel) renderPreview(path string) string {
+	label := filepath.Base(path)
+	exists, err := pathExists(path)
+	if err != nil {
+		return o.com.Styles.Initialize.Content.Render("[preview unavailable: " + label + "]")
+	}
+	if !exists {
+		return o.com.Styles.Initialize.Content.Render("[preview missing: " + label + "]")
+	}
+	switch terminalPreviews() {
+	case "inline":
+		return o.com.Styles.Initialize.Accent.Render("[preview " + label + "]")
+	default:
+		return o.com.Styles.Initialize.Content.Render("[preview " + label + "]")
+	}
+}
+
+func (o *onboardingModel) renderASCIIPreview(name string) string {
+	switch name {
+	case "home-menu":
+		return o.com.Styles.Initialize.Content.Render(strings.TrimSpace(`
+┌─────────────────────┐
+│ ▶ DONK              │
+│ Project: my-app     │
+│ Model:  mistral     │
+│ Status: ready       │
+└─────────────────────┘`))
+	}
+	return ""
+}
+
+func terminalPreviews() string {
+	if previewEnv() != "" {
+		return "inline"
+	}
+	return "placeholder"
+}
+
+func previewEnv() string {
+	switch strings.ToLower(os.Getenv("TERM_PROGRAM")) {
+	case "ghostty", "kitty", "wezterm", "alacritty", "iterm2":
+		return strings.ToLower(os.Getenv("TERM_PROGRAM"))
+	}
+	return ""
+}
+
+func pathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
