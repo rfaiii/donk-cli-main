@@ -84,6 +84,8 @@ DONK discovers all models available from Ollama’s local API. Open `/models`,
 The model diamond is gray when unknown, purple while loading, green when ready,
 and red if loading fails. Read [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md).
 
+![DONK models](resources/screenshots/menu-models.jpg)
+
 For smaller Ollama coding models such as `qwen2.5-coder:3b-instruct`, use the
 fantasy-free native coder. It talks directly to Ollama with a small tool set,
 recovers Qwen-style text tool calls, and buffers raw tool-call JSON from the
@@ -114,6 +116,9 @@ troubleshooting.
 - Agent Skills from `~/.agents/skills` with master-catalog syncing
 - NODE connection foundations for HTTP/JSON, WebSocket, and SSH transports
 - Persistent project registration and recently accessed project tracking
+
+![DONK home](resources/screenshots/home-menu.jpg)
+![DONK file finder](resources/screenshots/file-finder.jpg)
 
 ## 🛠 Developer checks
 
@@ -160,6 +165,11 @@ installer guide.
 | [`docs/UI_BRANDING.md`](docs/UI_BRANDING.md) | DONK visual identity |
 | [`docs/MOBILE-CLI.md`](docs/MOBILE-CLI.md) | Mobile companion bridge and iOS/Android plans |
 | [`docs/DONK-SERVER.md`](docs/DONK-SERVER.md) | Host-side companion server design |
+
+![DONK notifications](resources/screenshots/notification-select.jpg)
+![DONK pink theme](resources/screenshots/theme-pink.jpg)
+![DONK purple theme](resources/screenshots/theme-purple.jpg)
+![DONK default green theme](resources/screenshots/home-green.jpg)
 
 ## 🧪 Beta report checklist
 
