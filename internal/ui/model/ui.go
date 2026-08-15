@@ -2093,7 +2093,7 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 
 	case dialog.ActionFileBrowserSelected:
 		if msg.Path != "" {
-			cmds = append(cmds, m.insertFileCompletion(msg.Path))
+			cmds = append(cmds, m.attachFileFromPath(msg.Path))
 		}
 		m.dialog.CloseDialog(dialog.FileBrowserID)
 		cmds = append(cmds, m.textarea.Focus())
@@ -2976,10 +2976,10 @@ func (m *UI) drawHeader(scr uv.Screen, area uv.Rectangle) {
 	// Keep the compact finder affordance in chat/header views. The landing page
 	// has its own larger bordered button, so do not draw a duplicate there.
 	if m.state != uiLanding {
-		button := lipgloss.NewStyle().Foreground(lipgloss.Color("#3bf66b")).Bold(true).Render("📁")
-		buttonW := max(1, lipgloss.Width(button))
-		m.finderButtonRect = image.Rect(max(area.Min.X, area.Max.X-buttonW-1), area.Min.Y, area.Max.X-1, area.Min.Y+1)
-		uv.NewStyledString(button).Draw(scr, m.finderButtonRect)
+		attachBtn := lipgloss.NewStyle().Foreground(lipgloss.Color("#3bf66b")).Bold(true).Render("[+]")
+		attachW := max(1, lipgloss.Width(attachBtn))
+		m.finderButtonRect = image.Rect(max(area.Min.X, area.Max.X-attachW-1), area.Min.Y, area.Max.X-1, area.Min.Y+1)
+		uv.NewStyledString(attachBtn).Draw(scr, m.finderButtonRect)
 	}
 }
 
@@ -3983,6 +3983,41 @@ func (m *UI) insertFileCompletion(path string) tea.Cmd {
 		}
 	}
 	return tea.Batch(heightCmd, fileCmd)
+}
+
+// attachFileFromPath attaches a file from the given path without inserting
+// its path into the textarea. It is used by the editor [+] button and the
+// in-app file finder attach flow.
+func (m *UI) attachFileFromPath(path string) tea.Cmd {
+	fileCmd := func() tea.Msg {
+		absPath, _ := filepath.Abs(path)
+
+		if m.hasSession() {
+			lastRead := m.com.Workspace.FileTrackerLastReadTime(context.Background(), m.session.ID, absPath)
+			if !lastRead.IsZero() {
+				if info, err := os.Stat(path); err == nil && !info.ModTime().After(lastRead) {
+					return nil
+				}
+			}
+		} else if slices.Contains(m.sessionFileReads, absPath) {
+			return nil
+		}
+
+		m.sessionFileReads = append(m.sessionFileReads, absPath)
+
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return nil
+		}
+
+		return message.Attachment{
+			FilePath: path,
+			FileName: filepath.Base(path),
+			MimeType: mimeOf(content),
+			Content:  content,
+		}
+	}
+	return fileCmd
 }
 
 // insertMCPResourceCompletion inserts the selected resource into the textarea,
