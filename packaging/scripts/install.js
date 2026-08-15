@@ -5,8 +5,8 @@ import path from "node:path";
 import os from "node:os";
 import { execSync } from "node:child_process";
 
-const GITHUB_REPO = "richavery/donk-cli";
-const VERSION = process.env.npm_package_version;
+const GITHUB_REPO = "richavery/donk-cli-main";
+const VERSION = process.env.npm_package_version || "latest";
 const HOME = os.homedir();
 const INSTALL_DIR = process.env.npm_config_global
   ? path.join(execSync("npm root -g").toString().trim(), ".bin")
