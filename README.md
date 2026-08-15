@@ -7,9 +7,10 @@ skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
 > **Release 1.1.5:** this release adds the onboarding wizard with ASCII previews,
-> terminal-aware macOS DMG launcher, beta testing docs, and updated packaging.
-> The mobile companion scaffold is present for testing, but the mobile version
-> is currently in **test mode** and not yet ready for general use.
+> terminal-aware macOS DMG launcher, beta testing docs, updated packaging, and
+> optional Ghostty shader installation. The mobile companion scaffold is present
+> for testing, but the mobile version is currently in **test mode** and not yet
+> ready for general use.
 
 ## ⚡ Quick start
 
@@ -113,10 +114,13 @@ troubleshooting.
 - Bottom resource bar showing live CPU and RAM usage
 - Project File Finder with previews, metadata, hidden files, paging, clipboard,
   and project switching
+- `[+]` attachment button wired to FILEFINDER for fast file, photo, video, and
+  link attachments
 - Sessions, model/provider selection, permissions, MCP, LSP, and skills
 - Ollama discovery, model pull, automatic startup, and model warm-up
 - Agent Skills from `~/.agents/skills` with master-catalog syncing
-- NODE connection foundations for HTTP/JSON, WebSocket, and SSH transports
+- NODE connection support for HTTP/JSON, WebSocket, and SSH transports
+- Optional embedded Ghostty shader installation and standalone shader visualizer
 - Persistent project registration and recently accessed project tracking
 
 ![DONK home](resources/screenshots/home-menu.jpg)
@@ -168,6 +172,10 @@ installer guide.
 | [`docs/UI_BRANDING.md`](docs/UI_BRANDING.md) | DONK visual identity |
 | [`docs/MOBILE-CLI.md`](docs/MOBILE-CLI.md) | Mobile companion bridge and iOS/Android plans |
 | [`docs/DONK-SERVER.md`](docs/DONK-SERVER.md) | Host-side companion server design |
+| [`docs/NODE_TRANSPORTS.md`](docs/NODE_TRANSPORTS.md) | NODE connection setup and transports |
+| [`docs/NODE_HTTP_PROTOCOL.md`](docs/NODE_HTTP_PROTOCOL.md) | NODE HTTP/JSON protocol |
+| [`docs/NODE_WEBSOCKET_PROTOCOL.md`](docs/NODE_WEBSOCKET_PROTOCOL.md) | NODE WebSocket streaming protocol |
+| [`docs/NODE_SSH_TRANSPORT.md`](docs/NODE_SSH_TRANSPORT.md) | NODE SSH transport |
 
 ![DONK notifications](resources/screenshots/notification-select.jpg)
 ![DONK pink theme](resources/screenshots/theme-pink.jpg)

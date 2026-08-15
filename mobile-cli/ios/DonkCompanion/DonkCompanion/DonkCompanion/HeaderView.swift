@@ -3,8 +3,9 @@ import SwiftUI
 struct HeaderView: View {
     var body: some View {
         HStack {
-            Text("/// DONK-CLI ///")
-                .font(.system(size: 32, weight: .bold, design: .monospaced))
+            Spacer()
+            Text("//// DONK-CLI ////")
+                .font(.custom("JetBrainsMonoNerdFontMono-Regular", size: 32))
                 .foregroundColor(Theme.primary)
             Spacer()
         }

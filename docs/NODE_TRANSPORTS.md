@@ -8,7 +8,7 @@ DONK supports one device registry with three transport adapters:
 | `ws://`, `wss://` | WebSocket/JSON | Persistent connections and streaming output |
 | SSH configuration | SSH | Existing computers reachable through SSH |
 
-Start a NODE agent with both HTTP and WebSocket routes enabled:
+## Quick start
 
 ```sh
 donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
@@ -27,6 +27,28 @@ Open **NODE Connections** from the command palette (`/node`) or press
 `ctrl+shift+n`. Use `r` in the dialog to refresh discovery. Configured
 transport endpoints are shown for each device so you can verify which node is
 selected before running Node/NPM commands.
+
+## Pairing your iPhone
+
+1. Start the agent on your laptop/desktop:
+   ```sh
+   donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
+   ```
+2. Make sure your iPhone is on the same local network as the host.
+3. Open the DONK companion app on iPhone.
+4. Enter the host IP and port, then the same bearer token.
+5. The device appears in **NODE Connections** as `online` when the health
+   check succeeds.
+
+If the device stays `offline`, verify the host firewall allows port `7777`
+and that the token matches exactly.
+
+## Commands from iPhone
+
+When connected, prompts you send from the companion chat are forwarded to the
+host and executed with the same workspace context. Output streams back to the
+phone chat in real time over WebSocket, or as request/response results over
+HTTP.
 
 See `NODE_HTTP_PROTOCOL.md`, `NODE_WEBSOCKET_PROTOCOL.md`, and
 `NODE_SSH_TRANSPORT.md` for protocol details.

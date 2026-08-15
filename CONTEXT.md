@@ -1,5 +1,5 @@
 # Project: DONK-CLI
-# Date: 2026-08-14
+# Date: 2026-08-15
 
 ## Current Goal
 Ship and verify the v1.1.5 installer and onboarding experience across:
@@ -9,6 +9,7 @@ Ship and verify the v1.1.5 installer and onboarding experience across:
 4) Homebrew formula/tap
 5) Winget manifest
 6) Optional Ghostty shader installation + standalone shader visualizer
+7) NODE connection testing and iPhone pairing documentation
 
 Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and beta docs updated.
 
@@ -19,6 +20,7 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - **Packaging:** `packaging/` for npm/homebrew, `dist/release/` for binaries, `winget/` for manifest templates
 - **Release:** GitHub Releases v1.1.5 with cross-compiled platform binaries
 - **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `donk-cli shaders list/install`
+- **NODE:** `internal/node` provides device registry, HTTP/WebSocket/SSH transports, and tests
 
 ## Recent Iterations
 - [x] Rewrote onboarding as screenshot/ASCII-guided tour with Opt Out/Continue
@@ -31,11 +33,15 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - [x] Added beta testing guide in `docs/BETA.md`
 - [x] Embedded shader set and added `donk-cli shaders` command
 - [x] Added optional Ghostty config installer for bundled shaders
+- [x] Added standalone shader visualizer binary target
+- [x] Added `[+]` attachment button wired to FILEFINDER for in-ecosystem attachments
+- [x] Added NODE connection testing and iPhone pairing docs
 
 ## Active Roadblocks
 - Public GitHub release asset download URLs returning 404 during installer end-to-end testing
 - `internal/agent` tests show fixture/API mismatch unrelated to installer work
 - Homebrew/npm/winget manifest paths need real install validation after release asset serving is confirmed
+- iOS companion app is test-mode only; full device sync flow not yet implemented
 
 ## Next Steps
 - [ ] Validate Windows EXE installer flow on Windows x64
@@ -44,7 +50,8 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - [ ] Complete Homebrew tap install against published release
 - [ ] Complete Winget manifest validation
 - [ ] Finalize beta invite list and distribution notes
-- [ ] Fix `internal/agent` test fixture mismatch
+- [ ] Implement full iPhone ↔ laptop NODE sync command flow
+- [ ] Add NODE connection breadcrumbs/onboarding in TUI
 
 ---
 *Note: Update this before switching models or switching from local development to another machine.*

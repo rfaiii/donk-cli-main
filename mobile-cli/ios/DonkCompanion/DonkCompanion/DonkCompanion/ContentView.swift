@@ -7,19 +7,26 @@ struct ContentView: View {
         ZStack {
             Theme.background.ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 20) {
+            VStack(spacing: 0) {
+                // Top dashboard section
+                VStack(spacing: 16) {
                     HeaderView()
-                    
                     StatsView()
-                    
                     TaskPickerView()
-                    
                     ModelListView()
-                    
-                    BottomToolbarView()
                 }
                 .padding(.top, 10)
+                .padding(.bottom, 8)
+                
+                // Chat area takes up remaining flexible space
+                ChatView()
+                
+                // Bottom input and toolbar section
+                VStack(spacing: 8) {
+                    ChatInputBar()
+                    BottomToolbarView()
+                }
+                .padding(.bottom, 8)
             }
         }
         .environment(mockStore)
