@@ -42,24 +42,24 @@ function getRelease() {
   return api(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`);
 }
 
-function download(url) {
+function download(url, target) {
   return new Promise((resolve, reject) => {
     const mod = url.startsWith("https") ? https : http;
-    const file = fs.createWriteStream(TARGET);
+    const file = fs.createWriteStream(target || TARGET);
     mod.get(url, (res) => {
       if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        download(res.headers.location).then(resolve).catch(reject);
+        download(res.headers.location, target).then(resolve).catch(reject);
         res.resume();
         return;
       }
       res.pipe(file);
       file.on("finish", () => {
         file.close();
-        fs.chmodSync(TARGET, 0o755);
+        if (!target || target === TARGET) fs.chmodSync(TARGET, 0o755);
         resolve();
       });
     }).on("error", (err) => {
-      fs.rmSync(TARGET, { force: true });
+      fs.rmSync(target || TARGET, { force: true });
       reject(err);
     });
   });
@@ -101,17 +101,43 @@ async function main() {
   const assetName = resolveAssetName(release, platform, arch);
   const tag = release.tag_name || `v${VERSION}`;
   let asset = tryFindAsset(release, assetName);
+  let downloadUrl = asset?.browser_download_url || buildFallbackUrl(tag, assetName);
 
-  if (!asset) {
-    const fallbackUrl = buildFallbackUrl(tag, assetName);
-    console.warn(`Asset lookup failed for ${assetName}; falling back to ${fallbackUrl}`);
-    await download(fallbackUrl);
+  const tempTarget = TARGET + ".tmp";
+  await download(downloadUrl, tempTarget);
+
+  if (!fs.existsSync(tempTarget) || fs.statSync(tempTarget).size === 0) {
+    fs.rmSync(tempTarget, { force: true });
+    console.error(
+      `Downloaded file is empty or missing for ${assetName}. ` +
+        `Install the binary manually from https://github.com/${GITHUB_REPO}/releases/tag/${tag}`
+    );
+    process.exit(1);
+  }
+
+  const buffer = fs.readFileSync(tempTarget);
+  if (platform === "win32" && !buffer.toString("ascii", 0, 2).startsWith("MZ")) {
+    fs.rmSync(tempTarget, { force: true });
+    console.error(
+      `Downloaded file does not look like a Windows executable for ${assetName}. ` +
+        `Install the binary manually from https://github.com/${GITHUB_REPO}/releases/tag/${tag}`
+    );
+    process.exit(1);
+  }
+
+  if (platform !== "win32" && buffer.length > 0 && buffer[0] === 0x7f && buffer[1] === 0x45 && buffer[2] === 0x4c && buffer[3] === 0x46) {
+    fs.renameSync(tempTarget, TARGET);
+    fs.chmodSync(TARGET, 0o755);
     console.log(`Installed donk-cli to ${TARGET}`);
     return;
   }
 
-  await download(asset.browser_download_url);
-  console.log(`Installed donk-cli to ${TARGET}`);
+  fs.rmSync(tempTarget, { force: true });
+  console.error(
+    `Downloaded file for ${assetName} is not a valid binary. ` +
+      `Install the binary manually from https://github.com/${GITHUB_REPO}/releases/tag/${tag}`
+  );
+  process.exit(1);
 }
 
 main().catch((err) => {
