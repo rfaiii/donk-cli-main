@@ -7,16 +7,18 @@ import { execSync } from "node:child_process";
 
 const GITHUB_REPO = "richavery/donk-cli-main";
 const VERSION = process.env.npm_package_version || "latest";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || process.env.nPm_CONFIG_GITHUB_TOKEN || "";
 const HOME = os.homedir();
 const INSTALL_DIR = process.env.npm_config_global
   ? path.join(execSync("npm root -g").toString().trim(), ".bin")
   : path.join(process.cwd(), "node_modules", ".bin");
 const TARGET = path.join(INSTALL_DIR, "donk-cli");
 
-function getRelease() {
-  const url = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+function api(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, { headers: { "User-Agent": "donk-cli-npm-installer" } }, (res) => {
+    const headers = { "User-Agent": "donk-cli-npm-installer" };
+    if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
+    https.get(url, { headers }, (res) => {
       let data = "";
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => {
@@ -28,6 +30,10 @@ function getRelease() {
       });
     }).on("error", reject);
   });
+}
+
+function getRelease() {
+  return api(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`);
 }
 
 function download(url) {

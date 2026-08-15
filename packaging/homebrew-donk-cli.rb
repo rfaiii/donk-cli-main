@@ -9,7 +9,8 @@ class DonkCli < Formula
 
   def install
     ldflags = "-s -w -X github.com/richavery/donk-cli/internal/version.Version=#{version}"
-    system "go", "build", *std_go_args(ldflags:, output: bin/"donk-cli"), "."
+    build_args = std_go_args(ldflags: ldflags, output: bin/"donk-cli")
+    system "go", "build", *build_args, "."
 
     generate_completions_from_executable(bin/"donk-cli", "completion")
     man1.install Utils.safe_popen_read(bin/"donk-cli", "man").pipe("gzip -c"), "#{name}.1.gz"
