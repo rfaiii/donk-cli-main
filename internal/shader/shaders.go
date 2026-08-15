@@ -45,9 +45,10 @@ func Defaults() []string {
 		"cursor_warp.glsl",
 		"cursor_sweep.glsl",
 		"cursor_tail.glsl",
+		"rectangle_boom_cursor.glsl",
 		"ripple_cursor.glsl",
-		"sonic_boom_cursor.glsl",
 		"ripple_rectangle_cursor.glsl",
+		"sonic_boom_cursor.glsl",
 	}
 }
 
