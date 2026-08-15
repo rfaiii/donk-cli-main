@@ -8,6 +8,7 @@ Ship and verify the v1.1.5 installer and onboarding experience across:
 3) NPM package
 4) Homebrew formula/tap
 5) Winget manifest
+6) Optional Ghostty shader installation + standalone shader visualizer
 
 Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and beta docs updated.
 
@@ -17,6 +18,7 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - **UI:** `internal/ui/...` Bubble Tea state machine
 - **Packaging:** `packaging/` for npm/homebrew, `dist/release/` for binaries, `winget/` for manifest templates
 - **Release:** GitHub Releases v1.1.5 with cross-compiled platform binaries
+- **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `donk-cli shaders list/install`
 
 ## Recent Iterations
 - [x] Rewrote onboarding as screenshot/ASCII-guided tour with Opt Out/Continue
@@ -27,6 +29,8 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - [x] Added Windows installer zip bundle and Winget manifest template
 - [x] Merged maintainer/agent configuration into `AGENTS.md`
 - [x] Added beta testing guide in `docs/BETA.md`
+- [x] Embedded shader set and added `donk-cli shaders` command
+- [x] Added optional Ghostty config installer for bundled shaders
 
 ## Active Roadblocks
 - Public GitHub release asset download URLs returning 404 during installer end-to-end testing
