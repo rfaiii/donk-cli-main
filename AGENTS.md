@@ -229,3 +229,38 @@ func CharmtonePantera() Styles {
 **Adding a new theme**: Add a function in `themes.go` that returns the
 result of `quickStyle` with a `quickStyleOpts` palette (plus any needed
 overrides), then wire it into `ThemeForProvider`.
+
+## Agent Operating Principles
+
+This section documents the active development agent configuration and
+environment preferences for DONK-CLI.
+
+### Maintainer
+
+- **Richard Aizen Avery III**
+
+### Technical Environment
+
+- **Primary terminal:** Ghostty
+- **Local development:** macOS on Apple Silicon (`M1/M3/M4`)
+- **IDE/Workflow:** Cursor, Cline, Hermes, AntiGravity IDE
+
+### Operational Directives
+
+- Use terminal-first workflows. If an IDE tool struggles, revert to the
+  CLI to diagnose via standard streams.
+- Prefer modular, reusable code even during rapid experimentation.
+- Maintain state via context-rich notes when switching models or tools.
+- Before switching models, capture a short snapshot of intent: goal,
+  what failed, and the next hypothesis.
+- Keep the current experimentation state in `TODO.md`; avoid leaving
+  broken branches or dead code paths in the workspace.
+- Ship incrementally. Even exploratory work should be organized into
+  saveable utilities or snippets.
+
+### Model & Tool Pragmatism
+
+- Do not remain attached to a single model or provider. If the current
+  model struggles, switch models or change orchestration.
+- Design shell scripts and environment variables for cross-platform
+  portability across macOS, Linux, and Windows.
