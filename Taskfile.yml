@@ -1,0 +1,86 @@
+# https://taskfile.dev
+# Taskfile for DONK-CLI
+# Designed for macOS, Linux, and Windows development
+
+version: '3'
+
+vars:
+  PROJECT_NAME: donk-cli
+
+tasks:
+  default:
+    desc: Build the project
+    cmds:
+      - go build ./...
+
+  run:
+    desc: Run the CLI
+    cmds:
+      - go run . {{.CLI_ARGS}}
+
+  test:
+    desc: Run tests across components
+    cmds:
+      - GOWORK=off go test ./...
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - GOWORK=off go vet ./...
+
+  fmt:
+    desc: Format Go code
+    cmds:
+      - gofumpt -w .
+
+  lint:
+    desc: Run linters
+    cmds:
+      - golangci-lint run
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - go clean -cache
+      - rm -rf dist/
+
+  env-check:
+    desc: Check development environment compatibility
+    cmds:
+      - echo "Checking environment..."
+      - go version
+      - git --version
+      - echo "Ghostty detected: $GHOSTTY_BIN_DIR"
+
+  build-release:
+    desc: Build a release binary for the current platform
+    cmds:
+      - |
+        GOWORK=off CGO_ENABLED=0 GOEXPERIMENT=greenteagc go build -ldflags="-s -w -X github.com/richavery/donk-cli/internal/version.Version={{.version}}" -o dist/donk-cli .
+
+  build-all:
+    desc: Build release artifacts for all supported platforms
+    cmds:
+      - |
+        ./scripts/package/build-all.sh {{.version}}
+
+  package-windows:
+    desc: Build Windows installer bundle
+    cmds:
+      - pwsh scripts/package/windows-msi.ps1 -Version {{.version}}
+
+  package-npm:
+    desc: Validate npm packaging files
+    cmds:
+      - node --check packaging/scripts/install.js
+      - node --check packaging/scripts/uninstall.js
+
+  package-homebrew:
+    desc: Validate Homebrew formula syntax
+    cmds:
+      - ruby -c packaging/homebrew-donk-cli.rb
+
+  package-winget:
+    desc: Validate Winget manifest syntax
+    cmds:
+      - pwsh scripts/package/winget/publish.ps1 -DryRun
