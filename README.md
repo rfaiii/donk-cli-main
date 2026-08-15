@@ -120,7 +120,7 @@ troubleshooting.
 - Ollama discovery, model pull, automatic startup, and model warm-up
 - Agent Skills from `~/.agents/skills` with master-catalog syncing
 - NODE connection support for HTTP/JSON, WebSocket, and SSH transports
-- Optional embedded Ghostty shader installation and standalone shader visualizer
+- Optional embedded Ghostty shader installation and in-TUI cursor animations
 - Persistent project registration and recently accessed project tracking
 
 ![DONK home](resources/screenshots/home-menu.jpg)

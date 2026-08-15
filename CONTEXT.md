@@ -8,7 +8,7 @@ Ship and verify the v1.1.5 installer and onboarding experience across:
 3) NPM package
 4) Homebrew formula/tap
 5) Winget manifest
-6) Optional Ghostty shader installation + standalone shader visualizer
+6) Optional Ghostty shader installation + in-TUI cursor animations
 7) NODE connection testing and iPhone pairing documentation
 
 Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and beta docs updated.
@@ -33,7 +33,7 @@ Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and bet
 - [x] Added beta testing guide in `docs/BETA.md`
 - [x] Embedded shader set and added `donk-cli shaders` command
 - [x] Added optional Ghostty config installer for bundled shaders
-- [x] Added standalone shader visualizer binary target
+- [x] Added in-TUI cursor animation support using bundled effects
 - [x] Added `[+]` attachment button wired to FILEFINDER for in-ecosystem attachments
 - [x] Added NODE connection testing and iPhone pairing docs
 

@@ -275,6 +275,9 @@ type UI struct {
 	// Attachment list
 	attachments *attachments.Attachments
 
+	// Cursor animation effect rendered inside the editor/status area.
+	cursorEffect *anim.CursorEffect
+
 	readyPlaceholder   string
 	workingPlaceholder string
 
@@ -439,15 +442,15 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 	header := newHeader(com)
 
 	ui := &UI{
-		com:         com,
-		dialog:      dialog.NewOverlay(),
-		keyMap:      keyMap,
-		textarea:    ta,
-		chat:        ch,
-		header:      header,
-		completions: comp,
-		attachments: attachments,
-		todoSpinner: todoSpinner,
+		com:          com,
+		dialog:       dialog.NewOverlay(),
+		keyMap:       keyMap,
+		textarea:     ta,
+		chat:         ch,
+		header:       header,
+		completions:  comp,
+		attachments:  attachments,
+		todoSpinner:  todoSpinner,
 		bannerAnim: anim.New(anim.Settings{
 			ID:          "donk-banner",
 			Size:        240,
@@ -456,6 +459,7 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 			LabelColor:  com.Styles.Logo.TitleColorA,
 			CycleColors: true,
 		}),
+		cursorEffect: anim.NewCursorEffect(0),
 		lspStates:           make(map[string]workspace.LSPClientInfo),
 		mcpStates:           make(map[string]mcp.ClientInfo),
 		notifyBackend:       notification.NoopBackend{},
@@ -1022,6 +1026,12 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmds = append(cmds, cmd)
 			}
 		}
+		if m.cursorEffect != nil {
+			m.cursorEffect.Resize(msg.Width)
+			if m.focus == uiFocusEditor {
+				cmds = append(cmds, m.cursorEffect.Tick())
+			}
+		}
 	case tea.KeyboardEnhancementsMsg:
 		m.keyenh = msg
 		if msg.SupportsKeyDisambiguation() {
@@ -1246,6 +1256,11 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if cmd := m.chat.ScrollToBottomAndAnimate(); cmd != nil {
 					cmds = append(cmds, cmd)
 				}
+			}
+		}
+		if m.cursorEffect != nil {
+			if cmd := m.cursorEffect.Update(anim.TickMsg{}); cmd != nil {
+				cmds = append(cmds, cmd)
 			}
 		}
 	case scrollbarHideMsg:
@@ -4151,9 +4166,14 @@ func (m *UI) renderEditorView(width int) string {
 	if len(m.attachments.List()) > 0 {
 		attachmentsView = m.attachments.Render(width)
 	}
+	cursorView := ""
+	if m.cursorEffect != nil {
+		cursorView = m.cursorEffect.Render(width)
+	}
 	return strings.Join([]string{
 		attachmentsView,
 		m.textarea.View(),
+		cursorView,
 		"", // margin at bottom of editor
 	}, "\n")
 }
