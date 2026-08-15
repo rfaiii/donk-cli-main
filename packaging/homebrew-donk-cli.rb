@@ -1,7 +1,7 @@
 class DonkCli < Formula
   desc "DONK is a keyboard-first terminal AI workspace"
   homepage "https://donk-cli.com"
-  url "https://github.com/richavery/donk-cli/archive/refs/tags/v#{version}.tar.gz"
+  url "https://github.com/richavery/donk-cli-main/archive/refs/tags/v#{version}.tar.gz"
   version "1.1.5"
   license "FSL-1.1-MIT"
 

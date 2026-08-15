@@ -23,7 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richavery/donk-cli.git"
+    "url": "git+https://github.com/richavery/donk-cli-main.git"
   },
   "homepage": "https://donk-cli.com",
   "license": "MIT"
