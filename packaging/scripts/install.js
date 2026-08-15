@@ -59,20 +59,47 @@ function download(url) {
   });
 }
 
+function resolveAssetName(release, platform, arch) {
+  const rawTag = release.tag_name || `v${VERSION}`;
+  const tag = rawTag.startsWith("v") ? rawTag.slice(1) : rawTag;
+  const osName = platform === "win32" ? "Windows" : platform === "darwin" ? "darwin" : "linux";
+  const archName = arch === "x64" ? "amd64" : arch;
+  const base = `donk-cli_${tag}_${osName}_${archName}`;
+  return platform === "win32" ? `${base}.exe` : base;
+}
+
+function tryFindAsset(release, assetName) {
+  if (!release.assets || !Array.isArray(release.assets)) return null;
+  return release.assets.find((item) => item.name === assetName) || null;
+}
+
+function buildFallbackUrl(tag, assetName) {
+  const version = tag.startsWith("v") ? tag.slice(1) : tag;
+  return `https://github.com/${GITHUB_REPO}/releases/download/v${version}/${assetName}`;
+}
+
 async function main() {
   console.log(`Installing donk-cli@${VERSION || "latest"}...`);
-  const release = await getRelease();
+  let release;
+  try {
+    release = await getRelease();
+  } catch (err) {
+    console.warn(`Release lookup failed: ${err.message}`);
+    release = { tag_name: `v${VERSION}`, assets: [] };
+  }
+
   const platform = os.platform();
   const arch = os.arch();
-  const assetName =
-    platform === "win32"
-      ? `donk-cli_${release.tag_name}_Windows_${arch === "x64" ? "amd64" : arch}.zip`
-      : `donk-cli_${release.tag_name}_${platform === "darwin" ? "darwin" : "linux"}_${arch === "x64" ? "amd64" : arch}.zip`;
+  const assetName = resolveAssetName(release, platform, arch);
+  const tag = release.tag_name || `v${VERSION}`;
+  let asset = tryFindAsset(release, assetName);
 
-  const asset = release.assets.find((item) => item.name === assetName);
   if (!asset) {
-    console.error(`No matching asset found: ${assetName}`);
-    process.exit(1);
+    const fallbackUrl = buildFallbackUrl(tag, assetName);
+    console.warn(`Asset lookup failed for ${assetName}; falling back to ${fallbackUrl}`);
+    await download(fallbackUrl);
+    console.log(`Installed donk-cli to ${TARGET}`);
+    return;
   }
 
   await download(asset.browser_download_url);
