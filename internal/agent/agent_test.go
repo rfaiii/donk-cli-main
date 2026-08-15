@@ -56,6 +56,9 @@ func TestCoderAgent(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("skipping on windows for now")
 	}
+	if os.Getenv("CRUSH_HYPER_API_KEY") == "" {
+		t.Skip("skipping live provider test; CRUSH_HYPER_API_KEY is not set")
+	}
 
 	for _, pair := range modelPairs {
 		t.Run(pair.name, func(t *testing.T) {
