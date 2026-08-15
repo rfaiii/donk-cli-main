@@ -14,6 +14,12 @@ const INSTALL_DIR = process.env.npm_config_global
   : path.join(process.cwd(), "node_modules", ".bin");
 const TARGET = path.join(INSTALL_DIR, "donk-cli");
 
+function ensureBinDir() {
+  if (!fs.existsSync(INSTALL_DIR)) {
+    fs.mkdirSync(INSTALL_DIR, { recursive: true });
+  }
+}
+
 function api(url) {
   return new Promise((resolve, reject) => {
     const headers = { "User-Agent": "donk-cli-npm-installer" };
@@ -80,6 +86,8 @@ function buildFallbackUrl(tag, assetName) {
 
 async function main() {
   console.log(`Installing donk-cli@${VERSION || "latest"}...`);
+  ensureBinDir();
+
   let release;
   try {
     release = await getRelease();
