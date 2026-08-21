@@ -14,6 +14,14 @@ The goal is to achieve 1:1 feature parity with the Desktop CLI application by mi
 - [ ] **Change Project (`/cd`)**: Set the active working directory context.
 - [ ] **MCP Manager (`/mcp`)**: Add, list, and remove MCP server configurations.
 
+## NODE Connection Testing
+- [ ] **Localhost probe test**: verify device discovery finds `127.0.0.1` and link-local listeners.
+- [ ] **HTTP health check test**: validate `/v1/node/health` response and bearer auth behavior.
+- [ ] **WebSocket streaming test**: validate JSON-RPC execute frames and reconnect logic.
+- [ ] **SSH transport test**: validate host-key verification and command execution quoting.
+- [ ] **iPhone pairing smoke test**: validate companion app connects to `donk node serve` and appears online in NODE Connections.
+- [ ] **Offline/online state test**: validate UI state transitions when the host stops/starts.
+
 ## Settings & Configuration
 - [ ] **Desktop Settings Sync**: Sync generic `options` over the network from the active desktop node.
 - [ ] **Mobile-Specific Settings**: Options specific to iOS (Haptics, Push Notifications, Local Storage constraints).
