@@ -1,7 +1,7 @@
 # Mobile CLI
 
 Plans and outline for the iPhone and Android companion variants, plus the
-host-side companion server that bridges them to `donk-cli`.
+host-side companion bridge that connects them to `donk-cli`.
 
 ## Goals
 
@@ -46,17 +46,28 @@ mobile-cli/
 1. Capture requirements and constraints.
 2. Define the bridge protocol and data model.
 3. Prototype the host-side entrypoint.
-4. Prototype one mobile client variant.
-5. Add tests, docs, and packaging.
+4. Prototype one mobile client variant (iOS companion).
+5. Build a web-based HTML/CSS prototype for rapid UI iteration without Xcode.
+6. Migrate desktop settings and commands into the mobile surface.
+7. Add tests, docs, and packaging.
 
 ## Current status
 
-- iOS companion app scaffolded in `mobile-cli/ios/`.
-- Companion server design documented in `docs/DONK-SERVER.md`.
-- Host-side bridge module has not been implemented yet.
+- **iOS Companion App** scaffolded in `mobile-cli/ios/` with chat, command palette, theme switching, MCP client, and web preview surfaces.
+- **Web UI Prototype** built in `mobile-cli/web-preview/` for instant zero-compile UI testing.
+- **FastMCP Server** implemented in `mcp-server/`, exposing tools over SSE.
+- **Networking** The iOS app connects to the local FastMCP/companion bridge via `URLSession` for tool discovery and JSON-RPC requests.
+- Companion server design is documented in `docs/DONK-SERVER.md`.
+
+## Current limitations
+
+- Mobile companion is in **test mode**.
+- Full iPhone ↔ laptop NODE sync flow is not yet implemented end to end.
+- Android client is not yet scaffolded.
 
 ## Next Steps
 
-- Implement the companion server in Go.
-- Wire mobile client discovery/connection to the host bridge.
+- Refine command palette parity: `/themes`, `/node`, `/finder`, `/mcp`, `/cd`.
+- Implement the primary host-side companion bridge in Go.
 - Lock down the minimum viable command set.
+- Add onboarding breadcrumbs so users can quickly connect their iPhone to their desktop node.

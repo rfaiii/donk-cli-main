@@ -1,5 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/richavery/donk-cli/main/schema.json",
+  "mcpServers": {
+    "gemini-sync-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/richavery/Projects/donk-cli-main/mcp-server",
+        "run",
+        "mcp-server"
+      ],
+      "env": {
+        "GEMINI_API_KEY": ""
+      }
+    }
+  },
   "lsp": {
     "gopls": {
       "options": {
