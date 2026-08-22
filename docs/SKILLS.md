@@ -1,28 +1,36 @@
 # DONK Skills
 
-DONK discovers Agent Skills from the default `~/.agents/skills` directory, as
-well as project skill directories such as `.agents/skills` and `.donk/skills`.
-Each skill must be a directory containing a valid `SKILL.md` with frontmatter.
+DONK discovers Agent Skills from default directories including:
 
-The local master catalog at `~/Documents/AI-SKILLS/MASTER-AI-SKILLS.md` is an
-inventory of skill directories, not a single skill file. To make the catalog
-available to DONK without copying or overwriting existing skills, run:
+- `~/.config/donk/skills`
+- `~/.config/agents/skills`
+- `~/.agents/skills`
+- `~/.claude/skills`
+- `~/Documents/AI-SKILLS`
+
+Project-level skill directories such as `.agents/skills` and `.donk/skills`
+are also discovered automatically. Each skill must be a directory containing a
+valid `SKILL.md` with frontmatter.
+
+The local master catalog at `~/Documents/AI-SKILLS` is preloaded by default, so
+skills there are available immediately after install. If you want to refresh
+explicitly, run:
+
+```sh
+donk-cli skills scan
+```
+
+Or use the legacy installer/symlink approach:
 
 ```sh
 ./scripts/install-master-skills.sh
 ```
 
-The installer creates symlinks from `~/.agents/skills/<name>` to each source
-skill directory. Existing entries are preserved. Because the links point at the
-source directories, edits and updates in `~/Documents/AI-SKILLS` are available
-to DONK automatically after the next skill discovery.
-
-Override paths when needed:
+Override the default discovery paths when needed:
 
 ```sh
-DONK_MASTER_SKILLS_DIR=/path/to/AI-SKILLS \
-DONK_SKILLS_DIR=/path/to/skills \
-./scripts/install-master-skills.sh
+DONK_SKILLS_DIR=/path/to/skills donk-cli
+```
 
 ## Builtin skills
 

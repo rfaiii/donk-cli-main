@@ -1310,6 +1310,7 @@ func GlobalSkillsDirs() []string {
 		// Per the Agent Skills spec, scan ~/.agents/skills
 		filepath.Join(home.Dir(), ".agents", "skills"),
 		filepath.Join(home.Dir(), ".claude", "skills"),
+		filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
 	}
 
 	// On Windows, also load from app data on top of `$HOME/.config/donk`.
