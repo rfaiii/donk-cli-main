@@ -26,13 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const paletteList = document.getElementById('palette-list');
     const chatView = document.getElementById('chat-view');
 
+    let paletteState = 'root';
+
+    const themes = [
+        { cmd: 'material', desc: 'Default dark aesthetics', icon: 'ph-moon' },
+        { cmd: 'charmtone', desc: 'Charm CLI pink/purple', icon: 'ph-terminal' },
+        { cmd: 'light', desc: 'Blinding light mode', icon: 'ph-sun' }
+    ];
+
     function renderCommands(filterText) {
         paletteList.innerHTML = '';
         
-        let filtered = commands;
+        let currentList = paletteState === 'root' ? commands : themes;
+        let filtered = currentList;
+
         if (filterText && filterText !== '/') {
             const search = filterText.substring(1).toLowerCase();
-            filtered = commands.filter(c => 
+            filtered = currentList.filter(c => 
                 c.cmd.toLowerCase().includes(search) || 
                 c.desc.toLowerCase().includes(search)
             );
@@ -49,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             div.innerHTML = `
                 <i class="ph-fill ${c.icon} cmd-icon"></i>
                 <div class="cmd-info">
-                    <span class="cmd-name">/${c.cmd}</span>
+                    <span class="cmd-name">${paletteState === 'root' ? '/' : ''}${c.cmd}</span>
                     <span class="cmd-desc">${c.desc}</span>
                 </div>
             `;
@@ -64,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatInput.addEventListener('input', (e) => {
         const text = e.target.value;
+        if (!text) {
+            paletteState = 'root';
+        }
         if (text.startsWith('/')) {
             renderCommands(text);
         } else {
@@ -81,9 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function executeCommand(cmdName) {
-        chatInput.value = '';
-        commandPalette.classList.add('hidden');
-        appendMessage(`Executed command: /${cmdName}\n\n(This is a mock response from the web prototype)`, false);
+        if (paletteState === 'root') {
+            if (cmdName === 'themes') {
+                paletteState = 'themes';
+                chatInput.value = '/';
+                renderCommands('/');
+            } else {
+                chatInput.value = '';
+                commandPalette.classList.add('hidden');
+                appendMessage(`Executed command: /${cmdName}\n\n(This is a mock response from the web prototype)`, false);
+            }
+        } else if (paletteState === 'themes') {
+            paletteState = 'root';
+            chatInput.value = '';
+            commandPalette.classList.add('hidden');
+            appendMessage(`Switched theme to: ${cmdName}`, false);
+        }
     }
 
     chatInput.addEventListener('keydown', (e) => {

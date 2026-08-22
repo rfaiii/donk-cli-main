@@ -25,3 +25,9 @@ The goal is to achieve 1:1 feature parity with the Desktop CLI application by mi
 ## Settings & Configuration
 - [ ] **Desktop Settings Sync**: Sync generic `options` over the network from the active desktop node.
 - [ ] **Mobile-Specific Settings**: Options specific to iOS (Haptics, Push Notifications, Local Storage constraints).
+
+## Advanced UI & Animations
+- [ ] **Web/HTML Parity**: Continuously sync the CSS/JS web prototype so it looks 1:1 with the iOS app.
+- [ ] **Live Text Glitch Effect**: Add a subtle text glitch or typing animation under the banner (matching Desktop CLI aesthetics).
+- [ ] **Dynamic Backgrounds**: Investigate and implement subtle animated backgrounds (e.g., slow gradient shifts or particle effects) natively on iOS/Android.
+- [ ] **Interactive Command Palette**: Evolve the command palette from simple text insertion to interactive sub-menus (e.g., `/themes` opens a picker, context-sensitive onboarding options).
