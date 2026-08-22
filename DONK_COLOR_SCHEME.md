@@ -360,3 +360,7 @@ These are the effective combinations in the current default theme:
 - `./CRUSH/glamour/styles/README.md`
 - `./CRUSH/glamour/styles/dracula.go`
 - `./CRUSH/glamour/styles/tokyo-night.go`
+
+## Future
+
+- [ ] Revisit `charmbracelet/mods` for modal/prompt flows.

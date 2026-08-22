@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"image/color"
 	"runtime"
 	"runtime/metrics"
 	"strings"
@@ -76,7 +77,66 @@ func renderResourceBar(label string, percent float64, width int, styleSet *style
 	barWidth := max(1, width-fixedWidth)
 	filledWidth := min(barWidth, max(0, int(float64(barWidth)*percent/100)))
 	emptyWidth := barWidth - filledWidth
-	bar := styleSet.Status.ResourceFilled.Render(strings.Repeat("█", filledWidth)) +
-		styleSet.Status.ResourceEmpty.Render(strings.Repeat("░", emptyWidth))
+
+	filled := ""
+	if filledWidth > 0 {
+		filled = renderGradientBar(filledWidth, percent, styleSet)
+	}
+	empty := styleSet.Status.ResourceEmpty.Render(strings.Repeat("░", emptyWidth))
+	bar := filled + empty
 	return styleSet.Status.ResourceLabel.Render(labelText) + bar + " " + styleSet.Status.ResourceValue.Render(value)
+}
+
+func renderGradientBar(width int, percent float64, styleSet *styles.Styles) string {
+	if width <= 0 {
+		return ""
+	}
+	start := colorColor("#2a2a2a")
+	end := styleSet.Status.ResourceFilled.GetForeground()
+	if end == nil {
+		end = colorColor("#3BF66B")
+	}
+	startRGB := colorToRGB(start)
+	endRGB := colorToRGB(end)
+	parts := make([]string, width)
+	for i := 0; i < width; i++ {
+		t := 0.0
+		if width > 1 {
+			t = float64(i) / float64(width-1)
+		}
+		t = t*0.6 + 0.4*percent/100
+		if t < 0 {
+			t = 0
+		} else if t > 1 {
+			t = 1
+		}
+		c := lerpColor(startRGB, endRGB, t)
+		parts[i] = lipgloss.NewStyle().Foreground(lipgloss.Color(fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B))).Render("█")
+	}
+	return strings.Join(parts, "")
+}
+
+func colorColor(s string) color.Color {
+	return lipgloss.Color(s)
+}
+
+type rgb struct {
+	R, G, B uint8
+}
+
+func colorToRGB(c color.Color) rgb {
+	rr, gg, bb, _ := c.RGBA()
+	return rgb{
+		R: uint8(rr >> 8),
+		G: uint8(gg >> 8),
+		B: uint8(bb >> 8),
+	}
+}
+
+func lerpColor(a, b rgb, t float64) rgb {
+	return rgb{
+		R: uint8(float64(a.R)*(1-t) + float64(b.R)*t),
+		G: uint8(float64(a.G)*(1-t) + float64(b.G)*t),
+		B: uint8(float64(a.B)*(1-t) + float64(b.B)*t),
+	}
 }
