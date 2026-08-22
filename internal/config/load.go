@@ -1310,7 +1310,9 @@ func GlobalSkillsDirs() []string {
 		// Per the Agent Skills spec, scan ~/.agents/skills
 		filepath.Join(home.Dir(), ".agents", "skills"),
 		filepath.Join(home.Dir(), ".claude", "skills"),
-		filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
+	// Include the user's local AI skill catalog by default so a fresh install
+	// gets the full master skill set without extra setup.
+	filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
 	}
 
 	// On Windows, also load from app data on top of `$HOME/.config/donk`.

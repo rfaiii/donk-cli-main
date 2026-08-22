@@ -22,6 +22,7 @@ type resourceSnapshotMsg struct {
 	ramPercent float64
 }
 
+// resourceMonitorCmd publishes resource snapshots on a fixed interval.
 func (m *UI) resourceMonitorCmd() tea.Cmd {
 	return tea.Tick(resourceMonitorInterval, func(now time.Time) tea.Msg {
 		var samples = []metrics.Sample{{Name: "/cpu/classes/total:cpu-seconds"}}
@@ -42,6 +43,7 @@ func (m *UI) resourceMonitorCmd() tea.Cmd {
 	})
 }
 
+// resourceCPUPercent returns the CPU usage percent between two snapshots.
 func resourceCPUPercent(previous, current resourceSnapshotMsg) float64 {
 	elapsed := current.time.Sub(previous.time).Seconds()
 	if elapsed <= 0 {
@@ -50,6 +52,7 @@ func resourceCPUPercent(previous, current resourceSnapshotMsg) float64 {
 	return min(100, max(0, (current.cpuSeconds-previous.cpuSeconds)/elapsed/float64(runtime.NumCPU())*100))
 }
 
+// drawResourceMonitor renders the CPU/RAM status line in the help region.
 func (m *UI) drawResourceMonitor(scr uv.Screen, area uv.Rectangle) {
 	if !m.resourceReady || area.Dx() < 10 || area.Dy() == 0 {
 		return
@@ -67,6 +70,7 @@ func (m *UI) drawResourceMonitor(scr uv.Screen, area uv.Rectangle) {
 	uv.NewStyledString(lipgloss.NewStyle().Width(area.Dx()).Render(line)).Draw(scr, area)
 }
 
+// renderResourceBar builds one labeled usage bar with gradient fill.
 func renderResourceBar(label string, percent float64, width int, styleSet *styles.Styles) string {
 	if width <= 0 {
 		return ""
@@ -87,6 +91,9 @@ func renderResourceBar(label string, percent float64, width int, styleSet *style
 	return styleSet.Status.ResourceLabel.Render(labelText) + bar + " " + styleSet.Status.ResourceValue.Render(value)
 }
 
+// renderGradientBar returns a horizontal bar that interpolates between a dark
+// base and the theme primary color. The mix is driven by both position and
+// usage percent, so light usage stays darker while high usage glows brighter.
 func renderGradientBar(width int, percent float64, styleSet *styles.Styles) string {
 	if width <= 0 {
 		return ""
@@ -116,14 +123,17 @@ func renderGradientBar(width int, percent float64, styleSet *styles.Styles) stri
 	return strings.Join(parts, "")
 }
 
+// colorColor converts a hex string into the color type used by the style API.
 func colorColor(s string) color.Color {
 	return lipgloss.Color(s)
 }
 
+// rgb is a simple sRGB triple used for gradient interpolation.
 type rgb struct {
 	R, G, B uint8
 }
 
+// colorToRGB converts a color.Color to an 8-bit sRGB triple.
 func colorToRGB(c color.Color) rgb {
 	rr, gg, bb, _ := c.RGBA()
 	return rgb{
@@ -133,6 +143,7 @@ func colorToRGB(c color.Color) rgb {
 	}
 }
 
+// lerpColor blends two sRGB colors by a normalized factor.
 func lerpColor(a, b rgb, t float64) rgb {
 	return rgb{
 		R: uint8(float64(a.R)*(1-t) + float64(b.R)*t),
