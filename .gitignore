@@ -59,3 +59,7 @@ completions/donk-cli.*sh
 .task
 .node_modules
 node_modules/
+
+# Local/experimental files
+antigravity/rules.md
+mcp-server/src/mcp_server/__pycache__/

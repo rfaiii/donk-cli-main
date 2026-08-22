@@ -63,19 +63,11 @@ Requirements: Go 1.26 or newer.
 ```sh
 cd /path/to/donk-cli-go
 go build -o ./donk-cli .
-./donk-cli
-```
-
-To install the current source build:
-
-```sh
-./scripts/install-donk-cli.sh
-hash -r 2>/dev/null || true
 donk-cli --version
 ```
 
-Always use `./donk-cli` when testing a repository build. A bare `donk-cli` may
-resolve to an older copy elsewhere on `PATH`.
+Always use `donk-cli` when testing a repository build. A stale copy elsewhere on
+`PATH` can report an older version even when the repo binary is newer.
 
 ## Choose a project
 
@@ -158,8 +150,8 @@ projects` lists recently tracked projects.
 
 ## Troubleshooting
 
-- **The app looks unchanged:** rebuild and run `./donk-cli`, not an older copy
-  found on `PATH`.
+- **The app looks unchanged:** rebuild and run `donk-cli`, not an older copy found
+  on `PATH`.
 - **Ollama models are missing:** start Ollama, open `/models`, and press `r`.
 - **The model is slow initially:** the first request loads model weights; DONK
   warms the selected model after selection.

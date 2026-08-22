@@ -1,24 +1,20 @@
 # About DONK-CLI
 
-DONK is a keyboard-first AI coding assistant for terminal workflows.
+DONK is a keyboard-first terminal AI workspace.
 
-## Company
+## Contact
 
-- **Company name:** DONK
-- **Website:** https://donk-cli.com
-- **GitHub:** https://github.com/richavery/donk-cli-main
-
-## Contact & support
-
+- **Maintainer:** Richard Aizen Avery III
 - **Email:** averydevz@outlook.com
 - **GitHub:** https://github.com/richavery/donk-cli-main
 - **Issues:** https://github.com/richavery/donk-cli-main/issues
 
-## Maintainer
+## Support
 
-- **Name:** Richard Aizen Avery III
-- **Email:** averydevz@outlook.com
-
-## Licensing
-
-See [LICENSE](LICENSE) for license details.
+For beta issues, include:
+1. OS and CPU architecture
+2. Terminal application
+3. `donk-cli --version` output
+4. Exact launch command
+5. Project path and whether Ollama was enabled
+6. Reproduction steps and terminal output

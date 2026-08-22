@@ -1,131 +1,3 @@
-# ◇ DONK-CLI 1.1.5 by richard izn avery
-
-**The keyboard-first AI workspace for your projects.**
-
-DONK brings project files, conversations, local models, tools, permissions,
-skills, LSPs, and automation into one fast terminal cockpit. Inspect the
-workspace, choose the model, and ship.
-
-> **Release 1.1.5:** this release adds the onboarding wizard with ASCII previews,
-> terminal-aware macOS DMG launcher, beta testing docs, updated packaging, and
-> optional Ghostty shader installation. The mobile companion scaffold is present
-> for testing, but the mobile version is currently in **test mode** and not yet
-> ready for general use.
-
-## ⚡ Quick start
-
-See [`docs/installation.md`](docs/installation.md) for all platforms.
-
-```sh
-cd /path/to/donk-cli-go
-go build -o ./donk-cli .
-./donk-cli
-```
-
-Install the current source build globally:
-
-```sh
-./scripts/install-donk-cli.sh
-hash -r 2>/dev/null || true
-donk-cli --version
-donk-cli --help
-```
-
-When testing changes, prefer `./donk-cli`; a bare `donk-cli` can launch an old
-binary from another directory.
-
-## 📦 Install
-
-### macOS
-
-Use the DMG for a normal Mac app experience.
-
-1. Open `dist/donk-cli_dev_darwin_arm64.dmg`
-2. Drag `DONK.app` to `Applications`
-3. Double-click `DONK.app`
-
-If macOS blocks it:
-- Right-click `DONK.app` → Open
-- Or run: `xattr -cr /Applications/DONK.app`
-
-The DMG launcher auto-detects your terminal:
-- Ghostty first, then Alacritty, Kitty, WezTerm, iTerm2
-- Falls back to Terminal.app
-
-### Windows
-
-Use the EXE/MSI installer or ZIP archive.
-
-### Linux
-
-Use deb/rpm/apk/arch packages, AUR, Nix, or release archives.
-
-See [`docs/ONBOARDING.md`](docs/ONBOARDING.md) for the full onboarding and
-installer guide.
-
-## 🧭 Move between projects
-
-```sh
-donk-cli --cwd /path/to/project
-```
-
-Inside DONK, use `/cd` or `/project`, select a directory, and press `s`. You can
-also type `cd ~/Projects/my-project` into the prompt; DONK switches projects
-instead of sending that text to the agent. `donk-cli projects` lists recent
-projects.
-
-## 🧠 Local Ollama models
-
-DONK discovers all models available from Ollama’s local API. Open `/models`,
-`/ollama`, or press `Ctrl+L`.
-
-- `r` refreshes local models
-- `p` pulls the highlighted model
-- `s` starts Ollama when it is offline
-- `Enter` selects and warms the model
-
-The model diamond is gray when unknown, purple while loading, green when ready,
-and red if loading fails. Read [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md).
-
-![DONK models](resources/screenshots/menu-models.jpg)
-
-For smaller Ollama coding models such as `qwen2.5-coder:3b-instruct`, use the
-fantasy-free native coder. It talks directly to Ollama with a small tool set,
-recovers Qwen-style text tool calls, and buffers raw tool-call JSON from the
-terminal display:
-
-```sh
-GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
-GOWORK=off go build -o "$HOME/bin/donk-cli" .
-
-DONK_CODETOOL="$HOME/bin/codetool" \
-  "$HOME/bin/donk-cli" code --native \
-  --model qwen2.5-coder:3b-instruct --stream \
-  "Read the relevant files and fix the failing test"
-```
-
-Use `--cwd /path/to/project` when the coding task is in another directory. See
-[`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) for diagnostics and
-troubleshooting.
-
-## ✨ What DONK includes
-
-- Branded Bubble Tea TUI with bounded, responsive layouts
-- Bottom resource bar showing live CPU and RAM usage
-- Project File Finder with previews, metadata, hidden files, paging, clipboard,
-  and project switching
-- `[+]` attachment button wired to FILEFINDER for fast file, photo, video, and
-  link attachments
-- Sessions, model/provider selection, permissions, MCP, LSP, and skills
-- Ollama discovery, model pull, automatic startup, and model warm-up
-- Agent Skills from `~/.agents/skills` with master-catalog syncing
-- NODE connection support for HTTP/JSON, WebSocket, and SSH transports
-- Optional embedded Ghostty shader installation and in-TUI cursor animations
-- Persistent project registration and recently accessed project tracking
-
-![DONK home](resources/screenshots/home-menu.jpg)
-![DONK file finder](resources/screenshots/file-finder.jpg)
-
 ## 🛠 Developer checks
 
 ```sh
@@ -147,12 +19,21 @@ GOOS=linux GOARCH=arm64 go build -o /tmp/donk-linux-arm64 .
 
 ## 📦 Install
 
-- **macOS** — use the DMG, Homebrew, or NPM wrapper.
-- **Windows** — use the EXE/MSI installer or ZIP archive.
-- **Linux** — use deb/rpm/apk/arch packages, AUR, Nix, or release archives.
+Use `donk-cli` as the binary name and command on every platform.
 
-See [`docs/ONBOARDING.md`](docs/ONBOARDING.md) for the full onboarding and
-installer guide.
+- **macOS** — DMG, Homebrew, NPM, or release archive.
+- **Windows** — EXE, MSI, ZIP, NPM, or winget.
+- **Linux** — release archive, NPM, or Homebrew on Linux.
+
+After install, verify with:
+
+```sh
+donk-cli --version
+donk-cli --help
+```
+
+See [`docs/installation.md`](docs/installation.md) for platform-specific steps,
+troubleshooting, and package-manager commands.
 
 ## 📚 Documentation map
 
@@ -162,7 +43,6 @@ installer guide.
 | [`docs/ONBOARDING.md`](docs/ONBOARDING.md) | First-run setup, dependencies, and packaging |
 | [`docs/IMG-RESOURCES.md`](docs/IMG-RESOURCES.md) | Screenshots, videos, and app icon assets |
 | [`docs/PACKAGING.md`](docs/PACKAGING.md) | Release automation and packaging configs |
-| [`docs/ABOUT.md`](docs/ABOUT.md) | Company and maintainer contact info |
 | [`docs/BETA.md`](docs/BETA.md) | Beta testing program, invites, distribution, and feedback |
 | [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) | Ollama setup and local models |
 | [`docs/SKILLS.md`](docs/SKILLS.md) | Agent Skills discovery and syncing |
@@ -192,5 +72,12 @@ Include:
 4. Exact launch command
 5. Project path and whether Ollama was enabled
 6. Reproduction steps and terminal output
+
+## 📬 Contact
+
+- **Maintainer:** Richard Aizen Avery III
+- **Email:** averydevz@outlook.com
+- **GitHub:** https://github.com/richavery/donk-cli-main
+- **Issues:** https://github.com/richavery/donk-cli-main/issues
 
 **See the project. Choose your intelligence. Get to work.**
