@@ -31,3 +31,4 @@ struct GlitchText: View {
             }
     }
 }
+#imageLiteral(resourceName: "simulator_screenshot_F399E967-9636-4BF3-8C01-515896AEB34D.png")

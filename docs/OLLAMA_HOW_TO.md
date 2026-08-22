@@ -129,7 +129,7 @@ $env:OLLAMA_HOST = "http://127.0.0.1:11434"
 
 Manual provider configuration remains available for remote Ollama hosts, TLS,
 proxies, custom headers, and other advanced setups. See
-`docs/config/README.md` and `docs/LOCAL_MODELS_PHASE1.md`.
+`docs/config/README.md`.
 
 ## Troubleshooting
 

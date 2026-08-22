@@ -2,7 +2,7 @@
 
 This document tracks the work to make Cline a permanent, model-independent
 coding assistant inside DONK-CLI. It is the companion spec to
-`internal/skills/builtin/cline/SKILL.md` and `docs/DONK_CODER.md`.
+`internal/skills/builtin/cline/SKILL.md`.
 
 ## Goal
 
@@ -181,4 +181,4 @@ stale/conflicting configuration. Instead:
 - `internal/ui/dialog/commands.go` — palette rendering of skill commands.
 - `internal/ui/model/ui.go` — `loadCustomCommands`, `openModelsDialog`,
   `handleSelectModel`, `handleDialogAction` (onboarding/skip).
-- `docs/DONK_CODER.md` — coder agent design and current status.
+- `docs/OLLAMA_HOW_TO.md` — native coder installation and diagnostics.

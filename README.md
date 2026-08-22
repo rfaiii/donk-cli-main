@@ -160,7 +160,6 @@ installer guide.
 | --- | --- |
 | [`docs/installation.md`](docs/installation.md) | Installation, testing, paths, troubleshooting |
 | [`docs/ONBOARDING.md`](docs/ONBOARDING.md) | First-run setup, dependencies, and packaging |
-| [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Concrete macOS/Windows dependency list |
 | [`docs/IMG-RESOURCES.md`](docs/IMG-RESOURCES.md) | Screenshots, videos, and app icon assets |
 | [`docs/PACKAGING.md`](docs/PACKAGING.md) | Release automation and packaging configs |
 | [`docs/ABOUT.md`](docs/ABOUT.md) | Company and maintainer contact info |
@@ -176,6 +175,7 @@ installer guide.
 | [`docs/NODE_HTTP_PROTOCOL.md`](docs/NODE_HTTP_PROTOCOL.md) | NODE HTTP/JSON protocol |
 | [`docs/NODE_WEBSOCKET_PROTOCOL.md`](docs/NODE_WEBSOCKET_PROTOCOL.md) | NODE WebSocket streaming protocol |
 | [`docs/NODE_SSH_TRANSPORT.md`](docs/NODE_SSH_TRANSPORT.md) | NODE SSH transport |
+| [`docs/TASKLIST.md`](docs/TASKLIST.md) | Active task tracking |
 
 ![DONK notifications](resources/screenshots/notification-select.jpg)
 ![DONK pink theme](resources/screenshots/theme-pink.jpg)

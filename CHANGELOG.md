@@ -19,7 +19,7 @@
 ### Packaging & onboarding
 
 - Added `docs/ONBOARDING.md` for first-run setup and dependency guidance.
-- Added `docs/DEPENDENCIES.md` for concrete macOS/Windows install requirements.
+- Added `docs/installation.md` for first-run setup and dependency guidance.
 - Added `docs/IMG-RESOURCES.md` for screenshot, video, and icon asset guidance.
 - Added `docs/ABOUT.md` for company and maintainer contact info.
 - Added packaging wrappers under `packaging/` for Homebrew, NPM, macOS, and Windows.

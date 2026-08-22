@@ -103,6 +103,26 @@ ollama ls
 The default endpoint is `http://127.0.0.1:11434`. Set `OLLAMA_HOST` for another
 endpoint. See [`OLLAMA_HOW_TO.md`](OLLAMA_HOW_TO.md).
 
+## Native small-model coder
+
+For Qwen coder models that are slow or unreliable with the full DONK tool
+surface, use the fantasy-free native path:
+
+```sh
+GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
+GOWORK=off go build -o "$HOME/bin/donk-cli" .
+
+DONK_CODETOOL="$HOME/bin/codetool" \
+  "$HOME/bin/donk-cli" code --native \
+  --model qwen2.5-coder:3b-instruct --stream \
+  "Read note.txt and tell me exactly what it contains."
+```
+
+The native path uses the current directory. Use `--cwd /path/to/project` when
+the files are elsewhere. `DONK_CODETOOL` may be omitted when `codetool` is on
+`PATH`. Streaming is on by default; raw JSON tool-call dumps are buffered and
+hidden after recovery, while normal assistant text remains live.
+
 ## Agent Skills
 
 DONK discovers skills from `~/.agents/skills`. Sync the master catalog with:
@@ -118,6 +138,24 @@ See [`SKILLS.md`](SKILLS.md).
 Use `donk-cli dirs` to inspect platform-specific data locations. `donk-cli
 projects` lists recently tracked projects.
 
+## Dependencies
+
+### Required
+- DONK binary — no separate runtime needed after build.
+- Terminal emulator — Ghostty, Terminal.app, Windows Terminal, Alacritty, iTerm2, Kitty, or WezTerm.
+- Network access — required for provider auth, model discovery, and updates.
+
+### Optional
+- Ollama — local models; see `OLLAMA_HOW_TO.md`.
+- Provider API key — Anthropic, OpenAI, Gemini, etc.
+- Git — project detection and workspace state when available.
+- LSP servers — optional per language.
+
+### Build requirements
+- Go 1.26+
+- Git
+- Optional: `goreleaser`, `nsis`/`wixtoolset`, Xcode Command Line Tools
+
 ## Troubleshooting
 
 - **The app looks unchanged:** rebuild and run `./donk-cli`, not an older copy
@@ -128,7 +166,7 @@ projects` lists recently tracked projects.
 - **macOS security warning:** approve the binary in Privacy & Security.
 - **Windows command not found:** reopen PowerShell after changing `PATH`.
 
-## Beta verification
+## Verification
 
 ```sh
 donk-cli --version

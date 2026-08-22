@@ -9,6 +9,7 @@
 - [x] Ghostty shader installation
 - [x] In-TUI cursor animations
 - [x] NODE connection testing and iPhone pairing docs
+- [x] iOS app icon assets updated
 
 ## In progress
 - [ ] NODE localhost probe test
@@ -22,3 +23,13 @@
 - [ ] Implement laptop ↔ iPhone NODE sync/connect flow
 - [ ] Update onboarding breadcrumbs for NODE connections
 - [ ] Complete mobile companion parity items
+- [ ] Deep repo cleanup and docs consolidation
+
+## Mobile Companion Parity
+- [ ] Command palette `/` overlay
+- [ ] Command parser `/themes`, `/node`, `/finder`, `/mcp`, `/cd`
+- [ ] Theme switching
+- [ ] Ollama model management
+- [ ] File Finder
+- [ ] Desktop settings sync
+- [ ] Mobile-specific settings
