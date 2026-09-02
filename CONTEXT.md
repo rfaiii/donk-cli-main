@@ -1,29 +1,33 @@
 # Project: DONK-CLI
-# Date: 2026-08-15
+# Date: 2026-09-02
 
 ## Current Goal
-Ship and verify the v1.1.5 installer and onboarding experience across:
-1) Windows EXE
-2) Windows x64 MSI/installer flow
-3) NPM package
-4) Homebrew formula/tap
-5) Winget manifest
-6) Optional Ghostty shader installation + in-TUI cursor animations
-7) NODE connection testing and iPhone pairing documentation
-
-Keep CLI-native Bubble Tea onboarding, Ghostty-first launcher detection, and beta docs updated.
+Ship v1.1.7 — a polished homescreen/visuals release: boot brand banner, accent/alt
+theme color mapping, Cline free-model support, ALT-colored File Finder, and the
+`[ "/" OPENS COMMANDS ]` home button. (Text-editor integration and
+shader/skills load-sequence debugging deferred for further research/testing.)
 
 ## Current Technical Status
 - **Stack:** Go, Bubble Tea v2, Lip Gloss v2, Fantasy, SQLite/sqlc, Charmwalk snapshots
 - **CLI entry:** `main.go` + `internal/cmd`
 - **UI:** `internal/ui/...` Bubble Tea state machine
 - **Packaging:** `packaging/` for npm/homebrew, `dist/release/` for binaries, `winget/` for manifest templates
-- **Release:** GitHub Releases v1.1.5 with cross-compiled platform binaries
+- **Release:** GitHub Releases v1.1.7
 - **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `donk-cli shaders list/install`
 - **NODE:** `internal/node` provides device registry, HTTP/WebSocket/SSH transports, and tests
+- **Themes:** 8 themes, each with derived Accent + Alt colors (`Styles.ThemeColor.Accent/.Alt`) per the color-mapping table
+- **Cline:** hosted gateway (api.cline.bot) integrated; live catalog fetch surfaces free models; `X-Api-Key` auth
 
 ## Recent Iterations
-- [x] Rewrote onboarding as screenshot/ASCII-guided tour with Opt Out/Continue
+- [x] Boot brand banner: DONK → version → "OH BEAV!" → attribution, accent-bg scramble sequence (internal/ui/model/version_banner.go)
+- [x] Per-theme Accent/Alt color mapping across all 8 themes (internal/ui/styles/themes.go themeAccentAlt)
+- [x] Cline free-model support: live catalog fetch + in-app "ADD CLINE API KEY" flow, X-Api-Key verification
+- [x] "Other Models" palette entry + Cline catalog dialog (internal/ui/dialog/other_models.go)
+- [x] ALT-colored File Finder: metadata, separators, close button (internal/ui/dialog/filebrowser.go)
+- [x] Accent CPU/RAM bars; bold underlined project location; `[ "/" OPENS COMMANDS ]` + `[ OPEN FILE FINDER ]` home buttons
+- [x] Lightened section help text (LOCAL DEVICE / SKILLS / MCP) for readability
+- [x] Bumped dev version 1.1.6:beta_v2 → 1.1.6:beta_v3 → release 1.1.7
+- [x] Added docs/donk-cli-llm-integration-spec.md and docs/CLINE_PROVIDER.md
 - [x] Bumped project version to v1.1.5 and updated README/CHANGELOG
 - [x] Added DMG Swift launcher with Ghostty-first terminal auto-detection
 - [x] Created GitHub release v1.1.5 and attached cross-platform binaries

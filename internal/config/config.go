@@ -881,13 +881,18 @@ func (c *ProviderConfig) TestConnection(resolver VariableResolver) error {
 		switch providerID {
 		case catwalk.InferenceProviderOpenRouter:
 			testURL = baseURL + "/credits"
+			headers["Authorization"] = "Bearer " + apiKey
 		case catwalk.InferenceProviderOpenCodeGo:
 			testURL = strings.Replace(baseURL, "/go", "", 1) + "/models"
+			headers["Authorization"] = "Bearer " + apiKey
+		case catwalk.InferenceProvider(ClineProviderID):
+			// The Cline gateway authenticates via the X-Api-Key header.
+			testURL = baseURL + "/models"
+			headers[ClineAPIKeyHeader] = apiKey
 		default:
 			testURL = baseURL + "/models"
+			headers["Authorization"] = "Bearer " + apiKey
 		}
-
-		headers["Authorization"] = "Bearer " + apiKey
 	case catwalk.TypeAnthropic:
 		baseURL, _ := resolver.ResolveValue(c.BaseURL)
 		baseURL = cmp.Or(baseURL, "https://api.anthropic.com/v1")

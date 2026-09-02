@@ -352,6 +352,45 @@ func (c *Config) configureProviders(ctx context.Context, store *ConfigStore, env
 					continue
 				}
 			}
+		case catwalk.InferenceProvider(ClineProviderID):
+			if apiKey := env.Get(ClineAPIKeyEnv); apiKey != "" {
+				prepared.APIKey = apiKey
+				prepared.APIKeyTemplate = apiKey
+			} else {
+				v, err := resolver.ResolveValue(p.APIKey)
+				if v == "" || err != nil {
+					if configExists {
+						slog.Warn("Skipping Cline provider due to missing API key", "provider", p.ID)
+						c.Providers.Del(string(p.ID))
+					}
+					continue
+				}
+			}
+			// The Cline gateway authenticates via the X-Api-Key header
+			// rather than the Authorization bearer token used by standard
+			// OpenAI-compatible clients.
+			prepared.ExtraHeaders[ClineAPIKeyHeader] = prepared.APIKey
+
+			// Fetch the full live catalog (which includes Cline's free
+			// models) from the gateway using the configured key, merging
+			// discovered models with our curated defaults. On any failure
+			// we fall back to the static default catalog so the provider
+			// still works, just without the free tail.
+			dctx, dcancel := context.WithTimeout(ctx, 5*time.Second)
+			liveModels, derr := discover.DiscoverModels(dctx, discover.Config{
+				ID:             ClineProviderID,
+				BaseURL:        prepared.BaseURL,
+				APIKey:         "", // gateway uses X-Api-Key, not Bearer
+				ExtraHeaders:   prepared.ExtraHeaders,
+				ExistingModels: prepared.Models,
+			}, resolver)
+			dcancel()
+			if derr == nil && len(liveModels) > 0 {
+				prepared.Models = liveModels
+				slog.Info("Enabled live Cline model catalog", "count", len(liveModels))
+			} else if derr != nil {
+				slog.Warn("Cline model discovery unavailable; using default catalog", "error", derr)
+			}
 		default:
 			// if the provider api or endpoint are missing we skip them
 			v, err := resolver.ResolveValue(p.APIKey)
@@ -1310,9 +1349,9 @@ func GlobalSkillsDirs() []string {
 		// Per the Agent Skills spec, scan ~/.agents/skills
 		filepath.Join(home.Dir(), ".agents", "skills"),
 		filepath.Join(home.Dir(), ".claude", "skills"),
-	// Include the user's local AI skill catalog by default so a fresh install
-	// gets the full master skill set without extra setup.
-	filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
+		// Include the user's local AI skill catalog by default so a fresh install
+		// gets the full master skill set without extra setup.
+		filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
 	}
 
 	// On Windows, also load from app data on top of `$HOME/.config/donk`.

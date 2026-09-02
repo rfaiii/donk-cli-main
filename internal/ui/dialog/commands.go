@@ -487,6 +487,7 @@ func (c *Commands) defaultCommands() []*CommandItem {
 		NewCommandItem(c.com.Styles, "change_project", "Change Project", "", ActionOpenDialog{FileBrowserID}).WithAliases("cd", "/cd", "project"),
 		NewCommandItem(c.com.Styles, "node_settings", "NODE Connections", "ctrl+shift+n", ActionOpenDialog{NodeSettingsID}).WithAliases("node", "/node"),
 		NewCommandItem(c.com.Styles, "ollama_models", "Ollama Models", "", ActionOpenDialog{ModelsID}).WithAliases("ollama", "/ollama"),
+		NewCommandItem(c.com.Styles, "other_models", "Other Models", "", ActionOpenDialog{OtherModelsID}).WithAliases("other", "/other", "cline", "/cline", "external"),
 		NewCommandItem(c.com.Styles, "ollama_how_to", "Ollama How To", "", ActionOpenDialog{OllamaHowToID}),
 		NewCommandItem(c.com.Styles, "themes", "Themes", "ctrl+shift+t", ActionOpenDialog{ThemesID}).WithAliases("themes", "/themes"),
 	}

@@ -1,4 +1,4 @@
-# ◇ DONK-CLI 1.1.6 by Richard Aizen Avery III
+# ◇ DONK-CLI 1.1.7 by Richard Aizen Avery III
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,11 +6,12 @@ DONK brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.6:** this release brightens status text, adds gradient CPU/RAM
-> resource bars, preloads `~/Documents/AI-SKILLS` by default, and includes the
-> full feature inventory for beta review. The mobile companion scaffold is
-> present for testing, but the mobile version is currently in **test mode** and
-> not yet ready for general use.
+> **Release 1.1.7:** a polished homescreen with a boot brand banner (DONK →
+> version → "OH BEAV!" → accent-colored scramble sequence), accent/alt theme
+> color mapping across all 8 themes, Cline hosted-gateway support (including
+> free models) with an in-app "ADD CLINE API KEY" flow, an "Other Models" palette
+> entry, ALT-colored File Finder, accent CPU/RAM bars, bold underlined project
+> location, and a `[ "/" OPENS COMMANDS ]` home button.
 
 ## ⚡ Quick start
 

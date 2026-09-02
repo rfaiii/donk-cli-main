@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-const defaultVersion = "1.1.6"
+const defaultVersion = "1.1.7"
 
 var (
-	Version     = defaultVersion
-	Commit      = "unknown"
+	Version = defaultVersion
+	Commit  = "unknown"
 	// BuildID is a unique identifier for this build. For release builds it
 	// equals Commit; for development builds (go run / go build without
 	// ldflags) it is derived from the executable's modification time, which
@@ -44,6 +44,12 @@ func init() {
 				}
 			}
 		}
+	}
+	// Beta/dev tags (e.g. "1.1.6:beta_v2") must win over VCS-stamped build
+	// info (e.g. "v1.1.6+dirty") so a dev build always identifies itself
+	// with its explicit test tag.
+	if defaultVersion != "" && strings.Contains(defaultVersion, ":") && !strings.Contains(Version, ":") {
+		Version = defaultVersion
 	}
 
 	// Derive BuildID when not set via ldflags.

@@ -26,11 +26,60 @@ func (m *UI) landingView() string {
 	width := m.layout.main.Dx()
 	cwd := common.PrettyPath(t, m.com.Workspace.WorkingDir(), width)
 
-	buttonText := "📁  OPEN FILE FINDER  (ctrl+shift+f)"
-	button := lipgloss.NewStyle().Foreground(lipgloss.Color("#3BF66B")).Bold(true).Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#3BF66B")).Padding(0, 1).Render(buttonText)
-	parts := []string{cwd, "", button}
+	accent := t.ThemeColor.Accent
+	alt := t.ThemeColor.Alt
+	if accent == nil {
+		accent = lipgloss.Color("#FF4FA3")
+	}
+	if alt == nil {
+		alt = lipgloss.Color("#B56CFF")
+	}
 
-	m.finderButtonRect = image.Rect(m.layout.main.Min.X, m.layout.main.Min.Y+3, m.layout.main.Min.X+lipgloss.Width(button), m.layout.main.Min.Y+3+lipgloss.Height(button))
+	// Bold, underlined project location rendered in the accent color so it
+	// reads clearly against the dark background.
+	cwdStyled := lipgloss.NewStyle().
+		Foreground(accent).
+		Bold(true).
+		Underline(true).
+		Render(cwd)
+
+	// Command palette button on the left (replaces the old File Finder slot),
+	// and the File Finder button immediately adjacent on the right.
+	commandButton := lipgloss.NewStyle().
+		Foreground(accent).
+		Bold(true).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(accent).
+		Padding(0, 1).
+		Render("[ \"/\" OPENS COMMANDS ]")
+	buttonPadding := "   "
+	finderButton := lipgloss.NewStyle().
+		Foreground(accent).
+		Bold(true).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(accent).
+		Padding(0, 1).
+		Render("[ OPEN FILE FINDER — ctrl+shift+f ]")
+	buttons := commandButton + buttonPadding + finderButton
+
+	// Prominent MODEL / PROVIDER line on the homescreen so it's immediately
+	// visible. Uses ACCENT for the values and ALT for the labels.
+	modelName := ""
+	providerName := ""
+	if lm := m.selectedLargeModel(); lm != nil {
+		modelName = lm.CatwalkCfg.Name
+		if pcfg, ok := m.com.Config().Providers.Get(lm.ModelCfg.Provider); ok {
+			providerName = pcfg.Name
+		}
+	}
+	modelLine := lipgloss.NewStyle().Foreground(alt).Render("MODEL  ") +
+		lipgloss.NewStyle().Foreground(accent).Bold(true).Render(modelName) +
+		lipgloss.NewStyle().Foreground(alt).Render("   PROVIDER  ") +
+		lipgloss.NewStyle().Foreground(accent).Bold(true).Render(providerName)
+
+	m.finderButtonRect = image.Rect(m.layout.main.Min.X, m.layout.main.Min.Y+3, m.layout.main.Min.X+lipgloss.Width(finderButton), m.layout.main.Min.Y+3+lipgloss.Height(finderButton))
+	parts := []string{cwdStyled, "", buttons, "", modelLine}
+
 	parts = append(parts, "", m.modelInfo(width), "", m.nodeInfo(min(42, width), 3))
 	infoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)
 

@@ -98,6 +98,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Dialog.FileBrowser.Title = lipgloss.NewStyle().Foreground(o.primary).Bold(true)
 	s.Dialog.FileBrowser.Close = lipgloss.NewStyle().Foreground(o.destructive).Bold(true)
 	s.Dialog.FileBrowser.Rule = lipgloss.NewStyle().Foreground(o.fgMostSubtle)
+	s.Dialog.FileBrowser.Metadata = lipgloss.NewStyle().Foreground(o.fgBase)
 	s.Dialog.FileBrowser.Directory = lipgloss.NewStyle().Foreground(o.primary)
 	s.Dialog.FileBrowser.Entry = lipgloss.NewStyle().Foreground(o.fgBase)
 	s.Dialog.FileBrowser.Selected = lipgloss.NewStyle().Background(lipgloss.Color("#f5bde6")).Foreground(o.onPrimary)
@@ -944,7 +945,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	// Dialog.ListItem (commands, reasoning, models). The info column holds
 	// secondary hints like keybind shortcuts, so mute it when blurred and
 	// keep it readable on the focused row.
-	s.Dialog.ListItem.InfoBlurred = lipgloss.NewStyle().Foreground(o.fgMostSubtle)
+	s.Dialog.ListItem.InfoBlurred = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
 	s.Dialog.ListItem.InfoFocused = lipgloss.NewStyle().Foreground(o.fgBase)
 
 	// Dialog.Models

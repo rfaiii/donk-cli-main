@@ -10,19 +10,19 @@ import (
 const DefaultTheme = "rich-aizen-green"
 
 type ThemeDefinition struct {
-	ID, Name                    string
-	Primary, Secondary          color.Color
-	Gradient                    color.Color
-	Surface                     color.Color
-	SurfaceSubtle               color.Color
-	SurfaceMuted                color.Color
-	OnSurface                   color.Color
-	Muted                       color.Color
-	Subtle                      color.Color
-	Border                      color.Color
-	StatusSuccess, StatusError  color.Color
-	StatusWarning, StatusInfo   color.Color
-	CodeBackground              color.Color
+	ID, Name                   string
+	Primary, Secondary         color.Color
+	Gradient                   color.Color
+	Surface                    color.Color
+	SurfaceSubtle              color.Color
+	SurfaceMuted               color.Color
+	OnSurface                  color.Color
+	Muted                      color.Color
+	Subtle                     color.Color
+	Border                     color.Color
+	StatusSuccess, StatusError color.Color
+	StatusWarning, StatusInfo  color.Color
+	CodeBackground             color.Color
 }
 
 func (t ThemeDefinition) Palette() quickStyleOpts {
@@ -155,6 +155,46 @@ var themeDefinitions = []ThemeDefinition{
 }
 
 func Themes() []ThemeDefinition { return append([]ThemeDefinition(nil), themeDefinitions...) }
+
+// themeAccentAlt returns the (Accent, Alt) color pair for a theme, per the
+// DONK color-mapping table:
+//
+//	Primary Theme | Accent | Alt
+//	Green         | Pink   | Purple
+//	Pink          | Purple | Blue
+//	Purple        | Blue   | Orange
+//	Blue          | Orange | White
+//	Orange        | White  | Yellow
+//	White         | Yellow | Red
+//	Yellow        | Red    | Green
+//	Red           | Green  | Pink
+//
+// The values intentionally match the theme primaries so highlights stay
+// on-brand across every theme.
+func themeAccentAlt(id string) (color.Color, color.Color) {
+	green, pink, purple := lipgloss.Color("#3BF66B"), lipgloss.Color("#FF4FA3"), lipgloss.Color("#B56CFF")
+	blue, orange, white := lipgloss.Color("#5CC8FF"), lipgloss.Color("#FF8A3D"), lipgloss.Color("#FFFFFF")
+	yellow, red := lipgloss.Color("#D6C84A"), lipgloss.Color("#FF1F1F")
+	switch id {
+	case "crazy-jeff-pink":
+		return purple, blue
+	case "kobe-yang-purple":
+		return blue, orange
+	case "steve-dabeav-blue":
+		return orange, white
+	case "jenny-ann-orange":
+		return white, yellow
+	case "felix-tornado-white":
+		return yellow, red
+	case "luis-mellow-yellow":
+		return red, green
+	case "bobur-blood-red":
+		return green, pink
+	default: // rich-aizen-green
+		return pink, purple
+	}
+}
+
 func ThemeByID(id string) ThemeDefinition {
 	for _, theme := range themeDefinitions {
 		if theme.ID == id {
@@ -180,6 +220,13 @@ func applyTheme(s Styles, theme ThemeDefinition) Styles {
 		selectedFill = onPrimary
 		selectedText = primary
 	}
+
+	// Store the derived accent/Alt colors for the active theme so the rest of
+	// the UI (boot banner, buttons, metadata, separators, help text) can use
+	// them consistently. "accent" stays meaningful for selected-state fills;
+	// ThemeColor.Accent is the highlight color and ThemeColor.Alt the
+	// alternate (metadata) color per the mapping table.
+	s.ThemeColor.Accent, s.ThemeColor.Alt = themeAccentAlt(theme.ID)
 
 	s.Header.LogoGradFromColor, s.Header.LogoGradToColor = secondary, primary
 	s.Header.HypercreditIcon = s.Header.HypercreditIcon.Foreground(secondary)
@@ -222,10 +269,10 @@ func applyTheme(s Styles, theme ThemeDefinition) Styles {
 	s.Messages.ShellPrompt = s.Messages.ShellPrompt.Foreground(primary)
 	s.Messages.ToolCallFocused = s.Messages.ToolCallFocused.BorderForeground(secondary)
 
-	s.Status.ResourceFilled = lipgloss.NewStyle().Foreground(primary)
+	s.Status.ResourceFilled = lipgloss.NewStyle().Foreground(s.ThemeColor.Accent)
 	s.Status.ResourceEmpty = lipgloss.NewStyle().Foreground(borderColor)
 	s.Status.ResourceLabel = s.Status.ResourceLabel.Foreground(p.fgMoreSubtle)
-	s.Status.ResourceValue = s.Status.ResourceValue.Foreground(primary)
+	s.Status.ResourceValue = s.Status.ResourceValue.Foreground(s.ThemeColor.Accent)
 	s.Status.SuccessIndicator = s.Status.SuccessIndicator.Background(p.success)
 	s.Status.WarnIndicator = s.Status.WarnIndicator.Background(p.warning)
 	s.Status.ErrorIndicator = s.Status.ErrorIndicator.Background(p.error)
@@ -262,6 +309,23 @@ func applyTheme(s Styles, theme ThemeDefinition) Styles {
 	s.Pills.TodoLabel = s.Pills.TodoLabel.Foreground(p.fgBase)
 	s.Pills.TodoProgress = s.Pills.TodoProgress.Foreground(primary)
 	s.Pills.TodoSpinner = s.Pills.TodoSpinner.Foreground(secondary)
+
+	// Lighten the section heading / help text (LOCAL DEVICE, SKILLS, MCP, etc.)
+	// so it reads against the dark surface. These previously used the darkest
+	// muted tone; bumping one step brighter keeps it subtle but legible.
+	s.Resource.Heading = s.Resource.Heading.Foreground(p.fgMoreSubtle)
+	s.Resource.AdditionalText = s.Resource.AdditionalText.Foreground(p.fgMoreSubtle)
+
+	// Command list metadata (shortcut column) uses the ALT COLOR when focused
+	// so command buttons read as ACCENT-highlighted with ALT metadata/help.
+	s.Dialog.ListItem.InfoFocused = s.Dialog.ListItem.InfoFocused.Foreground(s.ThemeColor.Alt)
+
+	// File Finder uses the theme's ALT COLOR for metadata, the rule
+	// separators, and the close button (instead of the default red/ muted
+	// tones) so it stays on-brand per the theme color-mapping table.
+	s.Dialog.FileBrowser.Close = s.Dialog.FileBrowser.Close.Foreground(s.ThemeColor.Alt)
+	s.Dialog.FileBrowser.Rule = s.Dialog.FileBrowser.Rule.Foreground(s.ThemeColor.Alt)
+	s.Dialog.FileBrowser.Preview = s.Dialog.FileBrowser.Preview.Foreground(s.ThemeColor.Alt)
 
 	return s
 }

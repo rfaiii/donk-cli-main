@@ -182,6 +182,15 @@ type Styles struct {
 	// Background
 	Background color.Color
 
+	// ThemeColor holds the accent and alternate (Alt) colors derived from the
+	// active theme. Accent is the highlight color (buttons, banner, highlights)
+	// and Alt is used for metadata, separators, and help text, per the theme
+	// color-mapping table (see themes.go).
+	ThemeColor struct {
+		Accent color.Color
+		Alt    color.Color
+	}
+
 	// Logo
 	Logo struct {
 		FieldColor         color.Color
@@ -514,7 +523,7 @@ type Styles struct {
 		ImagePreview lipgloss.Style
 
 		FileBrowser struct {
-			Panel, Border, Title, Close, Rule                  lipgloss.Style
+			Panel, Border, Title, Close, Rule, Metadata        lipgloss.Style
 			Directory, Entry, Selected, Preview, Footer, Error lipgloss.Style
 		}
 

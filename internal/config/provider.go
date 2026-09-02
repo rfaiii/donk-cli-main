@@ -186,10 +186,11 @@ func Providers(cfg *Config) ([]catwalk.Provider, error) {
 
 		wg.Wait()
 
+		clineProvider := ClineProvider()
 		if hyperFound {
-			providerList = append([]catwalk.Provider{hyperProvider}, slices.Collect(providers.Seq())...)
+			providerList = append([]catwalk.Provider{hyperProvider, clineProvider}, slices.Collect(providers.Seq())...)
 		} else {
-			providerList = slices.Collect(providers.Seq())
+			providerList = append([]catwalk.Provider{clineProvider}, slices.Collect(providers.Seq())...)
 		}
 		providerErr = errors.Join(errs...)
 	})

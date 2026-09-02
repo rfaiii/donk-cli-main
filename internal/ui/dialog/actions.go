@@ -90,6 +90,11 @@ type (
 		ID   string
 		Name string
 	}
+	// ActionAddClineAPIKey is sent when the user selects the "ADD CLINE API
+	// KEY" row in the Other Models dialog. It opens the API key input so the
+	// full live Cline catalog (including free models) can be fetched and
+	// shown without a restart.
+	ActionAddClineAPIKey struct{}
 	// ActionRunMCPPrompt is a message to run a custom command.
 	ActionRunMCPPrompt struct {
 		Title       string

@@ -456,8 +456,14 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	if dividerH > 0 {
 		contentLines = append(contentLines, panelTheme.Rule.Render(strings.Repeat("─", contentW)))
 	}
-	for _, line := range footerLines {
-		contentLines = append(contentLines, panelTheme.Footer.Render(line))
+	for i, line := range footerLines {
+		// The footer's first lines (metadata, clipboard) use the theme ALT
+		// COLOR; the trailing help line keeps the muted footer style.
+		if i < 2 {
+			contentLines = append(contentLines, panelTheme.Metadata.Render(line))
+		} else {
+			contentLines = append(contentLines, panelTheme.Footer.Render(line))
+		}
 	}
 	// Every row is fixed before styling; apply the known content dimensions once
 	// so the outer panel cannot grow when preview text changes.

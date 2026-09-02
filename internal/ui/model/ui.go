@@ -41,6 +41,7 @@ import (
 	"github.com/richavery/donk-cli/internal/clipboard"
 	"github.com/richavery/donk-cli/internal/commands"
 	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/donk-cli/internal/discover"
 	"github.com/richavery/donk-cli/internal/event"
 	"github.com/richavery/donk-cli/internal/fsext"
 	"github.com/richavery/donk-cli/internal/history"
@@ -118,6 +119,11 @@ const (
 type openEditorMsg struct {
 	Text string
 }
+
+// clineModelsRefreshedMsg is emitted after the live Cline model catalog has
+// been fetched following an "ADD CLINE API KEY" action. The UI reopens the
+// Other Models dialog with the refreshed (full, free-inclusive) catalog.
+type clineModelsRefreshedMsg struct{}
 
 type shellResultMsg struct {
 	PendingID string // ID of the pending ShellItem to update.
@@ -201,11 +207,16 @@ type UI struct {
 	lastUserMessageTime int64
 
 	// The width and height of the terminal in cells.
-	width       int
-	height      int
-	bannerFrame int
-	bannerAnim  *anim.Anim
-	layout      uiLayout
+	width         int
+	height        int
+	bannerFrame   int
+	bannerAnim    *anim.Anim
+	versionBanner *versionBanner
+	// pendingClineKeyAdd marks an in-flight "ADD CLINE API KEY" flow in the
+	// Other Models dialog. When the returned ActionSelectModel arrives it is
+	// consumed to refresh the catalog instead of selecting a model.
+	pendingClineKeyAdd bool
+	layout             uiLayout
 
 	isTransparent bool
 
@@ -442,15 +453,15 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 	header := newHeader(com)
 
 	ui := &UI{
-		com:          com,
-		dialog:       dialog.NewOverlay(),
-		keyMap:       keyMap,
-		textarea:     ta,
-		chat:         ch,
-		header:       header,
-		completions:  comp,
-		attachments:  attachments,
-		todoSpinner:  todoSpinner,
+		com:         com,
+		dialog:      dialog.NewOverlay(),
+		keyMap:      keyMap,
+		textarea:    ta,
+		chat:        ch,
+		header:      header,
+		completions: comp,
+		attachments: attachments,
+		todoSpinner: todoSpinner,
 		bannerAnim: anim.New(anim.Settings{
 			ID:          "donk-banner",
 			Size:        240,
@@ -459,7 +470,8 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 			LabelColor:  com.Styles.Logo.TitleColorA,
 			CycleColors: true,
 		}),
-		cursorEffect: anim.NewCursorEffect(0),
+		versionBanner:       newVersionBanner(),
+		cursorEffect:        anim.NewCursorEffect(0),
 		lspStates:           make(map[string]workspace.LSPClientInfo),
 		mcpStates:           make(map[string]mcp.ClientInfo),
 		notifyBackend:       notification.NoopBackend{},
@@ -523,6 +535,9 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 func (m *UI) Init() tea.Cmd {
 	var cmds []tea.Cmd
 	cmds = append(cmds, m.bannerAnim.Start())
+	if cmd := m.versionBanner.start(); cmd != nil {
+		cmds = append(cmds, cmd)
+	}
 	if m.state == uiOnboarding {
 		if cmd := m.startOnboarding(); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -1263,6 +1278,10 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmds = append(cmds, cmd)
 			}
 		}
+	case versionBannerTickMsg:
+		if cmd := m.versionBanner.advance(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
 	case scrollbarHideMsg:
 		if m.state == uiChat {
 			m.chat.HideScrollbar(msg.seq)
@@ -1878,6 +1897,13 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 			break
 		}
 
+		// If the API key dialog (from the "ADD CLINE API KEY" flow) is closed
+		// without saving, clear the pending flag so a later model selection
+		// isn't mis-consumed as a catalog refresh.
+		if last := m.dialog.DialogLast(); last != nil && last.ID() == dialog.APIKeyInputID {
+			m.pendingClineKeyAdd = false
+		}
+
 		if m.dialog.ContainsDialog(dialog.FilePickerID) {
 			defer fimage.ResetCache()
 		}
@@ -2045,9 +2071,34 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 		m.dialog.CloseDialog(dialog.CommandsID)
 
 	case dialog.ActionSelectModel:
+		if m.pendingClineKeyAdd && string(msg.Provider.ID) == config.ClineProviderID {
+			// The user just added their Cline key from the Other Models
+			// dialog (NOT by picking a model). Consume the pending flow,
+			// close the key input, and refresh the catalog in place so the
+			// full live model list (including free models) appears.
+			m.pendingClineKeyAdd = false
+			m.dialog.CloseDialog(dialog.APIKeyInputID)
+			cmds = append(cmds, m.refreshClineModels())
+			break
+		}
 		if cmd := m.handleSelectModel(msg); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
+	case dialog.ActionAddClineAPIKey:
+		// Open the API key input for Cline. The returned ActionSelectModel is
+		// consumed by the pendingClineKeyAdd branch above to refresh the
+		// catalog rather than selecting a model.
+		m.pendingClineKeyAdd = true
+		m.dialog.CloseDialog(dialog.OtherModelsID)
+		if cmd := m.openAuthenticationDialog(
+			config.ClineProvider(),
+			config.SelectedModel{Provider: config.ClineProviderID},
+			config.SelectedModelTypeLarge,
+		); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+	case clineModelsRefreshedMsg:
+		m.dialog.OpenDialog(dialog.NewOtherModels(m.com))
 	case dialog.LocalModelsMsg:
 		if dlg, ok := m.dialog.Dialog(dialog.ModelsID).(*dialog.Models); ok {
 			dlg.HandleMsg(msg)
@@ -2315,6 +2366,7 @@ func (m *UI) handleSelectModel(msg dialog.ActionSelectModel) tea.Cmd {
 
 	if !isConfigured() || msg.ReAuthenticate {
 		m.dialog.CloseDialog(dialog.ModelsID)
+		m.dialog.CloseDialog(dialog.OtherModelsID)
 		if cmd := m.openAuthenticationDialog(msg.Provider, msg.Model, msg.ModelType); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
@@ -2360,6 +2412,7 @@ func (m *UI) handleSelectModel(msg dialog.ActionSelectModel) tea.Cmd {
 	m.dialog.CloseDialog(dialog.APIKeyInputID)
 	m.dialog.CloseDialog(dialog.OAuthID)
 	m.dialog.CloseDialog(dialog.ModelsID)
+	m.dialog.CloseDialog(dialog.OtherModelsID)
 
 	if isOnboarding {
 		m.setState(uiLanding, uiFocusEditor)
@@ -3130,6 +3183,11 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 			Max: image.Pt(8, 3),
 		})
 	}
+
+	// Boot version banner overlays the bottom row (drawn last so it sits
+	// on top of the status bar/resource monitor). Bar = accent, text =
+	// background so it pops.
+	m.versionBanner.draw(scr, area, m.com.Styles.ThemeColor.Accent, m.com.Styles.Background)
 
 	// This needs to come last to overlay on top of everything. We always pass
 	// the full screen bounds because the dialogs will position themselves
@@ -4552,6 +4610,8 @@ func (m *UI) openDialog(id string) tea.Cmd {
 		m.dialog.OpenDialog(dialog.NewOllamaHowTo(m.com))
 	case dialog.ThemesID:
 		m.dialog.OpenDialog(dialog.NewThemes(m.com, m.themeID))
+	case dialog.OtherModelsID:
+		m.dialog.OpenDialog(dialog.NewOtherModels(m.com))
 	case dialog.QuitID:
 		if cmd := m.openQuitDialog(); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -4574,6 +4634,33 @@ func (m *UI) openQuitDialog() tea.Cmd {
 	quitDialog := dialog.NewQuit(m.com)
 	m.dialog.OpenDialog(quitDialog)
 	return nil
+}
+
+// refreshClineModels fetches the live Cline model catalog (including free
+// models) using the just-saved API key and updates the in-memory provider.
+// It emits [clineModelsRefreshedMsg] so the Other Models dialog reopens with
+// the full catalog. On failure the curated default list remains.
+func (m *UI) refreshClineModels() tea.Cmd {
+	cfg := m.com.Config()
+	pc, ok := cfg.Providers.Get(config.ClineProviderID)
+	if !ok {
+		return func() tea.Msg { return clineModelsRefreshedMsg{} }
+	}
+	resolver := m.com.Workspace.Resolver()
+	return func() tea.Msg {
+		live, err := discover.DiscoverModels(context.Background(), discover.Config{
+			ID:             config.ClineProviderID,
+			BaseURL:        config.ClineBaseURL,
+			APIKey:         "", // gateway authenticates via X-Api-Key header
+			ExtraHeaders:   map[string]string{config.ClineAPIKeyHeader: pc.APIKey},
+			ExistingModels: pc.Models,
+		}, resolver)
+		if err == nil && len(live) > 0 {
+			pc.Models = live
+			cfg.Providers.Set(config.ClineProviderID, pc)
+		}
+		return clineModelsRefreshedMsg{}
+	}
 }
 
 // openModelsDialog opens the models dialog.
