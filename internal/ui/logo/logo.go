@@ -33,7 +33,7 @@ var donkCLIASCII = map[rune][]string{
 
 // Wordmark is the application name shown in the terminal UI. Keep this as the
 // single source of truth; use scripts/set-wordmark.sh to change it safely.
-const Wordmark = "DONK"
+const Wordmark = "DONK-CLI"
 
 // Opts are the options for rendering the DONK-CLI title art.
 type Opts struct {

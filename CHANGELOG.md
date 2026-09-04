@@ -83,6 +83,8 @@
   homescreen (NODE → MCP → LSP), with SKILLS on the right, for tighter space use.
 - Clicking outside the Commands (command palette) dialog now dismisses it (click-away
   close), matching the File Finder.
+- Restored the CLI suffix in the header wordmark (now renders "DONK-CLI"), per the
+  wordmark source of truth documented in docs/UI_BRANDING.md.
 
 ## 1.1.5
 
