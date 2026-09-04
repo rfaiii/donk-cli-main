@@ -42,6 +42,7 @@ import (
 	"github.com/richavery/donk-cli/internal/server"
 	"github.com/richavery/donk-cli/internal/session"
 	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/donk-cli/internal/ui/boot"
 	"github.com/richavery/donk-cli/internal/ui/common"
 	ui "github.com/richavery/donk-cli/internal/ui/model"
 	"github.com/richavery/donk-cli/internal/version"
@@ -62,6 +63,7 @@ func init() {
 	_ = rootCmd.PersistentFlags().MarkHidden("channels")
 	rootCmd.Flags().StringP("session", "s", "", "Continue a previous session by ID")
 	rootCmd.Flags().BoolP("continue", "C", false, "Continue the most recent session")
+	rootCmd.Flags().Bool("no-boot", false, "Skip the animated boot sequence")
 	rootCmd.MarkFlagsMutuallyExclusive("session", "continue")
 
 	rootCmd.AddCommand(
@@ -132,6 +134,12 @@ donk-cli --continue
 
 		inputFilter := ui.NewFilter()
 		var env uv.Environ = os.Environ()
+
+		// Animated beaver intro (interactive terminals only). Skippable with --no-boot.
+		if noBoot, _ := cmd.Flags().GetBool("no-boot"); !noBoot && term.IsTerminal(os.Stdout.Fd()) {
+			boot.Run()
+		}
+
 		program := tea.NewProgram(
 			model,
 			tea.WithEnvironment(env),
