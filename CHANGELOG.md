@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.9
+
+### Stability & polish
+- **Beaver mascot no longer spazzes**: 4s pulse + 400ms hover debounce
+  (new `hoverSettleMsg` and `beaverFacing` field) so the mascot tracks the
+  cursor/prompt direction smoothly instead of flipping on every mouse
+  movement. `anim.BeaverFrame` now takes a direction (-1/0/+1) instead of
+  raw coordinates.
+- **Duplicate NODE section removed**: NODE/MCP/LSP only appears in the
+  left column of the bottom resource bar, giving the beaver its own lane.
+- **`--version` beaver in BVR neon green (#3BF66B)**: the version mascot
+  is now in the brand green instead of the theme Dolly pink.
+- **`docs/TASKLIST.md` no longer broadcast**: added to `.gitignore` and
+  `git rm --cached`'d; the file stays on disk for local notes.
+- **Project organization**: removed duplicate `Taskfile.yml`, added
+  `packaging/icons/` (`bvr-cli-1024.png` + `.icon` set) for app/installer
+  integration.
+
 ## 1.1.8
 
 ### Beaver mascot & UI stability

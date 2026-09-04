@@ -1,18 +1,19 @@
 # Project: BVR-CLI
-# Date: 2026-09-02
+# Date: 2026-09-04
 
 ## Current Goal
-Ship v1.1.7 — a polished homescreen/visuals release: boot brand banner, accent/alt
-theme color mapping, Cline free-model support, ALT-colored File Finder, and the
-`stacked, superfile-icon Command and File Finder` home buttons. (Text-editor integration and
-shader/skills load-sequence debugging deferred for further research/testing.)
+Ship v1.1.9 — a stability and polish release: the homescreen beaver mascot
+no longer spazzes on every mouse movement (4s pulse + 400ms hover debounce),
+the duplicate NODE section is removed, the `--version` beaver is now in BVR
+neon green (#3BF66B), and the project is organized with `packaging/icons/`
+and a single `Taskfile.yaml`.
 
 ## Current Technical Status
 - **Stack:** Go, Bubble Tea v2, Lip Gloss v2, Fantasy, SQLite/sqlc, Charmwalk snapshots
 - **CLI entry:** `main.go` + `internal/cmd`
 - **UI:** `internal/ui/...` Bubble Tea state machine
-- **Packaging:** `packaging/` for npm/homebrew, `dist/release/` for binaries, `winget/` for manifest templates
-- **Release:** GitHub Releases v1.1.7
+- **Packaging:** `packaging/` for npm/homebrew/icons, `dist/release/` for binaries, `winget/` for manifest templates
+- **Release:** GitHub Releases v1.1.9
 - **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `bvr-cli shaders list/install`
 - **NODE:** `internal/node` provides device registry, HTTP/WebSocket/SSH transports, and tests
 - **Themes:** 8 themes, each with derived Accent + Alt colors (`Styles.ThemeColor.Accent/.Alt`) per the color-mapping table

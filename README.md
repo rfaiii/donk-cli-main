@@ -1,4 +1,4 @@
-# ◇ BVR-CLI 1.1.8 by Richard Aizen Avery III
+# ◇ BVR-CLI 1.1.9 by Richard Aizen Avery III
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,14 +6,11 @@ BVR brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.8:** total **DONK-CLI → BVR-CLI** rename (module path
-> `github.com/richavery/bvr-cli`, binary, config `bvr.json` / `.bvr` data dir, env
-> vars, identifiers, docs, assets, packaging, and the iOS companion) plus an
-> **animated beaver mascot on the homescreen** — the boot beaver now idles on the
-> homescreen in step with the banner ticker, rendered in the dense
-> character-filled style (textual fillers behind the face) with an x-ray
-> (`X_X`) Beta variant that swaps in when the agent errors and returns to the
-> normal (`0_0`) Alpha variant on completion.
+> **Release 1.1.9:** stability and polish release. The homescreen beaver
+> mascot no longer spazzes on every mouse movement (4s pulse + 400ms hover
+> debounce), the duplicate NODE section is gone, the `--version` beaver head
+> is now in BVR neon green (#3BF66B), and the project is organized with
+> `packaging/icons/` and a single `Taskfile.yaml`.
 
 ## ⚡ Quick start
 
