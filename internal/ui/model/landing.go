@@ -6,6 +6,7 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/ultraviolet/layout"
 	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/ui/anim"
 	"github.com/richavery/bvr-cli/internal/workspace"
 )
 
@@ -94,6 +95,10 @@ func (m *UI) landingView() string {
 	parts := []string{cwdStyled, "", buttons, "", modelLine}
 
 	parts = append(parts, "", m.modelInfo(width), "", m.nodeInfo(min(42, width), 3))
+	// Idle beaver mascot beneath the status monitors. It walks in step with
+	// the banner ticker (m.bannerFrame) so it costs no extra tick loop, and
+	// reuses the boot splash frames so it matches the intro.
+	parts = append(parts, "", anim.BeaverFrame(m.bannerFrame))
 	infoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)
 
 	var remainingHeightArea image.Rectangle
