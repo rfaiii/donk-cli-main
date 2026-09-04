@@ -102,14 +102,20 @@ func (m *UI) landingView() string {
 		layout.Fill(1),
 	).Split(m.layout.main).Assign(new(image.Rectangle), &remainingHeightArea)
 
-	mcpLspSectionWidth := min(30, (width-2)/3)
+	// Left column: NODE, MCP, LSP stacked vertically (top to bottom). The right
+	// side holds SKILLS. These are short status monitors, so they share a narrow
+	// left column, leaving the bulk of the width for the (often long) skill list.
+	leftW := min(30, (width-2)/3)
+	rightW := max(1, width-leftW-1)
+	sectionH := max(1, remainingHeightArea.Dy())
 
-	lspSection := m.lspInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
-	mcpSection := m.mcpInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
-	skillsSection := m.skillsInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()), false)
-	nodeSection := m.nodeInfo(mcpLspSectionWidth, max(1, remainingHeightArea.Dy()))
+	nodeSection := m.nodeInfo(leftW, sectionH)
+	mcpSection := m.mcpInfo(leftW, sectionH, false)
+	lspSection := m.lspInfo(leftW, sectionH, false)
+	skillsSection := m.skillsInfo(rightW, sectionH, false)
 
-	content := lipgloss.JoinHorizontal(lipgloss.Left, lspSection, " ", mcpSection, " ", skillsSection, " ", nodeSection)
+	leftColumn := lipgloss.JoinVertical(lipgloss.Left, nodeSection, " ", mcpSection, " ", lspSection)
+	content := lipgloss.JoinHorizontal(lipgloss.Left, leftColumn, " ", skillsSection)
 
 	return lipgloss.NewStyle().
 		Width(width).

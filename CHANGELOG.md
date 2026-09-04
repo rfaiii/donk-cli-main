@@ -79,6 +79,10 @@
 - Long File Finder entries are clipped with an ellipsis instead of wrapping.
 - Clicking outside the File Finder panel dismisses it (click-away close), in addition to
   the `[X]` close button.
+- Stacked NODE, MCP, and LSP resource monitors vertically on the left side of the
+  homescreen (NODE → MCP → LSP), with SKILLS on the right, for tighter space use.
+- Clicking outside the Commands (command palette) dialog now dismisses it (click-away
+  close), matching the File Finder.
 
 ## 1.1.5
 

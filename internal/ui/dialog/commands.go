@@ -1,6 +1,7 @@
 package dialog
 
 import (
+	"image"
 	"os"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 	"charm.land/bubbles/v2/spinner"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/richavery/donk-cli/internal/commands"
 	"github.com/richavery/donk-cli/internal/config"
@@ -67,6 +69,7 @@ type Commands struct {
 	list  *list.FilterableList
 
 	windowWidth int
+	panelRect   image.Rectangle
 
 	customCommands []commands.CustomCommand
 	mcpPrompts     []commands.MCPPrompt
@@ -155,6 +158,11 @@ func (c *Commands) ID() string {
 
 // HandleMsg implements [Dialog].
 func (c *Commands) HandleMsg(msg tea.Msg) Action {
+	if mouse, ok := msg.(tea.MouseClickMsg); ok {
+		if mouse.Button == uv.MouseLeft && !c.panelRect.Empty() && !image.Pt(mouse.X, mouse.Y).In(c.panelRect) {
+			return ActionClose{}
+		}
+	}
 	switch msg := msg.(type) {
 	case dockerMCPAvailabilityCheckedMsg:
 		c.dockerMCPAvailable = &msg.available
@@ -330,6 +338,10 @@ func (c *Commands) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 
 	view := rc.Render()
 
+	// Track the centered panel bounds so HandleMsg can dismiss the dialog on
+	// click-away (a left click outside the panel closes the command palette).
+	vw, vh := lipgloss.Size(view)
+	c.panelRect = common.CenterRect(area, min(vw, area.Dx()), min(vh, area.Dy()))
 	cur := c.Cursor()
 	DrawCenterCursor(scr, area, view, cur)
 	return cur
