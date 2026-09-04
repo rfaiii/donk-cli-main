@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.8
+
+### Brand rename & animated mascot
+- **Total rename** `DONK-CLI` → `BVR-CLI` across the module path
+  (`github.com/richavery/bvr-cli`), binary, config (`bvr.json`, `.bvr` data dir),
+  env vars, all identifiers, docs, assets, packaging, and the iOS companion app
+  (`DonkCompanion` → `BvrCompanion`).
+- **Animated beaver mascot on the homescreen** (`internal/ui/anim/beaver.go` +
+  `landingView`), idling in step with the existing `bannerFrame` ticker — no
+  extra tick loop. Reuses the boot splash frames and neon-green (`#39f66b`)
+  styling so it matches the intro.
+- **Dense character-filled mascot**: the beaver is now textured with fillers
+  (`A, V, @@, H, AW, WX`) instead of hollow outlines. An x-ray (`X_X`) **Beta**
+  variant is shown when the agent errors
+  (`notify.TypeAgentError`), returning to the normal (`0_0`) **Alpha** variant on
+  completion (`notify.TypeAgentFinished`) via a new `beaverErrored` flag.
+
 ## 1.1.7
 
 ### Homescreen UI & animations

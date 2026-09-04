@@ -1,5 +1,13 @@
 # BVR Tasklist
 
+## v1.1.8
+- [x] Total rename DONK-CLI → BVR-CLI (module, binary, config, env, identifiers, docs, assets, packaging, iOS companion)
+- [x] Animated idle beaver mascot on the homescreen (banner-ticker driven, no extra loop)
+- [x] Dense character-filled beaver frames + x-ray Beta variant on agent error
+- [ ] Desktop packaging (clean .exe/.dmg/Linux executables + cross-platform test)
+- [ ] Sound-effects library wired into the TUI
+- [ ] Mobile companion app finish
+
 ## v1.1.7
 - [x] Boot brand banner: BVR → version → "OH BEAV!" → attribution scramble sequence (fades away on completion)
 - [x] Per-theme Accent/Alt color mapping across all 8 themes (`Styles.ThemeColor.Accent`/`.Alt`)

@@ -1,4 +1,4 @@
-# ◇ BVR-CLI 1.1.7 by Richard Aizen Avery III
+# ◇ BVR-CLI 1.1.8 by Richard Aizen Avery III
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,12 +6,14 @@ BVR brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.7:** a polished homescreen with a boot brand banner (BVR →
-> version → "OH BEAV!" → accent-colored scramble sequence), accent/alt theme
-> color mapping across all 8 themes, Cline hosted-gateway support (including
-> free models) with an in-app "ADD CLINE API KEY" flow, an "Other Models" palette
-> entry, ALT-colored File Finder, accent CPU/RAM bars, bold underlined project
-> location, and stacked Command/File Finder home buttons with superfile icon glyphs.
+> **Release 1.1.8:** total **DONK-CLI → BVR-CLI** rename (module path
+> `github.com/richavery/bvr-cli`, binary, config `bvr.json` / `.bvr` data dir, env
+> vars, identifiers, docs, assets, packaging, and the iOS companion) plus an
+> **animated beaver mascot on the homescreen** — the boot beaver now idles on the
+> homescreen in step with the banner ticker, rendered in the dense
+> character-filled style (textual fillers behind the face) with an x-ray
+> (`X_X`) Beta variant that swaps in when the agent errors and returns to the
+> normal (`0_0`) Alpha variant on completion.
 
 ## ⚡ Quick start
 
