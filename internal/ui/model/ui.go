@@ -230,6 +230,7 @@ type UI struct {
 	state         uiState
 	beaverErrored bool // idle beaver: dense Beta (x-ray) when the agent errors
 	beaverResting bool // idle beaver: slow "rest" (center) pose between direction changes
+	beaverFacing  int  // idle beaver: 0=center, -1=left, +1=right (last applied direction)
 
 	keyMap KeyMap
 	keyenh tea.KeyboardEnhancementsMsg
@@ -536,14 +537,19 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 
 // beaverPulseMsg fires on a slow timer so the homescreen mascot idles in a
 // "rest" pose between cursor-driven direction changes instead of spazzing on
-// the banner ticker.
+// the banner ticker. The pulse is intentionally slow (~4s) so the mascot
+// doesn't flip direction on every mouse-motion event.
 type beaverPulseMsg struct{}
 
 func beaverPulseCmd() tea.Cmd {
-	return tea.Tick(1500*time.Millisecond, func(time.Time) tea.Msg {
+	return tea.Tick(4000*time.Millisecond, func(time.Time) tea.Msg {
 		return beaverPulseMsg{}
 	})
 }
+
+// hoverSettleMsg is sent after the mouse has been at the same position for
+// 400ms, confirming a direction change for the beaver mascot.
+type hoverSettleMsg struct{}
 
 // Init initializes the UI model.
 func (m *UI) Init() tea.Cmd {
@@ -1153,10 +1159,18 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		// Track hover position for inline editors and the homescreen
-		// mascot, which faces the cursor/prompt direction.
+		// mascot, which faces the cursor/prompt direction. The position is
+		// debounced: we only update hoverX after the mouse has been at the
+		// same cell for at least 400ms, preventing the beaver from spazzing
+		// out on every micro mouse movement. The mascot's facing is locked
+		// to the last debounced direction until the mouse settles elsewhere.
 		if m.hoverX != msg.X || m.hoverY != msg.Y {
 			m.hoverX = msg.X
 			m.hoverY = msg.Y
+			// Cancel any pending debounce so we wait for the mouse to settle
+			cmds = append(cmds, tea.Tick(400*time.Millisecond, func(time.Time) tea.Msg {
+				return hoverSettleMsg{}
+			}))
 			if m.activeInline != nil {
 				if clickable, ok := m.activeInline.(dialog.MouseClickableEditor); ok {
 					clickable.SetHover(msg.X, msg.Y)
@@ -1304,6 +1318,23 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case beaverPulseMsg:
 		m.beaverResting = !m.beaverResting
+	case hoverSettleMsg:
+		// After the mouse has been still, update beaverFacing so the mascot
+		// can track the new direction without spazzing.
+		if m.activeInline != nil {
+			break
+		}
+		if m.hoverX < 0 {
+			m.beaverFacing = 0 // center when unknown
+		} else if m.hoverX < m.layout.main.Dx()/2 {
+			m.beaverFacing = -1 // left
+		} else {
+			m.beaverFacing = 1 // right
+		}
+	case versionBannerTickMsg:
+		if cmd := m.versionBanner.advance(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
 		cmds = append(cmds, beaverPulseCmd())
 	case versionBannerTickMsg:
 		if cmd := m.versionBanner.advance(); cmd != nil {

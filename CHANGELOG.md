@@ -2,6 +2,24 @@
 
 ## 1.1.8
 
+### Beaver mascot & UI stability
+- **Fixed mascot spazzing**: slowed pulse timer to 4s + added 400ms hover
+  debounce so the beaver tracks cursor/prompt direction smoothly without rapid
+  flipping on every micro mouse movement. The mascot's facing is now
+  debounced through a new `hoverSettleMsg` and a `beaverFacing` field, with
+  `anim.BeaverFrame` taking a direction (-1/0/+1) instead of raw coordinates.
+- **Duplicate NODE section removed**: fixed the homescreen layout so the
+  NODE/MCP/LSP monitors appear only in the left column of the bottom
+  resource bar, giving the beaver mascot its own dedicated lane.
+- **Layered icons added**: high-resolution `bvr-cli-1024.png` (1024×1024
+  PNG) and a proper macOS `.icon` set under `packaging/icons/` for app
+  bundle and installer integration.
+
+### Project organization
+- Removed the duplicate `Taskfile.yml`; consolidated into `Taskfile.yaml`.
+- Added `packaging/icons/` to keep brand assets with the rest of the
+  packaging bundle, leaving a cleaner project root.
+
 ### Brand rename & animated mascot
 - **Total rename** `DONK-CLI` → `BVR-CLI` across the module path
   (`github.com/richavery/bvr-cli`), binary, config (`bvr.json`, `.bvr` data dir),

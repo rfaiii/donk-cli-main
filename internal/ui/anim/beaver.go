@@ -14,21 +14,12 @@ import (
 // identical to the intro.
 var mascotStyle = lipgloss.NewStyle().Foreground(boot.MascotColor).Bold(true)
 
-// BeaverFrame returns the homescreen beaver mascot, facing toward the
-// cursor/prompt instead of cycling through the boot sequence on its own.
-//
-// It looks left when the cursor/prompt sits on the left half of the terminal
-// and right when it sits on the right half, so the mascot tracks the user
-// (a slow, cursor-following idle) rather than spazzing out on the banner
-// ticker. resting renders the neutral center-facing "rest" pose the mascot
-// briefly strikes between direction changes. Pass errored=true to render the
-// x-ray Beta variant (X_X eyes) when the agent has errored; otherwise the
-// normal Alpha variant is shown.
-//
-// cursorX is the terminal cell column of the cursor/mouse and width is the
-// terminal width in cells. When cursorX hasn't been observed yet (<=0) the
-// mascot defaults to facing right, toward the typing area.
-func BeaverFrame(cursorX, width int, errored, resting bool) string {
+// BeaverFrame returns the homescreen beaver mascot, facing the given direction.
+// 
+// facing: -1 = look left, 0 = center (resting), +1 = look right.
+// errored: render the x-ray Beta variant (X_X eyes) when the agent has errored.
+// resting: render the neutral center-facing "rest" pose between direction changes.
+func BeaverFrame(facing int, errored, resting bool) string {
 	frames := boot.BeaverFramesDenseAlpha
 	if errored {
 		frames = boot.BeaverFramesDenseBeta
@@ -38,15 +29,18 @@ func BeaverFrame(cursorX, width int, errored, resting bool) string {
 		return mascotStyle.Render(frames["center"])
 	}
 
-	// Face the cursor/prompt: left half of the screen -> look left,
-	// right half -> look right. Default (no cursor yet) -> right.
-	facing := "right"
-	if cursorX > 0 && cursorX < width/2 {
-		facing = "left"
-	} else if cursorX >= width/2 {
-		facing = "right"
+	// Face the cursor/prompt based on the debounced facing direction.
+	// -1 = left, 0 = center, +1 = right.
+	facingStr := "right"
+	switch facing {
+	case -1:
+		facingStr = "left"
+	case 0:
+		facingStr = "center"
+	case 1:
+		facingStr = "right"
 	}
-	frame, ok := frames[facing]
+	frame, ok := frames[facingStr]
 	if !ok {
 		frame = frames["center"]
 	}

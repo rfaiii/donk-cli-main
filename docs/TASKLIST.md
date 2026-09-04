@@ -4,6 +4,9 @@
 - [x] Total rename DONK-CLI → BVR-CLI (module, binary, config, env, identifiers, docs, assets, packaging, iOS companion)
 - [x] Animated idle beaver mascot on the homescreen (banner-ticker driven, no extra loop)
 - [x] Dense character-filled beaver frames + x-ray Beta variant on agent error
+- [x] Fixed mascot spazzing (4s pulse + 400ms hover debounce)
+- [x] Duplicate NODE section removed from homescreen layout
+- [x] Layered icons added to packaging/icons/
 - [ ] Desktop packaging (clean .exe/.dmg/Linux executables + cross-platform test)
 - [ ] Sound-effects library wired into the TUI
 - [ ] Mobile companion app finish
