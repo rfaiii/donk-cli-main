@@ -44,7 +44,7 @@ type FileBrowser struct {
 	loadSeq    uint64
 
 	up, down, pageUp, pageDown, first, last, toggleHidden, refresh, open, back, copy, attach, external, changeProject, close key.Binding
-	contentRect, closeRect                                                                                                   image.Rectangle
+	contentRect, closeRect, panelRect                                                                                                   image.Rectangle
 }
 
 var _ Dialog = (*FileBrowser)(nil)
@@ -223,6 +223,10 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 		if mouse.Button == uv.MouseLeft && image.Pt(mouse.X, mouse.Y).In(f.closeRect) {
 			return ActionClose{}
 		}
+		// Click-away to dismiss: a left click outside the panel closes the finder.
+		if mouse.Button == uv.MouseLeft && !f.panelRect.Empty() && !image.Pt(mouse.X, mouse.Y).In(f.panelRect) {
+			return ActionClose{}
+		}
 		if !image.Pt(mouse.X, mouse.Y).In(f.contentRect) || len(f.entries) == 0 {
 			return nil
 		}
@@ -363,6 +367,7 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	contentW := max(1, width-panelStyle.GetHorizontalFrameSize())
 	contentH := max(1, height-panelStyle.GetVerticalFrameSize())
 	center := common.CenterRect(area, width, height)
+	f.panelRect = center
 	contentX := center.Min.X + 1 + 1
 	contentY := center.Min.Y + 1 + 1
 

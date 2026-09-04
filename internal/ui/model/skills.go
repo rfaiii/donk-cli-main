@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/x/ansi"
 	"github.com/richavery/donk-cli/internal/skills"
 	"github.com/richavery/donk-cli/internal/ui/common"
 	"github.com/richavery/donk-cli/internal/ui/styles"
@@ -135,11 +136,14 @@ func skillsList(t *styles.Styles, items []skillStatusItem, width, maxItems int) 
 
 	renderedItems := make([]string, 0, len(items))
 	for _, item := range items {
-		renderedItems = append(renderedItems, common.Status(t, common.StatusOpts{
+		line := common.Status(t, common.StatusOpts{
 			Icon:        item.icon,
 			Title:       item.title,
 			Description: item.description,
-		}, width))
+		}, width)
+		// Clip each entry to the section width so long skill names are cut
+		// off with an ellipsis instead of word-wrapping onto a second line.
+		renderedItems = append(renderedItems, ansi.Truncate(line, width, "…"))
 	}
 	return lipgloss.JoinVertical(lipgloss.Left, renderedItems...)
 }

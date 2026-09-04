@@ -532,12 +532,12 @@ func quickStyle(o quickStyleOpts) Styles {
 
 	s.Help = help.Styles{
 		ShortKey:       base.Foreground(o.fgMoreSubtle),
-		ShortDesc:      base.Foreground(o.fgMostSubtle),
-		ShortSeparator: base.Foreground(o.separator),
-		Ellipsis:       base.Foreground(o.separator),
+		ShortDesc:      base.Foreground(o.fgSubtle),
+		ShortSeparator: base.Foreground(o.fgSubtle),
+		Ellipsis:       base.Foreground(o.fgSubtle),
 		FullKey:        base.Foreground(o.fgMoreSubtle),
-		FullDesc:       base.Foreground(o.fgMostSubtle),
-		FullSeparator:  base.Foreground(o.separator),
+		FullDesc:       base.Foreground(o.fgSubtle),
+		FullSeparator:  base.Foreground(o.fgSubtle),
 	}
 
 	s.Diff = diffview.Style{
@@ -1023,7 +1023,10 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Dialog.Sessions.InfoBlurred = lipgloss.NewStyle().Foreground(o.fgMostSubtle)
 	s.Dialog.Sessions.InfoFocused = lipgloss.NewStyle().Foreground(o.fgBase)
 
-	s.Status.Help = lipgloss.NewStyle().Padding(0, 1)
+	// Restore the foreground that quickStyle set (applyTheme previously
+	// wiped it, leaving the status help bar with no foreground and defaulting
+	// to the terminal's dark color on the dark surface).
+	s.Status.Help = lipgloss.NewStyle().Foreground(o.fgMoreSubtle).Padding(0, 1)
 	s.Status.SuccessIndicator = base.Foreground(o.bgLessVisible).Background(o.success).Padding(0, 1).Bold(true).SetString("OKAY!")
 	s.Status.InfoIndicator = s.Status.SuccessIndicator
 	s.Status.UpdateIndicator = s.Status.SuccessIndicator.SetString("HEY!")

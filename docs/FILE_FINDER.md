@@ -30,10 +30,11 @@ capped at 120 columns. Using the available height deliberately covers the large
 application banner while the Finder is active, giving the list and preview more
 vertical room without changing the global header/logo implementation. The block
 scrollbar beside the file list shows the current position when more entries are
-available. It can be opened by clicking the **📁 OPEN FILE FINDER** button on the
-landing screen or the compact folder icon in the header. Click **[X]** inside the
-upper-right corner to close it. The finder keeps its current directory and
-selection when closed and reopened.
+It can be opened by clicking the **OPEN FILE FINDER** button (folder icon) on
+the landing screen or the compact folder icon in the header. Click **[X]** in
+the upper-right corner, press `esc`, or click anywhere **outside the panel** to
+close it. The finder keeps its current directory and selection when closed and
+reopened.
 
 The selected file uses a light-pink highlight for visibility. The file list and
 preview are separated by a divider, and the footer uses distinct colors for

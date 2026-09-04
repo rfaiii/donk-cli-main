@@ -4,7 +4,7 @@
 ## Current Goal
 Ship v1.1.7 — a polished homescreen/visuals release: boot brand banner, accent/alt
 theme color mapping, Cline free-model support, ALT-colored File Finder, and the
-`[ "/" OPENS COMMANDS ]` home button. (Text-editor integration and
+`stacked, superfile-icon Command and File Finder` home buttons. (Text-editor integration and
 shader/skills load-sequence debugging deferred for further research/testing.)
 
 ## Current Technical Status
@@ -24,7 +24,7 @@ shader/skills load-sequence debugging deferred for further research/testing.)
 - [x] Cline free-model support: live catalog fetch + in-app "ADD CLINE API KEY" flow, X-Api-Key verification
 - [x] "Other Models" palette entry + Cline catalog dialog (internal/ui/dialog/other_models.go)
 - [x] ALT-colored File Finder: metadata, separators, close button (internal/ui/dialog/filebrowser.go)
-- [x] Accent CPU/RAM bars; bold underlined project location; `[ "/" OPENS COMMANDS ]` + `[ OPEN FILE FINDER ]` home buttons
+- [x] Accent CPU/RAM bars; bold underlined project location; stacked Command (terminal icon) and File Finder (folder icon) home buttons, themed to the Primary color
 - [x] Lightened section help text (LOCAL DEVICE / SKILLS / MCP) for readability
 - [x] Bumped dev version 1.1.6:beta_v2 → 1.1.6:beta_v3 → release 1.1.7
 - [x] Added docs/donk-cli-llm-integration-spec.md and docs/CLINE_PROVIDER.md

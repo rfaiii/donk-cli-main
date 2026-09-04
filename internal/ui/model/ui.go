@@ -232,14 +232,15 @@ type UI struct {
 	keyMap KeyMap
 	keyenh tea.KeyboardEnhancementsMsg
 
-	dialog           *dialog.Overlay
-	fileBrowser      *dialog.FileBrowser
-	status           *Status
-	resourceSample   resourceSnapshotMsg
-	resourceReady    bool
-	resourceCPU      float64
-	resourceRAM      float64
-	finderButtonRect image.Rectangle
+	dialog            *dialog.Overlay
+	fileBrowser       *dialog.FileBrowser
+	status            *Status
+	resourceSample    resourceSnapshotMsg
+	resourceReady     bool
+	resourceCPU       float64
+	resourceRAM       float64
+	finderButtonRect  image.Rectangle
+	commandButtonRect image.Rectangle
 
 	// isCanceling tracks whether the user has pressed escape once to cancel.
 	isCanceling bool
@@ -1068,11 +1069,19 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, tea.Batch(cmds...)
 		}
-		if msg.Button == uv.MouseLeft && image.Pt(msg.X, msg.Y).In(m.finderButtonRect) {
-			if cmd := m.openFileBrowserDialog(); cmd != nil {
-				cmds = append(cmds, cmd)
+		if msg.Button == uv.MouseLeft {
+			if image.Pt(msg.X, msg.Y).In(m.commandButtonRect) {
+				if cmd := m.openCommandsDialog(); cmd != nil {
+					cmds = append(cmds, cmd)
+				}
+				return m, tea.Batch(cmds...)
 			}
-			return m, tea.Batch(cmds...)
+			if image.Pt(msg.X, msg.Y).In(m.finderButtonRect) {
+				if cmd := m.openFileBrowserDialog(); cmd != nil {
+					cmds = append(cmds, cmd)
+				}
+				return m, tea.Batch(cmds...)
+			}
 		}
 
 		// Route clicks to inline editors that support mouse interaction.

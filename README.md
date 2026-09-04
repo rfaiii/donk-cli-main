@@ -11,7 +11,7 @@ workspace, choose the model, and ship.
 > color mapping across all 8 themes, Cline hosted-gateway support (including
 > free models) with an in-app "ADD CLINE API KEY" flow, an "Other Models" palette
 > entry, ALT-colored File Finder, accent CPU/RAM bars, bold underlined project
-> location, and a `[ "/" OPENS COMMANDS ]` home button.
+> location, and stacked Command/File Finder home buttons with superfile icon glyphs.
 
 ## ⚡ Quick start
 

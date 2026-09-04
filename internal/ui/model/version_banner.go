@@ -36,7 +36,6 @@ const (
 	versionBannerInFrames    = 10 // ~0.5s wipe-in
 	versionBannerOutFrames   = 10 // ~0.5s fade-out
 	versionBannerRevealChunk = 2  // frames between each revealed char
-	versionBannerRevealMax   = 24 // cap scramble reveal pace for longer texts
 	versionBannerHoldFrames  = 40 // 2s hold at 20fps
 )
 
@@ -143,8 +142,13 @@ func (b *versionBanner) advance() tea.Cmd {
 
 // revealed returns how many leading characters are settled (non-cycling).
 func (b *versionBanner) revealed() int {
-	n := min(b.frame/versionBannerRevealChunk, versionBannerRevealMax)
-	return min(n, len(b.elements[b.idx]))
+	// Reveal every character of the current element before advancing to the
+	// hold phase. A previous fixed cap (versionBannerRevealMax) stopped the
+	// reveal short of any string longer than 24 runes — e.g. the author
+	// attribution — so those elements kept scrambling forever and the banner
+	// never faded. The reveal pace is already governed by
+	// versionBannerRevealChunk, so no separate cap is needed here.
+	return min(b.frame/versionBannerRevealChunk, len(b.elements[b.idx]))
 }
 
 // active reports whether the banner is currently on screen.

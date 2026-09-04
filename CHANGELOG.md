@@ -14,9 +14,11 @@
   rendered in the accent color for readability against the dark background.
 - Added a prominent **MODEL / PROVIDER** line directly on the homescreen
   (accent values, alt labels).
-- Added a `[ "/" OPENS COMMANDS ]` command-palette button on the left side of
-  the homescreen, with the `[ OPEN FILE FINDER ]` button immediately adjacent
-  on the right; both use the accent color.
+- Added Command palette and File Finder buttons on the homescreen, each prefixed
+  with a superfile icon glyph (a terminal icon for Commands, a folder icon for
+  File Finder) and themed to the active theme Primary color. The buttons are
+  stacked vertically with a blank line between them, left-aligned one above the
+  other.
 - CPU/RAM resource monitors now use the active **ACCENT** color (e.g. pink bars
   on the green theme).
 - Lightened the section heading / help text under LOCAL DEVICE, SKILLS, and
@@ -63,6 +65,20 @@
   Connections, Ollama Models, Other Models, Ollama How To, Themes,
   Notification Style, Toggle Beast Mode, Toggle Code Mode, Toggle Help,
   Initialize Project, Disable Background Color, Quit.
+
+### Fixed (post-release)
+
+- Project location renders cleanly on the homescreen (no garbled output) by styling
+  the path a single time instead of re-rendering an already-styled string.
+- The Command button is clickable (opens the command palette, same as `/` /
+  `ctrl+p`) and the File Finder hit box is correctly positioned for the stacked layout.
+- Bottom status-bar help text (descriptions and separators) is legible on the dark
+  surface instead of near-black.
+- The boot banner completes its full sequence and fades away; the reveal cap no longer
+  traps the 34-rune attribution line.
+- Long File Finder entries are clipped with an ellipsis instead of wrapping.
+- Clicking outside the File Finder panel dismisses it (click-away close), in addition to
+  the `[X]` close button.
 
 ## 1.1.5
 
