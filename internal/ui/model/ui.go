@@ -229,6 +229,7 @@ type UI struct {
 	focus         uiFocusState
 	state         uiState
 	beaverErrored bool // idle beaver: dense Beta (x-ray) when the agent errors
+	beaverResting bool // idle beaver: slow "rest" (center) pose between direction changes
 
 	keyMap KeyMap
 	keyenh tea.KeyboardEnhancementsMsg
@@ -533,10 +534,22 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 	return ui
 }
 
+// beaverPulseMsg fires on a slow timer so the homescreen mascot idles in a
+// "rest" pose between cursor-driven direction changes instead of spazzing on
+// the banner ticker.
+type beaverPulseMsg struct{}
+
+func beaverPulseCmd() tea.Cmd {
+	return tea.Tick(1500*time.Millisecond, func(time.Time) tea.Msg {
+		return beaverPulseMsg{}
+	})
+}
+
 // Init initializes the UI model.
 func (m *UI) Init() tea.Cmd {
 	var cmds []tea.Cmd
 	cmds = append(cmds, m.bannerAnim.Start())
+	cmds = append(cmds, beaverPulseCmd())
 	if cmd := m.versionBanner.start(); cmd != nil {
 		cmds = append(cmds, cmd)
 	}
@@ -1139,11 +1152,12 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Batch(cmds...)
 		}
 
-		// Track hover position for inline editors.
-		if m.activeInline != nil {
-			if m.hoverX != msg.X || m.hoverY != msg.Y {
-				m.hoverX = msg.X
-				m.hoverY = msg.Y
+		// Track hover position for inline editors and the homescreen
+		// mascot, which faces the cursor/prompt direction.
+		if m.hoverX != msg.X || m.hoverY != msg.Y {
+			m.hoverX = msg.X
+			m.hoverY = msg.Y
+			if m.activeInline != nil {
 				if clickable, ok := m.activeInline.(dialog.MouseClickableEditor); ok {
 					clickable.SetHover(msg.X, msg.Y)
 				}
@@ -1288,6 +1302,9 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmds = append(cmds, cmd)
 			}
 		}
+	case beaverPulseMsg:
+		m.beaverResting = !m.beaverResting
+		cmds = append(cmds, beaverPulseCmd())
 	case versionBannerTickMsg:
 		if cmd := m.versionBanner.advance(); cmd != nil {
 			cmds = append(cmds, cmd)

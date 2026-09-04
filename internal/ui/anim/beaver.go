@@ -14,25 +14,41 @@ import (
 // identical to the intro.
 var mascotStyle = lipgloss.NewStyle().Foreground(boot.MascotColor).Bold(true)
 
-// BeaverFrame returns the BVR-CLI beaver mascot for the given tick index,
-// cycling through the boot sequence (center, left, center, right, center).
+// BeaverFrame returns the homescreen beaver mascot, facing toward the
+// cursor/prompt instead of cycling through the boot sequence on its own.
 //
-// Pass errored=true to render the x-ray (X_X) Beta variant when the agent has
-// errored; otherwise the normal (0_0) Alpha variant is shown. Both reuse the
-// boot splash mascot so the homescreen beaver matches the intro, and both are
-// driven by the existing banner ticker (m.bannerFrame from the UI model) so
-// they idle without their own tick loop.
-func BeaverFrame(tick int, errored bool) string {
+// It looks left when the cursor/prompt sits on the left half of the terminal
+// and right when it sits on the right half, so the mascot tracks the user
+// (a slow, cursor-following idle) rather than spazzing out on the banner
+// ticker. resting renders the neutral center-facing "rest" pose the mascot
+// briefly strikes between direction changes. Pass errored=true to render the
+// x-ray Beta variant (X_X eyes) when the agent has errored; otherwise the
+// normal Alpha variant is shown.
+//
+// cursorX is the terminal cell column of the cursor/mouse and width is the
+// terminal width in cells. When cursorX hasn't been observed yet (<=0) the
+// mascot defaults to facing right, toward the typing area.
+func BeaverFrame(cursorX, width int, errored, resting bool) string {
 	frames := boot.BeaverFramesDenseAlpha
 	if errored {
 		frames = boot.BeaverFramesDenseBeta
 	}
-	seq := boot.BootSequence
-	if len(seq) == 0 {
-		return ""
+
+	if resting {
+		return mascotStyle.Render(frames["center"])
 	}
-	if frame, ok := frames[seq[tick%len(seq)]]; ok {
-		return mascotStyle.Render(frame)
+
+	// Face the cursor/prompt: left half of the screen -> look left,
+	// right half -> look right. Default (no cursor yet) -> right.
+	facing := "right"
+	if cursorX > 0 && cursorX < width/2 {
+		facing = "left"
+	} else if cursorX >= width/2 {
+		facing = "right"
 	}
-	return ""
+	frame, ok := frames[facing]
+	if !ok {
+		frame = frames["center"]
+	}
+	return mascotStyle.Render(frame)
 }
