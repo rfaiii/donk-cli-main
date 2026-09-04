@@ -7,8 +7,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/node"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/node"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 const NodeSettingsID = "node-settings"

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the DONK-CLI beta testing program, including invite management, distribution channels, and testing workflows.
+This document outlines the BVR-CLI beta testing program, including invite management, distribution channels, and testing workflows.
 
 ## Beta Channels
 
@@ -14,27 +14,27 @@ This document outlines the DONK-CLI beta testing program, including invite manag
 
 ```bash
 # Build DMG for distribution
-cd /Users/richavery/Projects/donk-cli-main
+cd /Users/richavery/Projects/bvr-cli-main
 ./scripts/package/macos-dmg.sh v1.1.5-beta.1
 ```
 
 **Installation:**
-1. Download `donk-cli_v1.1.5-beta.1_darwin_arm64.dmg`
-2. Open DMG and drag DONK.app to Applications
+1. Download `bvr-cli_v1.1.5-beta.1_darwin_arm64.dmg`
+2. Open DMG and drag BVR.app to Applications
 3. First launch may require: Right-click → Open (to bypass Gatekeeper)
 4. Launcher auto-detects terminal preference
 
 ### 2. Homebrew Tap (Secondary)
 
 **Platform:** macOS / Linux
-**Formula:** `packaging/homebrew-donk-cli.rb`
+**Formula:** `packaging/homebrew-bvr-cli.rb`
 
 ```bash
 # Install via Homebrew
-brew install richavery/tap/donk-cli
+brew install richavery/tap/bvr-cli
 
 # Upgrade to beta
-brew upgrade donk-cli
+brew upgrade bvr-cli
 ```
 
 ### 3. NPM Package (Cross-platform)
@@ -44,10 +44,10 @@ brew upgrade donk-cli
 
 ```bash
 # Install via NPM
-npm install -g @donk-cli/cli
+npm install -g @bvr-cli/cli
 
 # Upgrade to beta
-npm update -g @donk-cli/cli
+npm update -g @bvr-cli/cli
 ```
 
 ### 4. Go Install (Developers)
@@ -56,7 +56,7 @@ npm update -g @donk-cli/cli
 **Command:**
 
 ```bash
-go install github.com/richavery/donk-cli-main@latest
+go install github.com/richavery/bvr-cli-main@latest
 ```
 
 ### 5. Windows (Future)
@@ -102,8 +102,8 @@ Beta testers are tracked in this file. Each entry includes:
 - [ ] Drag-and-drop to Applications works
 - [ ] First launch bypasses Gatekeeper correctly
 - [ ] Launcher opens correct terminal (Ghostty/Alacritty/etc.)
-- [ ] DONK-CLI starts without errors
-- [ ] `donk-cli --version` returns correct version
+- [ ] BVR-CLI starts without errors
+- [ ] `bvr-cli --version` returns correct version
 
 ### Onboarding Flow
 
@@ -190,7 +190,7 @@ Verify:
 
 For testers without GitHub, use this form:
 - Email: averydevz@outlook.com
-- Subject: `[DONK Beta] Feedback - v1.1.5-beta.X`
+- Subject: `[BVR Beta] Feedback - v1.1.5-beta.X`
 
 ---
 
@@ -319,7 +319,7 @@ Maintain `CHANGELOG.md` with:
 
 ## Resources
 
-- **Beta Issues:** https://github.com/richavery/donk-cli-main/issues
+- **Beta Issues:** https://github.com/richavery/bvr-cli-main/issues
 - **Email:** averydevz@outlook.com
 - **Discord/Slack:** [Add if applicable]
 - **Documentation:** See `docs/` directory

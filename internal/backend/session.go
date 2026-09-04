@@ -3,9 +3,9 @@ package backend
 import (
 	"context"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/session"
 )
 
 // CreateSession creates a new session in the given workspace.

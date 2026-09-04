@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/oauth"
 )
 
 // DeviceAuthResponse contains the response from the device authorization endpoint.
@@ -49,7 +49,7 @@ func InitiateDeviceAuth(ctx context.Context) (*DeviceAuthResponse, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "donk")
+	req.Header.Set("User-Agent", "bvr")
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
@@ -77,9 +77,9 @@ func InitiateDeviceAuth(ctx context.Context) (*DeviceAuthResponse, error) {
 
 func deviceName() string {
 	if hostname, err := os.Hostname(); err == nil && hostname != "" {
-		return "Donk (" + hostname + ")"
+		return "BVR (" + hostname + ")"
 	}
-	return "Donk"
+	return "BVR"
 }
 
 // PollForToken polls the /device/token endpoint until authorization is complete.
@@ -124,7 +124,7 @@ func pollOnce(ctx context.Context, deviceCode string) (TokenResponse, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "donk")
+	req.Header.Set("User-Agent", "bvr")
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
@@ -167,7 +167,7 @@ func ExchangeToken(ctx context.Context, refreshToken string) (*oauth.Token, erro
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "donk")
+	req.Header.Set("User-Agent", "bvr")
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
@@ -224,7 +224,7 @@ func IntrospectToken(ctx context.Context, accessToken string) (*IntrospectTokenR
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "donk")
+	req.Header.Set("User-Agent", "bvr")
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)

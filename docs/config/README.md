@@ -5,17 +5,17 @@
 
 > [!TIP]
 >
-> DONK can configure itself via a builtin config skill. That is to say,
-> can generally just tell DONK want you want to configure using natural
+> BVR can configure itself via a builtin config skill. That is to say,
+> can generally just tell BVR want you want to configure using natural
 > language.
 >
-> If you're migrating from the old JSON format, you can also ask DONK to
+> If you're migrating from the old JSON format, you can also ask BVR to
 > convert the config for you.
 
-DONK is configured with Bash via a set of DONK-specific builtin commands. By
-default, global config lives at `~/.config/donk/donkrc` on Unix-like systems
-and `%USERPROFILE%\.config\donk\donkrc` on Windows. It works like a `.bashrc`:
-it runs when DONK starts and configures the agent.
+BVR is configured with Bash via a set of BVR-specific builtin commands. By
+default, global config lives at `~/.config/bvr/bvrrc` on Unix-like systems
+and `%USERPROFILE%\.config\bvr\bvrrc` on Windows. It works like a `.bashrc`:
+it runs when BVR starts and configures the agent.
 
 ```bash
 # Add Ollama.
@@ -57,9 +57,9 @@ provider add my-secret-provider \
 
 Two reasons:
 
-1. DONK ships with a first-class Bash interpreter, so we get the logic for
+1. BVR ships with a first-class Bash interpreter, so we get the logic for
    free.
-2. Ultimately, DONK needs to be able to configure itself, and command-based
+2. Ultimately, BVR needs to be able to configure itself, and command-based
    config allows both users and the agent to use the same tools.
 
 ## What about JSON?
@@ -70,42 +70,42 @@ be receiving new features. For more see [Legacy JSON](#legacy-json).
 ## Config versioning
 
 Not breaking the config API is really important to us! That said, you can
-target specific DONK versions with `$DONK_VERSION`:
+target specific BVR versions with `$BVR_VERSION`:
 
 ```bash
-if [[ $DONK_VERSION == "0.85.*" ]]; then
+if [[ $BVR_VERSION == "0.85.*" ]]; then
     option debug true
 fi
 ```
 
 ## Security
 
-Just like `donk.json`, `donkrc` is a trusted file. Guard it carefully and
+Just like `bvr.json`, `bvrrc` is a trusted file. Guard it carefully and
 don't download random configs without reading them first.
 
 ## Where config lives
 
-DONK looks for config in the following places, with lower numbers taking
+BVR looks for config in the following places, with lower numbers taking
 precedence:
 
 | Priority | Unix-like                        | Windows                           |
 | -------- | -------------------------------- | --------------------------------- |
-| 1        | `./.donkrc`                     | `.\.donkrc`                      |
-| 2        | `./donkrc`                      | `.\donkrc`                       |
-| 3        | `$XDG_CONFIG_HOME/donk/donkrc` | `%XDG_CONFIG_HOME%\donk\donkrc` |
+| 1        | `./.bvrrc`                     | `.\.bvrrc`                      |
+| 2        | `./bvrrc`                      | `.\bvrrc`                       |
+| 3        | `$XDG_CONFIG_HOME/bvr/bvrrc` | `%XDG_CONFIG_HOME%\bvr\bvrrc` |
 
-Legacy JSON uses `.donk.json` / `donk.json` in the same directories as the
+Legacy JSON uses `.bvr.json` / `bvr.json` in the same directories as the
 above. Everything found is merged, with project settings overriding global ones
-and `donkrc` overriding JSON in the same directory. If a folder has both, they
-merge and DONK logs a warning.
+and `bvrrc` overriding JSON in the same directory. If a folder has both, they
+merge and BVR logs a warning.
 
-Data directories (`~/.local/share/donk` on Unix-like systems and
-`%LOCALAPPDATA%\donk` on Windows) contain machine-owned JSON state. DONK does
-not discover or execute a `donkrc` from those locations.
+Data directories (`~/.local/share/bvr` on Unix-like systems and
+`%LOCALAPPDATA%\bvr` on Windows) contain machine-owned JSON state. BVR does
+not discover or execute a `bvrrc` from those locations.
 
 > [!NOTE]
-> DONK also stores state data in `$XDG_DATA_HOME/donk`
-> (`%LOCALAPPDATA%\donk` on Windows). This is application state, and should
+> BVR also stores state data in `$XDG_DATA_HOME/bvr`
+> (`%LOCALAPPDATA%\bvr` on Windows). This is application state, and should
 > not be edited by hand.
 
 ## Command Reference
@@ -122,7 +122,7 @@ Available Commands:
   lsp           Manage language servers
   hook          Manage hooks
   permissions   Configure tool permissions
-  option        Configure general DONK behavior
+  option        Configure general BVR behavior
 ```
 
 ### provider
@@ -192,7 +192,7 @@ Usage:
 ### model
 
 Manage custom models and the large/small model slots. Model references use the
-same `<provider>/<id>` form printed by `donk-cli models`.
+same `<provider>/<id>` form printed by `bvr-cli models`.
 
 ```text
 Usage:
@@ -456,7 +456,7 @@ permissions deny bash
 
 ### option
 
-Configure general DONK behavior, paths, attribution, and the terminal UI.
+Configure general BVR behavior, paths, attribution, and the terminal UI.
 Boolean values are optional and default to `true`.
 
 ```text
@@ -477,11 +477,11 @@ Boolean Keys:
   auto-summarize                 automatically summarize long conversations
   provider-auto-update           update the provider catalog automatically
   default-providers              include built-in providers
-  attribution-generated-with     add the Generated with DONK line
+  attribution-generated-with     add the Generated with BVR line
 
 String Keys:
   data-directory string            directory for project data and state
-  initialize-as string             context filename created by donk init
+  initialize-as string             context filename created by bvr init
   notifications string             notification style: auto, native, osc, bell,
                                    or disabled
   attribution-trailer-style string attribution trailer: none, co-authored-by,
@@ -545,7 +545,7 @@ option ui completions-max-items 200
 
 > [!IMPORTANT]
 > These skill paths load by default — you do NOT need `skill-path`
-> for them: `.agents/skills`, `.donk/skills`, `.claude/skills`,
+> for them: `.agents/skills`, `.bvr/skills`, `.claude/skills`,
 > `.cursor/skills`.
 
 ## Composing configs
@@ -553,9 +553,9 @@ option ui completions-max-items 200
 Because it's Bash, a shared base config is just a `source`:
 
 ```bash
-# Unix-like: ~/.config/donk/donkrc
-# Windows:   %USERPROFILE%\.config\donk\donkrc
-source ~/team/donk-base.sh    # sets up providers, a few skills
+# Unix-like: ~/.config/bvr/bvrrc
+# Windows:   %USERPROFILE%\.config\bvr\bvrrc
+source ~/team/bvr-base.sh    # sets up providers, a few skills
 
 # …but on this machine, drop a skill path the base added and add my own.
 option reset skill-path
@@ -567,13 +567,13 @@ script or pulled in via `source`. Later lines win, just like a shell.
 
 ## Legacy JSON
 
-`donk.json` is the original format and is now deprecated. We plan to support
+`bvr.json` is the original format and is now deprecated. We plan to support
 it for the forseeable future, but new configuration options will only be added
 to Bash-based config.
 
 ```jsonc
 {
-  "$schema": "https://raw.githubusercontent.com/richavery/donk-cli/main/schema.json",
+  "$schema": "https://raw.githubusercontent.com/richavery/bvr-cli/main/schema.json",
   "providers": {
     "anthropic": { "api_key": "$ANTHROPIC_API_KEY" },
   },
@@ -587,11 +587,11 @@ to Bash-based config.
 For a full reference, See the [JSON schema](../../schema.json).
 
 In JSON, only selected string fields (API keys, URLs, MCP/LSP commands and args,
-headers) are shell-expanded at load time. In `donkrc` there's no such list —
+headers) are shell-expanded at load time. In `bvrrc` there's no such list —
 it's all just Bash.
 
 Both formats are trusted code: they run with your shell privileges before the UI
-appears. Don't launch DONK in a directory whose config you haven't read.
+appears. Don't launch BVR in a directory whose config you haven't read.
 
 ---
 
@@ -600,17 +600,17 @@ appears. Don't launch DONK in a directory whose config you haven't read.
 We'd love to hear your thoughts on this project. Need help? We gotchu. You can
 find us on:
 
-- [Twitter](https://twitter.com/donkcli)
-- [Slack](https://discord.gg/donk)
-- [Discord](https://discord.gg/donk)
-- [The Fediverse](https://mastodon.social/@donkcli)
-- [Bluesky](https://bsky.app/profile/donk-cli.com)
+- [Twitter](https://twitter.com/bvrcli)
+- [Slack](https://discord.gg/bvr)
+- [Discord](https://discord.gg/bvr)
+- [The Fediverse](https://mastodon.social/@bvrcli)
+- [Bluesky](https://bsky.app/profile/bvr-cli.com)
 
 ---
 
-Part of [DONK](https://donk-cli.com).
+Part of [BVR](https://bvr-cli.com).
 
-<a href="https://donk-cli.com/"><img alt="The DONK logo" width="400" src="https://raw.githubusercontent.com/richavery/donk-cli/main/docs/donk-banner.png" /></a>
+<a href="https://bvr-cli.com/"><img alt="The BVR logo" width="400" src="https://raw.githubusercontent.com/richavery/bvr-cli/main/docs/bvr-banner.png" /></a>
 
 <!--prettier-ignore-->
-DONK热爱开源 • DONK loves open source
+BVR热爱开源 • BVR loves open source

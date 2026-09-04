@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 )
 
 // Manager owns per-workspace skill discovery state: the latest discovery

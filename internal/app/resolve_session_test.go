@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

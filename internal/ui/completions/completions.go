@@ -12,9 +12,9 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/exp/ordered"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/fsext"
-	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/ui/list"
 )
 
 const (

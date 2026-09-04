@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/workspace"
 	"github.com/stretchr/testify/require"
 )
 

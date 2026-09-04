@@ -7,9 +7,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

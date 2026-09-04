@@ -1,4 +1,4 @@
 *.golden linguist-generated=true -text
-.github/donk-schema.json linguist-generated=true
+.github/bvr-schema.json linguist-generated=true
 internal/agent/hyper/provider.json linguist-generated=true
 internal/agent/testdata/**/*.yaml -diff linguist-generated=true

@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/lsp"
 )
 
 const LSPRestartToolName = "lsp_restart"

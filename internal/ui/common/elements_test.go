@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

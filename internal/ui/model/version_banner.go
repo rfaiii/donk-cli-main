@@ -11,7 +11,7 @@ import (
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 
-	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/version"
 )
 
 // Boot-time version banner.
@@ -20,7 +20,7 @@ import (
 // startup, scrambling each element's letters into place, holding it for two
 // seconds, then advancing to the next:
 //
-//	1. "DONK"
+//	1. "BVR"
 //	2. "v1.1.6:beta_v3"   (the app version)
 //	3. "OH BEAV!"
 //	4. "created by RICHARD AIZEN AVERY III"
@@ -65,11 +65,11 @@ type versionBanner struct {
 }
 
 // bannerElements returns the boot banner sequence. Element 0 is strictly the
-// brand wordmark "DONK"; the version is the current build, an attribution
-// line credits the author, and "OH BEAV!" is the DONK refrain.
+// brand wordmark "BVR"; the version is the current build, an attribution
+// line credits the author, and "OH BEAV!" is the BVR refrain.
 func bannerElements() []string {
 	return []string{
-		"DONK",
+		"BVR",
 		"v" + version.ShortVersion(),
 		"OH BEAV!",
 		"created by RICHARD AIZEN AVERY III",

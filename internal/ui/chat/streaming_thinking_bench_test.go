@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"charm.land/glamour/v2"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // buildThinkingBlock generates a realistic long thinking block with

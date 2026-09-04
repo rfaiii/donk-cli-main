@@ -8,8 +8,8 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/ui/dialog"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/ui/dialog"
 )
 
 // isAuthTimeout reports whether an error indicates the OAuth flow was

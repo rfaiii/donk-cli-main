@@ -1,6 +1,6 @@
-# DONK Features Overview
+# BVR Features Overview
 
-This document is the canonical feature inventory for DONK-CLI. It is intended
+This document is the canonical feature inventory for BVR-CLI. It is intended
 for beta marketing, release notes, onboarding copy, and internal triage.
 
 ## Core experience
@@ -36,7 +36,7 @@ for beta marketing, release notes, onboarding copy, and internal triage.
 - `question` — interactive multi-step user prompts.
 - `node` — device/routing integration for laptop↔iPhone sync.
 - `mcp-tools`, `read_mcp_resource`, `list_mcp_resources` — MCP server access.
-- `donk_info`, `donk_logs` — self-inspection and diagnostics.
+- `bvr_info`, `bvr_logs` — self-inspection and diagnostics.
 - `job_output`, `job_kill` — background shell job control.
 
 ## Skills
@@ -44,14 +44,14 @@ for beta marketing, release notes, onboarding copy, and internal triage.
 - Agent Skills open-standard discovery (`SKILL.md` with YAML frontmatter).
 - Builtin skills embedded into the binary.
 - Auto-discovery from default directories:
-  - `~/.config/donk/skills`
+  - `~/.config/bvr/skills`
   - `~/.config/agents/skills`
   - `~/.agents/skills`
   - `~/.claude/skills`
   - `~/Documents/AI-SKILLS`
 - Project skill directories:
   - `.agents/skills`
-  - `.donk/skills`
+  - `.bvr/skills`
 - User skills override builtins with the same name.
 - Skills are surfaced to the coding agent as `<available_skills>`.
 - Skills can be user-invocable from the command palette.
@@ -129,10 +129,10 @@ for beta marketing, release notes, onboarding copy, and internal triage.
 
 ## Config and onboarding
 
-- JSON config via `donk.json`.
-- Bash-style `donkrc` with builtins:
+- JSON config via `bvr.json`.
+- Bash-style `bvrrc` with builtins:
   - `provider`, `model`, `mcp`, `lsp`, `permissions`, `hook`, `options`.
-- Context files: `AGENTS.md`, `DONK.md`, `CLAUDE.md`, `GEMINI.md`.
+- Context files: `AGENTS.md`, `BVR.md`, `CLAUDE.md`, `GEMINI.md`.
 - Default context paths and project-level overrides.
 - Data directory override with `--data-dir`.
 - Workspace-aware path resolution.
@@ -154,8 +154,8 @@ for beta marketing, release notes, onboarding copy, and internal triage.
 
 - Maintainer: Richard Aizen Avery III
 - Email: averydevz@outlook.com
-- GitHub: https://github.com/richavery/donk-cli-main
-- Website: https://donk-cli.com
+- GitHub: https://github.com/richavery/bvr-cli-main
+- Website: https://bvr-cli.com
 
 ## Beta feedback and bug collection
 

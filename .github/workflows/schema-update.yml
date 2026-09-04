@@ -24,6 +24,6 @@ jobs:
         with:
           commit_message: "chore: auto-update files"
           branch: main
-          commit_user_name: DONK
-          commit_user_email: donkcli@users.noreply.github.com
-          commit_author: DONK <donkcli@users.noreply.github.com>
+          commit_user_name: BVR
+          commit_user_email: bvrcli@users.noreply.github.com
+          commit_author: BVR <bvrcli@users.noreply.github.com>

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 func TestHumanizedToolName(t *testing.T) {

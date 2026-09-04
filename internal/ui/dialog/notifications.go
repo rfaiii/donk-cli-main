@@ -6,10 +6,10 @@ import (
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/notification"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/notification"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 )
 

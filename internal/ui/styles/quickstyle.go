@@ -11,7 +11,7 @@ import (
 	"charm.land/glamour/v2/ansi"
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/diffview"
+	"github.com/richavery/bvr-cli/internal/ui/diffview"
 )
 
 // quickStyleOpts is the palette of colors used by quickStyle to simplify the

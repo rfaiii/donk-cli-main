@@ -4,12 +4,12 @@ set -euo pipefail
 # Change the terminal UI name in one place.
 #
 # Usage:
-#   ./scripts/set-wordmark.sh DONK-CLI
+#   ./scripts/set-wordmark.sh BVR-CLI
 #
 # Instructions:
 #   1. Use uppercase letters, numbers, and hyphens only.
 #   2. Pass the complete display name, including a suffix such as -CLI.
-#   3. Rebuild the binary after changing it: go build -o donk-cli .
+#   3. Rebuild the binary after changing it: go build -o bvr-cli .
 #   4. Run the logo tests: go test ./internal/ui/logo ./internal/ui/model
 #
 # The script updates internal/ui/logo/logo.go's Wordmark constant. The UI uses
@@ -47,4 +47,4 @@ if count != 1:
 path.write_text(updated)
 PY
 
-printf 'Updated DONK-CLI wordmark to %s\n' "$wordmark"
+printf 'Updated BVR-CLI wordmark to %s\n' "$wordmark"

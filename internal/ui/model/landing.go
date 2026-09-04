@@ -5,8 +5,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/ultraviolet/layout"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/workspace"
 )
 
 // selectedLargeModel returns the currently selected large language model from

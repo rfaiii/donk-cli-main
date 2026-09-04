@@ -1,5 +1,5 @@
 // Package node contains the device registry and discovery primitives used by
-// the DONK NODE connection UI and future remote transports.
+// the BVR NODE connection UI and future remote transports.
 package node
 
 import (

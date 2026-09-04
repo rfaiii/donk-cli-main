@@ -9,16 +9,16 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/model"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/model"
 	"github.com/spf13/cobra"
 )
 
 var codeCmd = &cobra.Command{
 	Use:   "code",
 	Short: "Start a coder-only session",
-	Long:  `Start a DONK session in coder mode with coding-focused tools and system prompt.`,
+	Long:  `Start a BVR session in coder mode with coding-focused tools and system prompt.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		native, err := cmd.Flags().GetBool("native")
 		if err != nil {
@@ -54,7 +54,7 @@ var codeCmd = &cobra.Command{
 		if _, err := program.Run(); err != nil {
 			event.Error(err)
 			slog.Error("TUI run error", "error", err)
-			return fmt.Errorf("Donk crashed: %w", err)
+			return fmt.Errorf("BVR crashed: %w", err)
 		}
 		return nil
 	},
@@ -110,15 +110,15 @@ func runNativeCode(cmd *cobra.Command, args []string) error {
 }
 
 func nativeCodeTool() (string, error) {
-	if path := os.Getenv("DONK_CODETOOL"); path != "" {
+	if path := os.Getenv("BVR_CODETOOL"); path != "" {
 		if _, err := exec.LookPath(path); err == nil {
 			return path, nil
 		}
-		return "", fmt.Errorf("DONK_CODETOOL does not point to an executable: %s", path)
+		return "", fmt.Errorf("BVR_CODETOOL does not point to an executable: %s", path)
 	}
 	path, err := exec.LookPath("codetool")
 	if err == nil {
 		return path, nil
 	}
-	return "", fmt.Errorf("native coding agent not found; build cmd/codetool or set DONK_CODETOOL")
+	return "", fmt.Errorf("native coding agent not found; build cmd/codetool or set BVR_CODETOOL")
 }

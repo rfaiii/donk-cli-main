@@ -6,16 +6,16 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	"github.com/invopop/jsonschema"
-	"github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/discover"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/discover"
 	"github.com/spf13/cobra"
 )
 
 var schemaCmd = &cobra.Command{
 	Use:    "schema",
 	Short:  "Generate JSON schema for configuration",
-	Long:   "Generate JSON schema for the donk configuration file",
+	Long:   "Generate JSON schema for the bvr configuration file",
 	Hidden: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		reflector := new(jsonschema.Reflector)

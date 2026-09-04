@@ -6,9 +6,9 @@ import "fmt"
 type Scope int
 
 const (
-	// ScopeGlobal targets the global data config (~/.local/share/donk/donk.json).
+	// ScopeGlobal targets the global data config (~/.local/share/bvr/bvr.json).
 	ScopeGlobal Scope = iota
-	// ScopeWorkspace targets the workspace config (.donk/donk.json).
+	// ScopeWorkspace targets the workspace config (.bvr/bvr.json).
 	ScopeWorkspace
 )
 

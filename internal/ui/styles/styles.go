@@ -14,7 +14,7 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/alecthomas/chroma/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/diffview"
+	"github.com/richavery/bvr-cli/internal/ui/diffview"
 )
 
 const (
@@ -68,13 +68,13 @@ type Styles struct {
 	// basic 16-color SGR codes (red, green, blue, …) and leave the actual
 	// colors up to the terminal; without this palette they fall through
 	// to the user's terminal defaults, which are often illegible on
-	// DONK's background. Defining them here keeps output readable and
+	// BVR's background. Defining them here keeps output readable and
 	// on-brand regardless of terminal configuration.
 	ANSI [16]color.Color
 
 	// Header
 	Header struct {
-		Charm             lipgloss.Style // Legacy metadata style; DONK header does not render it
+		Charm             lipgloss.Style // Legacy metadata style; BVR header does not render it
 		Diagonals         lipgloss.Style // Style for diagonal separators (╱)
 		Percentage        lipgloss.Style // Style for context percentage
 		HypercreditIcon   lipgloss.Style // Style for Hypercredit count (◆ N)
@@ -83,9 +83,9 @@ type Styles struct {
 		WorkingDir        lipgloss.Style // Style for current working directory
 		Separator         lipgloss.Style // Style for separator dots (•)
 		Wrapper           lipgloss.Style // Outer container for the entire header row
-		LogoGradCanvas    lipgloss.Style // Canvas for the compact "DONK" gradient
-		LogoGradFromColor color.Color    // "DONK" wordmark gradient start
-		LogoGradToColor   color.Color    // "DONK" wordmark gradient end
+		LogoGradCanvas    lipgloss.Style // Canvas for the compact "BVR" gradient
+		LogoGradFromColor color.Color    // "BVR" wordmark gradient start
+		LogoGradToColor   color.Color    // "BVR" wordmark gradient end
 	}
 
 	CompactDetails struct {
@@ -201,8 +201,8 @@ type Styles struct {
 		SmallCharm         lipgloss.Style // Legacy compact metadata style
 		SmallDiagonals     lipgloss.Style // Diagonal line fill in SmallRender
 		GradCanvas         lipgloss.Style // Blank canvas for gradient painting
-		SmallGradFromColor color.Color    // Small "DONK" wordmark gradient start
-		SmallGradToColor   color.Color    // Small "DONK" wordmark gradient end
+		SmallGradFromColor color.Color    // Small "BVR" wordmark gradient start
+		SmallGradToColor   color.Color    // Small "BVR" wordmark gradient end
 	}
 
 	// Working indicator gradient (spinners/shimmers on assistant "thinking",

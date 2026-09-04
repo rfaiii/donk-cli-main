@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // GenericToolMessageItem is a message item that represents an unknown tool call.

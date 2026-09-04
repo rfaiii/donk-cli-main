@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/shell"
 )
 
 const (

@@ -1,4 +1,4 @@
-module github.com/richavery/donk-cli
+module github.com/richavery/bvr-cli
 
 go 1.26.5
 

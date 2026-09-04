@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/history"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

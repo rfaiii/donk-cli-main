@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/home"
 	"github.com/stretchr/testify/require"
 )
 

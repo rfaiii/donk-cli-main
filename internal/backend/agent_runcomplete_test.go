@@ -8,10 +8,10 @@ import (
 
 	"charm.land/fantasy"
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/agent"
-	"github.com/richavery/donk-cli/internal/app"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/agent"
+	"github.com/richavery/bvr-cli/internal/app"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 
@@ -77,7 +77,7 @@ func insertRunCompleteWorkspace(t *testing.T, b *Backend, base context.Context, 
 // error returned from RunAccepted before the coordinator could publish
 // its own terminal event (e.g. a readyWg or UpdateModels failure,
 // modeled here by a stub coordinator) still yields a reliable terminal
-// RunComplete for the run's RunID. Without it, a `donk-cli run` caller
+// RunComplete for the run's RunID. Without it, a `bvr-cli run` caller
 // blocking on that RunID would hang because the lossy TypeAgentError
 // event is not a guaranteed terminal signal.
 func TestRunAgent_PreRunErrorPublishesTerminalRunComplete(t *testing.T) {

@@ -14,14 +14,14 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	"github.com/invopop/jsonschema"
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/oauth/copilot"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth/copilot"
 )
 
 const (
-	appName              = "donk"
-	defaultDataDirectory = ".donk"
+	appName              = "bvr"
+	defaultDataDirectory = ".bvr"
 	defaultInitializeAs  = "AGENTS.md"
 )
 
@@ -33,12 +33,12 @@ var defaultContextPaths = []string{
 	"CLAUDE.local.md",
 	"GEMINI.md",
 	"gemini.md",
-	"donk.md",
-	"donk.local.md",
-	"Donk.md",
-	"Donk.local.md",
-	"DONK.md",
-	"DONK.local.md",
+	"bvr.md",
+	"bvr.local.md",
+	"Bvr.md",
+	"Bvr.local.md",
+	"BVR.md",
+	"BVR.local.md",
 	"AGENTS.md",
 	"agents.md",
 	"Agents.md",
@@ -134,7 +134,7 @@ type ProviderConfig struct {
 	FlatRate bool `json:"flat_rate,omitempty" jsonschema:"description=Flat-rate mode for this provider"`
 
 	// AutoDiscoverModels controls model discovery via /v1/models endpoint.
-	// When Models is empty and this is nil or true, DONK auto-discovers
+	// When Models is empty and this is nil or true, BVR auto-discovers
 	// models. When true and Models is non-empty, discovered models are
 	// merged in (user-specified models take precedence). When false,
 	// only explicitly listed models are used.
@@ -226,7 +226,7 @@ type MCPConfig struct {
 	// OAuthCallbackPort pins the localhost port used for the OAuth
 	// redirect listener. Set this when the OAuth provider requires an
 	// exact-match callback URL (e.g. GitHub OAuth Apps). When omitted,
-	// DONK picks the first free port from its default range.
+	// BVR picks the first free port from its default range.
 	OAuthCallbackPort int `json:"oauth_callback_port,omitempty" jsonschema:"description=Fixed localhost port for the OAuth callback, required by providers that enforce exact-match redirect URIs"`
 
 	// OAuthToken is the persisted OAuth token for this server. It is
@@ -296,7 +296,7 @@ const (
 type Attribution struct {
 	TrailerStyle  TrailerStyle `json:"trailer_style,omitempty" jsonschema:"description=Style of attribution trailer to add to commits,enum=none,enum=co-authored-by,enum=assisted-by,default=assisted-by"`
 	CoAuthoredBy  *bool        `json:"co_authored_by,omitempty" jsonschema:"description=Deprecated: use trailer_style instead"`
-	GeneratedWith bool         `json:"generated_with,omitempty" jsonschema:"description=Add Generated with DONK line to commit messages and issues and PRs,default=true"`
+	GeneratedWith bool         `json:"generated_with,omitempty" jsonschema:"description=Add Generated with BVR line to commit messages and issues and PRs,default=true"`
 }
 
 // JSONSchemaExtend marks the co_authored_by field as deprecated in the schema.
@@ -309,28 +309,28 @@ func (Attribution) JSONSchemaExtend(schema *jsonschema.Schema) {
 }
 
 type Options struct {
-	ContextPaths         []string    `json:"context_paths,omitempty" jsonschema:"description=Paths to files containing context information for the AI,example=.cursorrules,example=DONK.md"`
-	GlobalContextPaths   []string    `json:"global_context_paths,omitempty" jsonschema:"description=Paths to files containing global context information for the AI,default=~/.config/donk/DONK.md,default=~/.config/AGENTS.md"`
-	SkillsPaths          []string    `json:"skills_paths,omitempty" jsonschema:"description=Paths to directories containing Agent Skills (folders with SKILL.md files),example=~/.config/donk/skills,example=./skills"`
+	ContextPaths         []string    `json:"context_paths,omitempty" jsonschema:"description=Paths to files containing context information for the AI,example=.cursorrules,example=BVR.md"`
+	GlobalContextPaths   []string    `json:"global_context_paths,omitempty" jsonschema:"description=Paths to files containing global context information for the AI,default=~/.config/bvr/BVR.md,default=~/.config/AGENTS.md"`
+	SkillsPaths          []string    `json:"skills_paths,omitempty" jsonschema:"description=Paths to directories containing Agent Skills (folders with SKILL.md files),example=~/.config/bvr/skills,example=./skills"`
 	TUI                  *TUIOptions `json:"tui,omitempty" jsonschema:"description=Terminal user interface options"`
 	Debug                bool        `json:"debug,omitempty" jsonschema:"description=Enable debug logging,default=false"`
 	DebugLSP             bool        `json:"debug_lsp,omitempty" jsonschema:"description=Enable debug logging for LSP servers,default=false"`
 	DisableAutoSummarize bool        `json:"disable_auto_summarize,omitempty" jsonschema:"description=Disable automatic conversation summarization,default=false"`
-	// DataDirectory is where DONK keeps per-project state such as
+	// DataDirectory is where BVR keeps per-project state such as
 	// the SQLite database and workspace overrides. Relative paths are
 	// resolved against the working directory; absolute paths are used
 	// verbatim. After defaulting the stored value is always absolute.
-	DataDirectory             string       `json:"data_directory,omitempty" jsonschema:"description=Directory for storing application data. Relative paths are resolved against the working directory; absolute paths are used as-is.,default=.donk,example=.donk"`
+	DataDirectory             string       `json:"data_directory,omitempty" jsonschema:"description=Directory for storing application data. Relative paths are resolved against the working directory; absolute paths are used as-is.,default=.bvr,example=.bvr"`
 	DisabledTools             []string     `json:"disabled_tools,omitempty" jsonschema:"description=List of built-in tools to disable and hide from the agent,example=bash,example=sourcegraph"`
 	DisableProviderAutoUpdate bool         `json:"disable_provider_auto_update,omitempty" jsonschema:"description=Disable providers auto-update,default=false"`
 	DisableDefaultProviders   bool         `json:"disable_default_providers,omitempty" jsonschema:"description=Ignore all default/embedded providers. When enabled\\, providers must be fully specified in the config file with base_url\\, models\\, and api_key - no merging with defaults occurs,default=false"`
 	Attribution               *Attribution `json:"attribution,omitempty" jsonschema:"description=Attribution settings for generated content"`
 	DisableMetrics            bool         `json:"disable_metrics,omitempty" jsonschema:"description=Disable sending metrics,default=false"`
-	InitializeAs              string       `json:"initialize_as,omitempty" jsonschema:"description=Name of the context file to create/update during project initialization,default=AGENTS.md,example=AGENTS.md,example=DONK.md,example=CLAUDE.md,example=docs/LLMs.md"`
+	InitializeAs              string       `json:"initialize_as,omitempty" jsonschema:"description=Name of the context file to create/update during project initialization,default=AGENTS.md,example=AGENTS.md,example=BVR.md,example=CLAUDE.md,example=docs/LLMs.md"`
 	AutoLSP                   *bool        `json:"auto_lsp,omitempty" jsonschema:"description=Automatically setup LSPs based on root markers,default=true"`
 	Progress                  *bool        `json:"progress,omitempty" jsonschema:"description=Show indeterminate progress updates during long operations,default=true"`
 	Notifications             string       `json:"notifications,omitempty" jsonschema:"description=Notification style to use. Options: auto (default)\\, native\\, osc\\, bell\\, disabled. Auto selects based on environment: native for local sessions\\, osc for SSH (with automatic OSC 99/777 detection).,enum=auto,enum=native,enum=osc,enum=bell,enum=disabled,default=auto"`
-	DisabledSkills            []string     `json:"disabled_skills,omitempty" jsonschema:"description=List of skill names to disable and hide from the agent,example=donk-config"`
+	DisabledSkills            []string     `json:"disabled_skills,omitempty" jsonschema:"description=List of skill names to disable and hide from the agent,example=bvr-config"`
 }
 
 type MCPs map[string]MCPConfig
@@ -633,7 +633,7 @@ func (h *HookConfig) TimeoutDuration() time.Duration {
 	return time.Duration(h.Timeout) * time.Second
 }
 
-// Config holds the configuration for donk.
+// Config holds the configuration for bvr.
 type Config struct {
 	Schema string `json:"$schema,omitempty"`
 
@@ -769,8 +769,8 @@ func allToolNames() []string {
 		"bash",
 		"node",
 		"npm",
-		"donk_info",
-		"donk_logs",
+		"bvr_info",
+		"bvr_logs",
 		"job_output",
 		"job_kill",
 		"download",

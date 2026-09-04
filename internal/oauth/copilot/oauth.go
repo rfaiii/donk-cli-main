@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth"
 )
 
 const (

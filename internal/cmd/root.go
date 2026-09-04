@@ -30,23 +30,23 @@ import (
 	"github.com/charmbracelet/x/exp/charmtone"
 	xstrings "github.com/charmbracelet/x/exp/strings"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/app"
-	"github.com/richavery/donk-cli/internal/client"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/lock"
-	donklog "github.com/richavery/donk-cli/internal/log"
-	"github.com/richavery/donk-cli/internal/projects"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/server"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/skills"
-	"github.com/richavery/donk-cli/internal/ui/boot"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	ui "github.com/richavery/donk-cli/internal/ui/model"
-	"github.com/richavery/donk-cli/internal/version"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/app"
+	"github.com/richavery/bvr-cli/internal/client"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/lock"
+	bvrlog "github.com/richavery/bvr-cli/internal/log"
+	"github.com/richavery/bvr-cli/internal/projects"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/server"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/ui/boot"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	ui "github.com/richavery/bvr-cli/internal/ui/model"
+	"github.com/richavery/bvr-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/workspace"
 	"github.com/spf13/cobra"
 )
 
@@ -54,9 +54,9 @@ var clientHost string
 
 func init() {
 	rootCmd.PersistentFlags().StringP("cwd", "c", "", "Current working directory")
-	rootCmd.PersistentFlags().StringP("data-dir", "D", "", "Custom DONK data directory")
+	rootCmd.PersistentFlags().StringP("data-dir", "D", "", "Custom BVR data directory")
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "Debug")
-	rootCmd.PersistentFlags().StringVarP(&clientHost, "host", "H", server.DefaultHost(), "Connect to a specific DONK server host (for advanced users)")
+	rootCmd.PersistentFlags().StringVarP(&clientHost, "host", "H", server.DefaultHost(), "Connect to a specific BVR server host (for advanced users)")
 	rootCmd.Flags().BoolP("help", "h", false, "Help")
 	rootCmd.Flags().BoolP("beastmode", "y", false, "Automatically accept all permissions (dangerous mode)")
 	rootCmd.PersistentFlags().StringSlice("channels", nil, "MCP servers to enable as channels (repeatable), e.g. --channels server:webhook")
@@ -81,33 +81,33 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "donk-cli",
+	Use:   "bvr-cli",
 	Short: "A terminal-first AI assistant for software development",
 	Long:  "A glamorous, terminal-first AI assistant for software development and adjacent tasks",
 	Example: `
 # Run in interactive mode
-donk-cli
+bvr-cli
 
 # Run non-interactively
-donk-cli run "Guess my 5 favorite Pokémon"
+bvr-cli run "Guess my 5 favorite Pokémon"
 
 # Run a non-interactively with pipes and redirection
-cat README.md | donk-cli run "make this more glamorous" > GLAMOROUS_README.md
+cat README.md | bvr-cli run "make this more glamorous" > GLAMOROUS_README.md
 
 # Run with debug logging in a specific directory
-donk-cli --debug --cwd /path/to/project
+bvr-cli --debug --cwd /path/to/project
 
 # Run in beastmode (auto-accept all permissions; use with care)
-donk-cli --beastmode
+bvr-cli --beastmode
 
 # Run with custom data directory
-donk-cli --data-dir /path/to/custom/.donk
+bvr-cli --data-dir /path/to/custom/.bvr
 
 # Continue a previous session
-donk-cli --session {session-id}
+bvr-cli --session {session-id}
 
 # Continue the most recent session
-donk-cli --continue
+bvr-cli --continue
   `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		sessionID, _ := cmd.Flags().GetString("session")
@@ -151,7 +151,7 @@ donk-cli --continue
 		if _, err := program.Run(); err != nil {
 			event.Error(err)
 			slog.Error("TUI run error", "error", err)
-			return errors.New("Donk crashed. If metrics are enabled, we were notified about it. If you'd like to report it, please copy the stacktrace above and open an issue at https://github.com/richavery/donk-cli/issues/new?template=bug.yml") //nolint:staticcheck
+			return errors.New("BVR crashed. If metrics are enabled, we were notified about it. If you'd like to report it, please copy the stacktrace above and open an issue at https://github.com/richavery/bvr-cli/issues/new?template=bug.yml") //nolint:staticcheck
 		}
 		return nil
 	},
@@ -203,14 +203,14 @@ func Execute() {
 		context.Background(),
 		rootCmd,
 		fang.WithVersion(version.Version),
-		fang.WithColorSchemeFunc(donkHelpColorScheme),
+		fang.WithColorSchemeFunc(bvrHelpColorScheme),
 		fang.WithNotifySignal(os.Interrupt),
 	); err != nil {
 		os.Exit(1)
 	}
 }
 
-func donkHelpColorScheme(_ lipgloss.LightDarkFunc) fang.ColorScheme {
+func bvrHelpColorScheme(_ lipgloss.LightDarkFunc) fang.ColorScheme {
 	green := lipgloss.Color("#3BF66B")
 	purple := lipgloss.Color("#C69CFF")
 	pink := lipgloss.Color("#E0C2FF")
@@ -249,9 +249,9 @@ func supportsProgressBar() bool {
 }
 
 // useClientServer returns true when the client/server architecture is
-// enabled via the DONK_CLIENT_SERVER environment variable.
+// enabled via the BVR_CLIENT_SERVER environment variable.
 func useClientServer() bool {
-	v, _ := strconv.ParseBool(os.Getenv("DONK_CLIENT_SERVER"))
+	v, _ := strconv.ParseBool(os.Getenv("BVR_CLIENT_SERVER"))
 	return v
 }
 
@@ -273,7 +273,7 @@ func setupWorkspaceWithProgressBar(cmd *cobra.Command) (workspace.Workspace, fun
 }
 
 // setupWorkspace returns a Workspace and cleanup function. When
-// DONK_CLIENT_SERVER=1, it connects to a server process and returns a
+// BVR_CLIENT_SERVER=1, it connects to a server process and returns a
 // ClientWorkspace. Otherwise it creates an in-process app.App and
 // returns an AppWorkspace.
 func setupWorkspace(cmd *cobra.Command) (workspace.Workspace, func(), error) {
@@ -326,8 +326,8 @@ func setupLocalWorkspace(cmd *cobra.Command) (workspace.Workspace, func(), error
 		return nil, nil, err
 	}
 
-	logFile := filepath.Join(cfg.Options.DataDirectory, "logs", "donk.log")
-	donklog.Setup(logFile, debug)
+	logFile := filepath.Join(cfg.Options.DataDirectory, "logs", "bvr.log")
+	bvrlog.Setup(logFile, debug)
 
 	// Discover skills once before app.New. Local mode hosts a single
 	// workspace per process, so WithGlobalMirror keeps the package
@@ -446,8 +446,8 @@ func connectToServer(cmd *cobra.Command) (*client.Client, *proto.Workspace, func
 	}
 
 	if ws.Config != nil {
-		logFile := filepath.Join(ws.Config.Options.DataDirectory, "logs", "donk.log")
-		donklog.Setup(logFile, debug)
+		logFile := filepath.Join(ws.Config.Options.DataDirectory, "logs", "bvr.log")
+		bvrlog.Setup(logFile, debug)
 	}
 
 	cleanup := func() { _ = c.DeleteWorkspace(context.Background(), ws.ID) }
@@ -461,11 +461,11 @@ func connectToServer(cmd *cobra.Command) (*client.Client, *proto.Workspace, func
 func ensureServer(cmd *cobra.Command, hostURL *url.URL) error {
 	// Initialize the persistent log here so stale-socket diagnostics
 	// emitted before connectToServer runs are captured in the per-host
-	// server log file. donklog.Setup uses sync.Once internally, so the
+	// server log file. bvrlog.Setup uses sync.Once internally, so the
 	// later call from connectToServer becomes a no-op.
 	debug, _ := cmd.Flags().GetBool("debug")
-	logFile := filepath.Join(config.GlobalCacheDir(), "server-"+safeHostName(hostURL), "donk.log")
-	donklog.Setup(logFile, debug)
+	logFile := filepath.Join(config.GlobalCacheDir(), "server-"+safeHostName(hostURL), "bvr.log")
+	bvrlog.Setup(logFile, debug)
 
 	switch hostURL.Scheme {
 	case "unix", "npipe":
@@ -513,13 +513,13 @@ func ensureServer(cmd *cobra.Command, hostURL *url.URL) error {
 
 		if needsStart {
 			if err := spawnAndWaitReady(cmd, hostURL); err != nil {
-				return fmt.Errorf("failed to initialize donk server: %v", err)
+				return fmt.Errorf("failed to initialize bvr server: %v", err)
 			}
 			return nil
 		}
 
 		if err := waitForServerReady(cmd.Context(), hostURL); err != nil {
-			return fmt.Errorf("failed to initialize donk server: %v", err)
+			return fmt.Errorf("failed to initialize bvr server: %v", err)
 		}
 	}
 
@@ -528,7 +528,7 @@ func ensureServer(cmd *cobra.Command, hostURL *url.URL) error {
 
 // spawnAndWaitReady serializes the spawn-and-wait-for-readiness sequence
 // across concurrent clients via an exclusive flock on
-// $XDG_CACHE_HOME/donk/server-<safeHost>/start.lock.
+// $XDG_CACHE_HOME/bvr/server-<safeHost>/start.lock.
 //
 // After acquiring the lock it re-probes readiness so that a client that
 // blocked while another client was spawning can skip its own spawn and
@@ -600,10 +600,10 @@ func safeHostName(hostURL *url.URL) string {
 }
 
 // serverReadyTimeout returns the total budget for the readiness probe.
-// Overridable via DONK_SERVER_READY_TIMEOUT (parsed as a Go duration).
+// Overridable via BVR_SERVER_READY_TIMEOUT (parsed as a Go duration).
 func serverReadyTimeout() time.Duration {
 	const def = 10 * time.Second
-	v := os.Getenv("DONK_SERVER_READY_TIMEOUT")
+	v := os.Getenv("BVR_SERVER_READY_TIMEOUT")
 	if v == "" {
 		return def
 	}
@@ -793,18 +793,18 @@ func startDetachedServer(cmd *cobra.Command, hostURL *url.URL) error {
 	c.Stderr = stderr
 
 	if err := c.Start(); err != nil {
-		return fmt.Errorf("failed to start donk server: %v", err)
+		return fmt.Errorf("failed to start bvr server: %v", err)
 	}
 
 	if err := c.Process.Release(); err != nil {
-		return fmt.Errorf("failed to detach donk server process: %v", err)
+		return fmt.Errorf("failed to detach bvr server process: %v", err)
 	}
 
 	return nil
 }
 
 func shouldEnableMetrics(cfg *config.Config) bool {
-	if v, _ := strconv.ParseBool(os.Getenv("DONK_DISABLE_METRICS")); v {
+	if v, _ := strconv.ParseBool(os.Getenv("BVR_DISABLE_METRICS")); v {
 		return false
 	}
 	if v, _ := strconv.ParseBool(os.Getenv("DO_NOT_TRACK")); v {
@@ -883,7 +883,7 @@ func ResolveCwd(cmd *cobra.Command) (string, error) {
 	return cwd, nil
 }
 
-func createDotDonkDir(dir string) error {
+func createDotBvrDir(dir string) error {
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return fmt.Errorf("failed to create data directory: %q %w", dir, err)
 	}

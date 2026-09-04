@@ -6,8 +6,8 @@ import (
 
 	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/ui/xchroma"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/xchroma"
 )
 
 // SyntaxHighlight applies syntax highlighting to the given source code based

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/diffdetect"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/diffdetect"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 type parsedDiffFile struct {

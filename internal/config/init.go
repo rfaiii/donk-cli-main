@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/fsext"
 )
 
 const (

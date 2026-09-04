@@ -19,27 +19,27 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/agent/notify"
-	"github.com/richavery/donk-cli/internal/agent/prompt"
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/discover"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/filetracker"
-	"github.com/richavery/donk-cli/internal/history"
-	"github.com/richavery/donk-cli/internal/hooks"
-	"github.com/richavery/donk-cli/internal/log"
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/oauth/copilot"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/question"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/agent/notify"
+	"github.com/richavery/bvr-cli/internal/agent/prompt"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/discover"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/filetracker"
+	"github.com/richavery/bvr-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/hooks"
+	"github.com/richavery/bvr-cli/internal/log"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth/copilot"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/question"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/skills"
 	"golang.org/x/sync/errgroup"
 
 	"charm.land/fantasy/providers/anthropic"
@@ -229,7 +229,7 @@ func (c *coordinator) run(ctx context.Context, accept *AcceptedRun, sessionID st
 	// Without this, slow-to-start MCP servers (e.g. stdio Python via uv) may
 	// not have registered their tools yet when buildTools reads the registry,
 	// so their tools silently never appear in the LLM tool palette — even
-	// though donk_info reports them as connected.
+	// though bvr_info reports them as connected.
 	if err := mcp.WaitForInit(ctx); err != nil {
 		return nil, fmt.Errorf("failed to wait for MCP initialization: %w", err)
 	}
@@ -261,7 +261,7 @@ func (c *coordinator) run(ctx context.Context, accept *AcceptedRun, sessionID st
 	// Coalesce per-attempt RunComplete payloads so only the final
 	// outcome reaches subscribers. Without this, the first attempt's
 	// failed RunComplete (unauthorized) would race ahead of the
-	// retry's success, and `donk-cli run` would exit on the stale error
+	// retry's success, and `bvr-cli run` would exit on the stale error
 	// before ever seeing the retry result. Each attempt's
 	// SessionAgentCall.OnComplete hook overwrites latest; we publish
 	// exactly once after retries resolve, via PublishMustDeliver, so
@@ -703,7 +703,7 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		}
 	}
 
-	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "donk.log")
+	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "bvr.log")
 
 	// Build hook runner if PreToolUse hooks are configured.
 	var hookRunner *hooks.Runner
@@ -716,8 +716,8 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		tools.NewBashTool(c.permissions, c.cfg.WorkingDir(), c.cfg.Config().Options.Attribution, modelID),
 		tools.NewNodeTool(c.permissions, c.cfg.WorkingDir()),
 		tools.NewNPMTool(c.permissions, c.cfg.WorkingDir()),
-		tools.NewDonkInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
-		tools.NewDonkLogsTool(logFile),
+		tools.NewBvrInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
+		tools.NewBvrLogsTool(logFile),
 		tools.NewJobOutputTool(),
 		tools.NewJobKillTool(),
 		tools.NewDownloadTool(c.permissions, c.cfg.WorkingDir(), nil),
@@ -1146,7 +1146,7 @@ func (c *coordinator) buildProvider(providerCfg config.ProviderConfig, model con
 		switch providerCfg.ID {
 		case hyper.Name:
 			baseURL = hyper.BaseURL() + "/v1"
-			headers["x-donk-id"] = event.GetID()
+			headers["x-bvr-id"] = event.GetID()
 		case string(catwalk.InferenceProviderZAI):
 			if providerCfg.ExtraBody == nil {
 				providerCfg.ExtraBody = map[string]any{}

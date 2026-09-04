@@ -9,7 +9,7 @@ import (
 	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/exp/golden"
-	"github.com/richavery/donk-cli/internal/ui/diffview"
+	"github.com/richavery/bvr-cli/internal/ui/diffview"
 )
 
 //go:embed testdata/TestDefault.before

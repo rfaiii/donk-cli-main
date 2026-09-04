@@ -7,7 +7,7 @@ import (
 )
 
 func TestShellConfigLSPAdd(t *testing.T) {
-	store := loadDonkSh(t, `lsp add gopls --command gopls --filetypes go --filetypes mod --root-markers go.mod --timeout 60`)
+	store := loadBvrSh(t, `lsp add gopls --command gopls --filetypes go --filetypes mod --root-markers go.mod --timeout 60`)
 
 	l, ok := store.Config().LSP["gopls"]
 	require.True(t, ok, "gopls LSP should be configured")
@@ -18,7 +18,7 @@ func TestShellConfigLSPAdd(t *testing.T) {
 }
 
 func TestShellConfigLSPRemove(t *testing.T) {
-	store := loadDonkSh(t, `lsp add keepls --command keep-server
+	store := loadBvrSh(t, `lsp add keepls --command keep-server
 lsp add dropls --command drop-server
 lsp remove dropls`)
 

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/attachments"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/attachments"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

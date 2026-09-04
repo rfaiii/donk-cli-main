@@ -1,5 +1,5 @@
 // Package mcp provides functionality for managing Model Context Protocol (MCP)
-// clients within the DONK application.
+// clients within the BVR application.
 package mcp
 
 import (
@@ -18,14 +18,14 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/auth"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/oauth"
-	mcpoauth "github.com/richavery/donk-cli/internal/oauth/mcp"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	mcpoauth "github.com/richavery/bvr-cli/internal/oauth/mcp"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/version"
 	"golang.org/x/oauth2"
 )
 
@@ -748,7 +748,7 @@ func updateState(name string, state State, err error, client *ClientSession, cou
 		// close it so the child process and its stdio pipes are released — the
 		// bare map delete this used to do leaked both. Clearing the tool
 		// registry keeps the agent from advertising tools it can no longer
-		// call: without it, donk_info / the `/mcp` menu and the tool list
+		// call: without it, bvr_info / the `/mcp` menu and the tool list
 		// handed to the LLM diverge, so a server still reads "connected, N
 		// tools" while every call fails with "tool not found".
 		if old, ok := sessions.Take(name); ok {
@@ -799,9 +799,9 @@ func createSession(ctx context.Context, cfg *config.ConfigStore, name string, m 
 
 	client := mcp.NewClient(
 		&mcp.Implementation{
-			Name:    "donk",
+			Name:    "bvr",
 			Version: version.Version,
-			Title:   "Donk",
+			Title:   "BVR",
 		},
 		&mcp.ClientOptions{
 			ToolListChangedHandler: func(context.Context, *mcp.ToolListChangedRequest) {

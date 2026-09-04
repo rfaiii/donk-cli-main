@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/anim"
-	"github.com/richavery/donk-cli/internal/ui/attachments"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/anim"
+	"github.com/richavery/bvr-cli/internal/ui/attachments"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

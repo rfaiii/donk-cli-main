@@ -1,12 +1,12 @@
-# ◇ DONK-CLI 1.1.7 by Richard Aizen Avery III
+# ◇ BVR-CLI 1.1.7 by Richard Aizen Avery III
 
 **The keyboard-first AI workspace for your projects.**
 
-DONK brings project files, conversations, local models, tools, permissions,
+BVR brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.1.7:** a polished homescreen with a boot brand banner (DONK →
+> **Release 1.1.7:** a polished homescreen with a boot brand banner (BVR →
 > version → "OH BEAV!" → accent-colored scramble sequence), accent/alt theme
 > color mapping across all 8 themes, Cline hosted-gateway support (including
 > free models) with an in-app "ADD CLINE API KEY" flow, an "Other Models" palette
@@ -18,21 +18,21 @@ workspace, choose the model, and ship.
 See [`docs/installation.md`](docs/installation.md) for all platforms.
 
 ```sh
-cd /path/to/donk-cli-go
-go build -o ./donk-cli .
-donk-cli
+cd /path/to/bvr-cli-go
+go build -o ./bvr-cli .
+bvr-cli
 ```
 
 Install the current source build globally:
 
 ```sh
-./scripts/install-donk-cli.sh
+./scripts/install-bvr-cli.sh
 hash -r 2>/dev/null || true
-donk-cli --version
-donk-cli --help
+bvr-cli --version
+bvr-cli --help
 ```
 
-When testing changes, prefer `donk-cli` from the repo build; if you have an
+When testing changes, prefer `bvr-cli` from the repo build; if you have an
 older global install, update it with the installer above.
 
 ## 📦 Install
@@ -41,13 +41,13 @@ older global install, update it with the installer above.
 
 Use the DMG for a normal Mac app experience.
 
-1. Open `dist/donk-cli_dev_darwin_arm64.dmg`
-2. Drag `DONK.app` to `Applications`
-3. Double-click `DONK.app`
+1. Open `dist/bvr-cli_dev_darwin_arm64.dmg`
+2. Drag `BVR.app` to `Applications`
+3. Double-click `BVR.app`
 
 If macOS blocks it:
-- Right-click `DONK.app` → Open
-- Or run: `xattr -cr /Applications/DONK.app`
+- Right-click `BVR.app` → Open
+- Or run: `xattr -cr /Applications/BVR.app`
 
 The DMG launcher auto-detects your terminal:
 - Ghostty first, then Alacritty, Kitty, WezTerm, iTerm2
@@ -67,17 +67,17 @@ installer guide.
 ## 🧭 Move between projects
 
 ```sh
-donk-cli --cwd /path/to/project
+bvr-cli --cwd /path/to/project
 ```
 
-Inside DONK, use `/cd` or `/project`, select a directory, and press `s`. You can
-also type `cd ~/Projects/my-project` into the prompt; DONK switches projects
-instead of sending that text to the agent. `donk-cli projects` lists recent
+Inside BVR, use `/cd` or `/project`, select a directory, and press `s`. You can
+also type `cd ~/Projects/my-project` into the prompt; BVR switches projects
+instead of sending that text to the agent. `bvr-cli projects` lists recent
 projects.
 
 ## 🧠 Local Ollama models
 
-DONK discovers all models available from Ollama’s local API. Open `/models`,
+BVR discovers all models available from Ollama’s local API. Open `/models`,
 `/ollama`, or press `Ctrl+L`.
 
 - `r` refreshes local models
@@ -88,7 +88,7 @@ DONK discovers all models available from Ollama’s local API. Open `/models`,
 The model diamond is gray when unknown, purple while loading, green when ready,
 and red if loading fails. Read [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md).
 
-![DONK models](resources/screenshots/menu-models.jpg)
+![BVR models](resources/screenshots/menu-models.jpg)
 
 For smaller Ollama coding models such as `qwen2.5-coder:3b-instruct`, use the
 fantasy-free native coder. It talks directly to Ollama with a small tool set,
@@ -97,10 +97,10 @@ terminal display:
 
 ```sh
 GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
-GOWORK=off go build -o "$HOME/bin/donk-cli" .
+GOWORK=off go build -o "$HOME/bin/bvr-cli" .
 
-DONK_CODETOOL="$HOME/bin/codetool" \
-  "$HOME/bin/donk-cli" code --native \
+BVR_CODETOOL="$HOME/bin/codetool" \
+  "$HOME/bin/bvr-cli" code --native \
   --model qwen2.5-coder:3b-instruct --stream \
   "Read the relevant files and fix the failing test"
 ```
@@ -109,7 +109,7 @@ Use `--cwd /path/to/project` when the coding task is in another directory. See
 [`docs/OLLAMA_HOW_TO.md`](docs/OLLAMA_HOW_TO.md) for diagnostics and
 troubleshooting.
 
-## ✨ What DONK includes
+## ✨ What BVR includes
 
 - Branded Bubble Tea TUI with bounded, responsive layouts
 - Gradient CPU/RAM resource bars that glow brighter under load
@@ -126,8 +126,8 @@ troubleshooting.
 - Optional embedded Ghostty shader installation and in-TUI cursor animations
 - Persistent project registration and recently accessed project tracking
 
-![DONK home](resources/screenshots/home-menu.jpg)
-![DONK file finder](resources/screenshots/file-finder.jpg)
+![BVR home](resources/screenshots/home-menu.jpg)
+![BVR file finder](resources/screenshots/file-finder.jpg)
 
 ## 🛠 Developer checks
 
@@ -141,11 +141,11 @@ go build ./...
 Cross-compile the beta targets:
 
 ```sh
-GOOS=darwin GOARCH=arm64 go build -o /tmp/donk-darwin-arm64 .
-GOOS=darwin GOARCH=amd64 go build -o /tmp/donk-darwin-amd64 .
-GOOS=windows GOARCH=amd64 go build -o /tmp/donk-windows-amd64.exe .
-GOOS=linux GOARCH=amd64 go build -o /tmp/donk-linux-amd64 .
-GOOS=linux GOARCH=arm64 go build -o /tmp/donk-linux-arm64 .
+GOOS=darwin GOARCH=arm64 go build -o /tmp/bvr-darwin-arm64 .
+GOOS=darwin GOARCH=amd64 go build -o /tmp/bvr-darwin-amd64 .
+GOOS=windows GOARCH=amd64 go build -o /tmp/bvr-windows-amd64.exe .
+GOOS=linux GOARCH=amd64 go build -o /tmp/bvr-linux-amd64 .
+GOOS=linux GOARCH=arm64 go build -o /tmp/bvr-linux-arm64 .
 ```
 
 ## 📦 Install
@@ -172,19 +172,19 @@ installer guide.
 | [`docs/SKILLS.md`](docs/SKILLS.md) | Agent Skills discovery and syncing |
 | [`docs/FILE_FINDER.md`](docs/FILE_FINDER.md) | File Finder behavior |
 | [`docs/SYSTEM_ARCHITECTURE.md`](docs/SYSTEM_ARCHITECTURE.md) | Architecture and roadmap |
-| [`docs/UI_BRANDING.md`](docs/UI_BRANDING.md) | DONK visual identity |
+| [`docs/UI_BRANDING.md`](docs/UI_BRANDING.md) | BVR visual identity |
 | [`docs/MOBILE-CLI.md`](docs/MOBILE-CLI.md) | Mobile companion bridge and iOS/Android plans |
-| [`docs/DONK-SERVER.md`](docs/DONK-SERVER.md) | Host-side companion server design |
+| [`docs/BVR-SERVER.md`](docs/BVR-SERVER.md) | Host-side companion server design |
 | [`docs/NODE_TRANSPORTS.md`](docs/NODE_TRANSPORTS.md) | NODE connection setup and transports |
 | [`docs/NODE_HTTP_PROTOCOL.md`](docs/NODE_HTTP_PROTOCOL.md) | NODE HTTP/JSON protocol |
 | [`docs/NODE_WEBSOCKET_PROTOCOL.md`](docs/NODE_WEBSOCKET_PROTOCOL.md) | NODE WebSocket streaming protocol |
 | [`docs/NODE_SSH_TRANSPORT.md`](docs/NODE_SSH_TRANSPORT.md) | NODE SSH transport |
 | [`docs/TASKLIST.md`](docs/TASKLIST.md) | Active task tracking |
 
-![DONK notifications](resources/screenshots/notification-select.jpg)
-![DONK pink theme](resources/screenshots/theme-pink.jpg)
-![DONK purple theme](resources/screenshots/theme-purple.jpg)
-![DONK default green theme](resources/screenshots/home-green.jpg)
+![BVR notifications](resources/screenshots/notification-select.jpg)
+![BVR pink theme](resources/screenshots/theme-pink.jpg)
+![BVR purple theme](resources/screenshots/theme-purple.jpg)
+![BVR default green theme](resources/screenshots/home-green.jpg)
 
 ## 🧪 Beta report checklist
 
@@ -192,7 +192,7 @@ Include:
 
 1. OS and CPU architecture
 2. Terminal application
-3. `donk-cli --version` output
+3. `bvr-cli --version` output
 4. Exact launch command
 5. Project path and whether Ollama was enabled
 6. Reproduction steps and terminal output
@@ -201,8 +201,8 @@ Include:
 
 - **Maintainer:** Richard Aizen Avery III
 - **Email:** averydevz@outlook.com
-- **GitHub:** https://github.com/richavery/donk-cli-main
-- **Website:** https://donk-cli.com
+- **GitHub:** https://github.com/richavery/bvr-cli-main
+- **Website:** https://bvr-cli.com
 
 Found a bug or have a feature request? Open an issue on GitHub or reach out by
 email. Beta feedback is welcome.

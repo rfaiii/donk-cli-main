@@ -16,7 +16,7 @@ import (
 	"github.com/charmbracelet/x/ansi/kitty"
 	"github.com/disintegration/imaging"
 	paintbrush "github.com/jordanella/go-ansi-paintbrush"
-	"github.com/richavery/donk-cli/internal/ui/util"
+	"github.com/richavery/bvr-cli/internal/ui/util"
 )
 
 // TransmittedMsg is a message indicating that an image has been transmitted to

@@ -7,20 +7,20 @@ import (
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/table"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/projects"
+	"github.com/richavery/bvr-cli/internal/projects"
 	"github.com/spf13/cobra"
 )
 
 var projectsCmd = &cobra.Command{
 	Use:   "projects",
 	Short: "List project directories",
-	Long:  "List directories where DONK project data is known to exist",
+	Long:  "List directories where BVR project data is known to exist",
 	Example: `
 # List all projects in a table
-donk-cli projects
+bvr-cli projects
 
 # Output projects data as JSON
-donk-cli projects --json
+bvr-cli projects --json
   `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		jsonOutput, _ := cmd.Flags().GetBool("json")

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/env"
+	"github.com/richavery/bvr-cli/internal/env"
 	"github.com/stretchr/testify/require"
 )
 

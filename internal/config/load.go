@@ -22,14 +22,14 @@ import (
 	"charm.land/catwalk/pkg/catwalk"
 	powernapConfig "github.com/charmbracelet/x/powernap/pkg/config"
 	"github.com/qjebbs/go-jsons"
-	"github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/discover"
-	"github.com/richavery/donk-cli/internal/env"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/fsext"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/shellconfig"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/discover"
+	"github.com/richavery/bvr-cli/internal/env"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/shellconfig"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -153,7 +153,7 @@ func Load(workingDir, dataDir string, debug bool) (*ConfigStore, error) {
 	// Capture initial staleness snapshot
 	// Capture initial staleness snapshot. Track every discovered config path,
 	// not just the ones that loaded, so a config file created after startup
-	// (e.g. a donkrc added mid-session) is detected as a change.
+	// (e.g. a bvrrc added mid-session) is detected as a change.
 	store.captureStalenessSnapshot(append(slices.Clone(configPaths), loadedPaths...))
 
 	return store, nil
@@ -169,15 +169,15 @@ func mustMarshalConfig(cfg *Config) []byte {
 	return data
 }
 
-func PushPopDonkEnv() func() {
+func PushPopBvrEnv() func() {
 	var found []string
 	for _, ev := range os.Environ() {
-		if strings.HasPrefix(ev, "DONK_") {
+		if strings.HasPrefix(ev, "BVR_") {
 			pair := strings.SplitN(ev, "=", 2)
 			if len(pair) != 2 {
 				continue
 			}
-			found = append(found, strings.TrimPrefix(pair[0], "DONK_"))
+			found = append(found, strings.TrimPrefix(pair[0], "BVR_"))
 		}
 	}
 	backups := make(map[string]string)
@@ -186,7 +186,7 @@ func PushPopDonkEnv() func() {
 	}
 
 	for _, ev := range found {
-		os.Setenv(ev, os.Getenv("DONK_"+ev))
+		os.Setenv(ev, os.Getenv("BVR_"+ev))
 	}
 
 	restore := func() {
@@ -199,7 +199,7 @@ func PushPopDonkEnv() func() {
 
 func (c *Config) configureProviders(ctx context.Context, store *ConfigStore, env env.Env, resolver VariableResolver, knownProviders []catwalk.Provider) error {
 	knownProviderNames := make(map[string]bool)
-	restore := PushPopDonkEnv()
+	restore := PushPopBvrEnv()
 	defer restore()
 
 	// When disable_default_providers is enabled, skip all default/embedded
@@ -551,10 +551,10 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 		c.Options.TUI = &TUIOptions{}
 	}
 	if len(c.Options.GlobalContextPaths) == 0 {
-		donkConfigDir := filepath.Dir(GlobalConfig())
+		bvrConfigDir := filepath.Dir(GlobalConfig())
 		c.Options.GlobalContextPaths = []string{
-			filepath.Join(donkConfigDir, "DONK.md"),
-			filepath.Join(filepath.Dir(donkConfigDir), "AGENTS.md"),
+			filepath.Join(bvrConfigDir, "BVR.md"),
+			filepath.Join(filepath.Dir(bvrConfigDir), "AGENTS.md"),
 		}
 	}
 	slices.Sort(c.Options.GlobalContextPaths)
@@ -583,7 +583,7 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 		c.MCP = make(map[string]MCPConfig)
 	}
 	// Drop orphaned OAuth token entries left behind when a user removes
-	// an MCP from donk.json. See MCPConfig.isOrphanedToken.
+	// an MCP from bvr.json. See MCPConfig.isOrphanedToken.
 	for name, m := range c.MCP {
 		if m.isOrphanedToken() {
 			delete(c.MCP, name)
@@ -612,11 +612,11 @@ func (c *Config) setDefaults(workingDir, dataDir string) {
 	// Project specific skills dirs.
 	c.Options.SkillsPaths = append(c.Options.SkillsPaths, ProjectSkillsDir(workingDir)...)
 
-	if str, ok := os.LookupEnv("DONK_DISABLE_PROVIDER_AUTO_UPDATE"); ok {
+	if str, ok := os.LookupEnv("BVR_DISABLE_PROVIDER_AUTO_UPDATE"); ok {
 		c.Options.DisableProviderAutoUpdate, _ = strconv.ParseBool(str)
 	}
 
-	if str, ok := os.LookupEnv("DONK_DISABLE_DEFAULT_PROVIDERS"); ok {
+	if str, ok := os.LookupEnv("BVR_DISABLE_DEFAULT_PROVIDERS"); ok {
 		c.Options.DisableDefaultProviders, _ = strconv.ParseBool(str)
 	}
 
@@ -916,12 +916,12 @@ func resolveSelectedModels(cfg *Config, knownProviders []catwalk.Provider) (reso
 // lookupConfigs searches config files starting at cwd and walking up
 // through the current project. The upward walk stops at the git
 // working tree root when one can be detected, otherwise at cwd itself,
-// so an unrelated donk.json placed above the project is never picked
+// so an unrelated bvr.json placed above the project is never picked
 // up. Global user-level config locations are always included
 // regardless of the boundary.
 func lookupConfigs(cwd string) []string {
 	// Prepend global user config and machine-owned data JSON. Only the user
-	// config directory contributes a donkrc; the data directory is writable
+	// config directory contributes a bvrrc; the data directory is writable
 	// machine state and must never be executed as Bash. Missing files are
 	// skipped when loaded.
 	configPaths := []string{
@@ -933,8 +933,8 @@ func lookupConfigs(cwd string) []string {
 
 	// Ordered high-to-low priority within a directory. LookupBounded returns
 	// matches in this order, and the later reverse + merge make the earliest
-	// listed name win on conflict. So: .donkrc beats donkrc, both beat the
-	// JSON configs, and .donk.json beats donk.json.
+	// listed name win on conflict. So: .bvrrc beats bvrrc, both beat the
+	// JSON configs, and .bvr.json beats bvr.json.
 	configNames := []string{
 		"." + appName + "rc",
 		appName + "rc",
@@ -958,7 +958,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 	var configs [][]byte
 	var loaded []string
 
-	// Track directories that have both donk.json and donkrc to warn
+	// Track directories that have both bvr.json and bvrrc to warn
 	// about potential confusion, along with the top-level keys each
 	// defines so we can report conflicts.
 	jsonDirKeys := make(map[string]map[string]bool)
@@ -1003,7 +1003,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 		}
 	}
 
-	// Warn if both a JSON config and a donkrc exist in the same directory
+	// Warn if both a JSON config and a bvrrc exist in the same directory
 	// and define overlapping top-level keys. Disjoint coexistence is
 	// intentional and not worth warning about.
 	for dir, jKeys := range jsonDirKeys {
@@ -1019,7 +1019,7 @@ func loadFromConfigPaths(ctx context.Context, configPaths []string) (*Config, []
 		}
 		if len(conflicts) > 0 {
 			slices.Sort(conflicts)
-			slog.Warn("Found both a JSON config and a donkrc in the same directory; merging with donkrc taking precedence",
+			slog.Warn("Found both a JSON config and a bvrrc in the same directory; merging with bvrrc taking precedence",
 				"dir", dir, "conflicting_keys", strings.Join(conflicts, ", "))
 		}
 	}
@@ -1186,21 +1186,21 @@ func migrateDisableNotifications() {
 
 // GlobalConfig returns the global configuration file path for the application.
 func GlobalConfig() string {
-	if donkGlobal := os.Getenv("DONK_GLOBAL_CONFIG"); donkGlobal != "" {
-		return filepath.Join(donkGlobal, fmt.Sprintf("%s.json", appName))
+	if bvrGlobal := os.Getenv("BVR_GLOBAL_CONFIG"); bvrGlobal != "" {
+		return filepath.Join(bvrGlobal, fmt.Sprintf("%s.json", appName))
 	}
 	return filepath.Join(home.Config(), appName, fmt.Sprintf("%s.json", appName))
 }
 
-// shellConfigSibling returns the donkrc path that sits alongside a given
-// donk.json path (same directory). Used so global config locations pick up a
+// shellConfigSibling returns the bvrrc path that sits alongside a given
+// bvr.json path (same directory). Used so global config locations pick up a
 // shell config, not just JSON.
 func shellConfigSibling(jsonPath string) string {
 	return filepath.Join(filepath.Dir(jsonPath), appName+"rc")
 }
 
-// isShellConfig reports whether a config path is a shell config (donkrc or
-// the hidden .donkrc), as opposed to a JSON config.
+// isShellConfig reports whether a config path is a shell config (bvrrc or
+// the hidden .bvrrc), as opposed to a JSON config.
 func isShellConfig(path string) bool {
 	base := filepath.Base(path)
 	return base == appName+"rc" || base == "."+appName+"rc"
@@ -1209,8 +1209,8 @@ func isShellConfig(path string) bool {
 // GlobalCacheDir returns the path to the global cache directory for the
 // application.
 func GlobalCacheDir() string {
-	if donkCache := os.Getenv("DONK_CACHE_DIR"); donkCache != "" {
-		return donkCache
+	if bvrCache := os.Getenv("BVR_CACHE_DIR"); bvrCache != "" {
+		return bvrCache
 	}
 	if xdgCacheHome := os.Getenv("XDG_CACHE_HOME"); xdgCacheHome != "" {
 		return filepath.Join(xdgCacheHome, appName)
@@ -1233,16 +1233,16 @@ func ProjectConfigs(cwd string) []string {
 // GlobalConfigData returns the path to the main data directory for the application.
 // this config is used when the app overrides configurations instead of updating the global config.
 func GlobalConfigData() string {
-	if donkData := os.Getenv("DONK_GLOBAL_DATA"); donkData != "" {
-		return filepath.Join(donkData, fmt.Sprintf("%s.json", appName))
+	if bvrData := os.Getenv("BVR_GLOBAL_DATA"); bvrData != "" {
+		return filepath.Join(bvrData, fmt.Sprintf("%s.json", appName))
 	}
 	if xdgDataHome := os.Getenv("XDG_DATA_HOME"); xdgDataHome != "" {
 		return filepath.Join(xdgDataHome, appName, fmt.Sprintf("%s.json", appName))
 	}
 
 	// return the path to the main data directory
-	// for windows, it should be in `%LOCALAPPDATA%/donk/`
-	// for linux and macOS, it should be in `$HOME/.local/share/donk/`
+	// for windows, it should be in `%LOCALAPPDATA%/bvr/`
+	// for linux and macOS, it should be in `$HOME/.local/share/bvr/`
 	if runtime.GOOS == "windows" {
 		localAppData := cmp.Or(
 			os.Getenv("LOCALAPPDATA"),
@@ -1322,7 +1322,7 @@ func computeWorktreeRoot(dir string) string {
 // projectBoundary returns the directory at which an upward configuration
 // search rooted at dir should stop. It is the git working tree root when
 // one can be detected, otherwise dir itself. Returning dir as a
-// fallback keeps DONK from silently adopting state files placed above
+// fallback keeps BVR from silently adopting state files placed above
 // the current project.
 func projectBoundary(dir string) string {
 	if root := worktreeRoot(dir); root != "" {
@@ -1339,8 +1339,8 @@ func projectBoundary(dir string) string {
 // Skills in these directories are auto-discovered and their files can be read
 // without permission prompts.
 func GlobalSkillsDirs() []string {
-	if donkSkills := os.Getenv("DONK_SKILLS_DIR"); donkSkills != "" {
-		return []string{donkSkills}
+	if bvrSkills := os.Getenv("BVR_SKILLS_DIR"); bvrSkills != "" {
+		return []string{bvrSkills}
 	}
 
 	paths := []string{
@@ -1354,7 +1354,7 @@ func GlobalSkillsDirs() []string {
 		filepath.Join(home.Dir(), "Documents", "AI-SKILLS"),
 	}
 
-	// On Windows, also load from app data on top of `$HOME/.config/donk`.
+	// On Windows, also load from app data on top of `$HOME/.config/bvr`.
 	// This is here mostly for backwards compatibility.
 	if runtime.GOOS == "windows" {
 		appData := cmp.Or(
@@ -1376,12 +1376,12 @@ func GlobalSkillsDirs() []string {
 // git-root lookups to prevent drift when a new convention is added.
 var projectSkillSubdirs = []string{
 	".agents/skills",
-	".donk/skills",
+	".bvr/skills",
 	".claude/skills",
 	".cursor/skills",
 }
 
-// ProjectSkillsDir returns the default project directories for which DONK
+// ProjectSkillsDir returns the default project directories for which BVR
 // will look for skills. In addition to the working directory, it also
 // checks the git working tree root so that monorepo-level skills are
 // discovered when the user is inside a subdirectory.

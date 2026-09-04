@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // MCPToolMessageItem is a message item that represents a bash tool call.

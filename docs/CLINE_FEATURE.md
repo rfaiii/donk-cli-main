@@ -1,7 +1,7 @@
 # CLINE_FEATURE — Integrating Cline as a First-Class Coding Assistant
 
 This document tracks the work to make Cline a permanent, model-independent
-coding assistant inside DONK-CLI. It is the companion spec to
+coding assistant inside BVR-CLI. It is the companion spec to
 `internal/skills/builtin/cline/SKILL.md`.
 
 ## Goal
@@ -9,7 +9,7 @@ coding assistant inside DONK-CLI. It is the companion spec to
 Let a user reach and run Cline from anywhere in the app — including before,
 during, and after onboarding — without first selecting or signing up for a remote
 model. When invoked, Cline runs as a full autonomous agent (Claude/OpenAI/Google/
-OpenRouter/Bedrock via its own API keys and config), while DONK stays the
+OpenRouter/Bedrock via its own API keys and config), while BVR stays the
 terminal/workspace host and the local-model planner for smaller jobs.
 
 ## Status by capability
@@ -83,18 +83,18 @@ straightforward task. Example observed for
 "scan README.md and tell me what this app is about":
 
 - `{"name": "describe", "arguments": {}}` — `describe` is **not** a registered
-  DONK tool (pure hallucination).
+  BVR tool (pure hallucination).
 - `{ "function": { "sourcegraph_search_code": { "query": ..., "context_window": 10,
-  "count": 20, "timeout": 120 } } }` — the real DONK tool is `sourcegraph`
+  "count": 20, "timeout": 120 } } }` — the real BVR tool is `sourcegraph`
   (`internal/agent/tools/sourcegraph.go`, `SourcegraphToolName = "sourcegraph"`).
   The model used the wrong function name and chose a web code-search tool for a
   local README read, even though it reproduced `sourcegraph`'s real param names
   (`context_window`/`count`/`timeout`).
 
-Root cause: model-fit. A 3B model given the full DONK tool surface confuses tool
+Root cause: model-fit. A 3B model given the full BVR tool surface confuses tool
 selection and naming. This is the exact case Proposal B (model-fit tagging +
 warning) and Proposal C (coder prompt for small models / fallback retry) in
-`DONK_CODER.md` target. The mitigation today is to hand the task to Cline via
+`BVR_CODER.md` target. The mitigation today is to hand the task to Cline via
 `/cline`, which routes to a capable model. Add this query to the regression
 checklist when testing small-model + Cline handoff.
 
@@ -108,7 +108,7 @@ checklist when testing small-model + Cline handoff.
 - **Palette-wide filter caveat:** while typing a non-empty query the radio
   header still highlights the currently selected tab while the list shows matches
   across all tabs. A future polish could dim the radio or group matches by tab.
-- **Model dependency:** `/cline` attaches the skill and has the *local* DONK
+- **Model dependency:** `/cline` attaches the skill and has the *local* BVR
   model drive the delegation. Using Cline without any configured model requires
   item 5 (direct "run Cline on this task") or a local Ollama model to act as the
   orchestrator brain.
@@ -147,22 +147,22 @@ using the user's queued message. This needs:
 
 ## 6. Settings-menu conflict avoidance
 
-Cline keeps its own settings (`~/.config/Cline/`, `.clinerules`). DONK should
+Cline keeps its own settings (`~/.config/Cline/`, `.clinerules`). BVR should
 NOT duplicate or mirror those settings in the in-app settings menu, to avoid
 stale/conflicting configuration. Instead:
 
 - Keep Cline configuration in the Cline-native locations only.
-- The DONK `cline` skill surfaces the relevant `cline` commands/flags in
+- The BVR `cline` skill surfaces the relevant `cline` commands/flags in
   `SKILL.md` (install, auth, `.clinerules`, MCP) so users operate Cline through
   Cline's own tooling.
-- The settings menu should only expose DONK-side concerns: whether the Cline
+- The settings menu should only expose BVR-side concerns: whether the Cline
   skill is enabled/disabled, and the optional `cline.mode` default
   (`agents.coder.cline.mode` or a dedicated `cline:` option namespace).
 
 ## Testing with local models
 
 - Start Ollama: `ollama serve` (or rely on the auto-start added in item 1).
-- Run `./donk-cli` and on the model picker, confirm an `Ollama (Local)` group
+- Run `./bvr-cli` and on the model picker, confirm an `Ollama (Local)` group
   lists your local models; pick one (e.g. `qwen2.5-coder`) as the large/coder
   model. No remote signup required.
 - Open the palette (`ctrl+p`), type `/cline`, and select it. Send a coding task.

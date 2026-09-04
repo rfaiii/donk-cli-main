@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/proto"
 )
 
 // GrantPermission grants, denies, or persistently grants a permission

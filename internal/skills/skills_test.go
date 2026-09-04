@@ -364,8 +364,8 @@ func TestToPromptXMLBuiltinType(t *testing.T) {
 	t.Parallel()
 
 	skills := []*Skill{
-		{Name: "builtin-skill", Description: "A builtin.", SkillFilePath: "donk://skills/builtin-skill/SKILL.md", Builtin: true},
-		{Name: "user-skill", Description: "A user skill.", SkillFilePath: "/home/user/.config/donk/skills/user-skill/SKILL.md"},
+		{Name: "builtin-skill", Description: "A builtin.", SkillFilePath: "bvr://skills/builtin-skill/SKILL.md", Builtin: true},
+		{Name: "user-skill", Description: "A user skill.", SkillFilePath: "/home/user/.config/bvr/skills/user-skill/SKILL.md"},
 	}
 	xml := ToPromptXML(skills)
 	require.Contains(t, xml, "<type>builtin</type>")
@@ -408,25 +408,25 @@ func TestDiscoverBuiltin(t *testing.T) {
 
 	var found bool
 	for _, s := range discovered {
-		if s.Name == "donk-config" {
+		if s.Name == "bvr-config" {
 			found = true
 			require.True(t, strings.HasPrefix(s.SkillFilePath, BuiltinPrefix))
 			require.True(t, strings.HasPrefix(s.Path, BuiltinPrefix))
-			require.Equal(t, "donk://skills/donk-config/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "donk://skills/donk-config", s.Path)
+			require.Equal(t, "bvr://skills/bvr-config/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "bvr://skills/bvr-config", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
 		}
 	}
-	require.True(t, found, "donk-config builtin skill not found")
+	require.True(t, found, "bvr-config builtin skill not found")
 
 	var foundJQ bool
 	for _, s := range discovered {
 		if s.Name == "jq" {
 			foundJQ = true
-			require.Equal(t, "donk://skills/jq/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "donk://skills/jq", s.Path)
+			require.Equal(t, "bvr://skills/jq/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "bvr://skills/jq", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
@@ -436,23 +436,23 @@ func TestDiscoverBuiltin(t *testing.T) {
 
 	var foundHooks bool
 	for _, s := range discovered {
-		if s.Name == "donk-hooks" {
+		if s.Name == "bvr-hooks" {
 			foundHooks = true
-			require.Equal(t, "donk://skills/donk-hooks/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "donk://skills/donk-hooks", s.Path)
+			require.Equal(t, "bvr://skills/bvr-hooks/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "bvr://skills/bvr-hooks", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
 		}
 	}
-	require.True(t, foundHooks, "donk-hooks builtin skill not found")
+	require.True(t, foundHooks, "bvr-hooks builtin skill not found")
 
 	var foundCline bool
 	for _, s := range discovered {
 		if s.Name == "cline" {
 			foundCline = true
-			require.Equal(t, "donk://skills/cline/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "donk://skills/cline", s.Path)
+			require.Equal(t, "bvr://skills/cline/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "bvr://skills/cline", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
@@ -465,8 +465,8 @@ func TestDiscoverBuiltin(t *testing.T) {
 	for _, s := range discovered {
 		if s.Name == "hermes" {
 			foundHermes = true
-			require.Equal(t, "donk://skills/hermes/SKILL.md", s.SkillFilePath)
-			require.Equal(t, "donk://skills/hermes", s.Path)
+			require.Equal(t, "bvr://skills/hermes/SKILL.md", s.SkillFilePath)
+			require.Equal(t, "bvr://skills/hermes", s.Path)
 			require.NotEmpty(t, s.Description)
 			require.NotEmpty(t, s.Instructions)
 			require.True(t, s.Builtin)
@@ -492,10 +492,10 @@ func TestDeduplicate(t *testing.T) {
 		},
 		{
 			name:     "user overrides builtin",
-			input:    []*Skill{{Name: "donk-config", Path: "donk://skills/donk-config"}, {Name: "donk-config", Path: "/user/donk-config"}},
+			input:    []*Skill{{Name: "bvr-config", Path: "bvr://skills/bvr-config"}, {Name: "bvr-config", Path: "/user/bvr-config"}},
 			wantLen:  1,
-			wantName: "donk-config",
-			wantPath: "/user/donk-config",
+			wantName: "bvr-config",
+			wantPath: "/user/bvr-config",
 		},
 		{
 			name:    "empty",

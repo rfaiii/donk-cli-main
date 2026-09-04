@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

@@ -10,11 +10,11 @@ import (
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
-	mcp "github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/localmodel"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/logo"
+	mcp "github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/localmodel"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/logo"
 )
 
 // modelInfo renders the current model information including reasoning

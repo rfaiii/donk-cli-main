@@ -34,17 +34,17 @@ const (
 	ShellTypePowerShell
 )
 
-// DonkEnvMarkers returns a fresh slice of the environment variables that
-// DONK unconditionally sets on every shell it spawns — both the interactive
+// BvrEnvMarkers returns a fresh slice of the environment variables that
+// BVR unconditionally sets on every shell it spawns — both the interactive
 // bash tool's [Shell] and the hook runner's [Run] calls. Tools that want to
 // detect "am I being invoked by an AI agent?" can check any of these.
 // Keeping them in one place guarantees the two shell surfaces cannot drift.
 // A fresh slice is returned on every call so callers may append freely.
-func DonkEnvMarkers() []string {
+func BvrEnvMarkers() []string {
 	return []string{
-		"DONK=1",
-		"AGENT=donk",
-		"AI_AGENT=donk",
+		"BVR=1",
+		"AGENT=bvr",
+		"AI_AGENT=bvr",
 	}
 }
 
@@ -95,12 +95,12 @@ func NewShell(opts *Options) *Shell {
 	}
 
 	// Strip herdr pane-ownership vars so subprocesses (including test
-	// binaries and nested donk instances) can't attach to or release
+	// binaries and nested bvr instances) can't attach to or release
 	// the parent pane's agent authority.
 	env = withoutHerdrEnv(env)
 
-	// Allow tools to detect execution by DONK.
-	env = append(env, DonkEnvMarkers()...)
+	// Allow tools to detect execution by BVR.
+	env = append(env, BvrEnvMarkers()...)
 
 	logger := opts.Logger
 	if logger == nil {

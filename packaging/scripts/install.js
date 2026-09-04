@@ -5,14 +5,14 @@ import path from "node:path";
 import os from "node:os";
 import { execSync } from "node:child_process";
 
-const GITHUB_REPO = "richavery/donk-cli-main";
+const GITHUB_REPO = "richavery/bvr-cli-main";
 const VERSION = process.env.npm_package_version || "latest";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || process.env.nPm_CONFIG_GITHUB_TOKEN || "";
 const HOME = os.homedir();
 const INSTALL_DIR = process.env.npm_config_global
   ? path.join(execSync("npm root -g").toString().trim(), ".bin")
   : path.join(process.cwd(), "node_modules", ".bin");
-const TARGET = path.join(INSTALL_DIR, "donk-cli");
+const TARGET = path.join(INSTALL_DIR, "bvr-cli");
 
 function ensureBinDir() {
   if (!fs.existsSync(INSTALL_DIR)) {
@@ -22,7 +22,7 @@ function ensureBinDir() {
 
 function api(url) {
   return new Promise((resolve, reject) => {
-    const headers = { "User-Agent": "donk-cli-npm-installer" };
+    const headers = { "User-Agent": "bvr-cli-npm-installer" };
     if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
     https.get(url, { headers }, (res) => {
       let data = "";
@@ -70,7 +70,7 @@ function resolveAssetName(release, platform, arch) {
   const tag = rawTag.startsWith("v") ? rawTag.slice(1) : rawTag;
   const osName = platform === "win32" ? "Windows" : platform === "darwin" ? "darwin" : "linux";
   const archName = arch === "x64" ? "amd64" : arch;
-  const base = `donk-cli_${tag}_${osName}_${archName}`;
+  const base = `bvr-cli_${tag}_${osName}_${archName}`;
   return platform === "win32" ? `${base}.exe` : base;
 }
 
@@ -85,7 +85,7 @@ function buildFallbackUrl(tag, assetName) {
 }
 
 async function main() {
-  console.log(`Installing donk-cli@${VERSION || "latest"}...`);
+  console.log(`Installing bvr-cli@${VERSION || "latest"}...`);
   ensureBinDir();
 
   let release;
@@ -128,7 +128,7 @@ async function main() {
   if (platform !== "win32" && buffer.length > 0 && buffer[0] === 0x7f && buffer[1] === 0x45 && buffer[2] === 0x4c && buffer[3] === 0x46) {
     fs.renameSync(tempTarget, TARGET);
     fs.chmodSync(TARGET, 0o755);
-    console.log(`Installed donk-cli to ${TARGET}`);
+    console.log(`Installed bvr-cli to ${TARGET}`);
     return;
   }
 

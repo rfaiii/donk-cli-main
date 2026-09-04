@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/csync"
 )
 
 const (

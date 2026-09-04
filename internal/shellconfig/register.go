@@ -1,4 +1,4 @@
-// Package shellconfig implements the Bash-powered config format for DONK.
+// Package shellconfig implements the Bash-powered config format for BVR.
 //
 // It provides shell builtins (provider, model, mcp, lsp, permissions, hook,
 // option) that populate config by mutating a ConfigBuilder
@@ -7,7 +7,7 @@
 // they are no-ops during normal bash tool execution.
 //
 // This package sits between shell and config: it imports shell (for
-// RegisterBuiltin and Run), and config imports shellconfig to run donkrc
+// RegisterBuiltin and Run), and config imports shellconfig to run bvrrc
 // files.
 package shellconfig
 
@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/shell"
 )
 
 func init() {

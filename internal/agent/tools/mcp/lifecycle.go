@@ -7,7 +7,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 )
 
 // reinitAction describes how to reconcile one MCP server against the

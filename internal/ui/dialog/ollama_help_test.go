@@ -6,8 +6,8 @@ import (
 
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,7 +18,7 @@ func TestOllamaHowToIncludesPlatformInstructions(t *testing.T) {
 }
 
 func TestOllamaHowToDrawIsBounded(t *testing.T) {
-	theme := styles.DarkDonkTheme()
+	theme := styles.DarkBvrTheme()
 	dialog := NewOllamaHowTo(&common.Common{Styles: &theme})
 	screen := uv.NewScreenBuffer(60, 16)
 	dialog.Draw(screen, image.Rect(0, 0, 60, 16))
@@ -27,7 +27,7 @@ func TestOllamaHowToDrawIsBounded(t *testing.T) {
 		require.LessOrEqual(t, ansi.StringWidth(line), 60)
 	}
 	require.Contains(t, rendered, "# Ollama How-To")
-	require.Contains(t, rendered, "DONK can discover")
+	require.Contains(t, rendered, "BVR can discover")
 }
 
 func splitLines(value string) []string {

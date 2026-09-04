@@ -7,7 +7,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/message"
 )
 
 // promptHistoryLoadedMsg is sent when prompt history is loaded.

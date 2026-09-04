@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/workspace"
 	"github.com/stretchr/testify/require"
 )
 

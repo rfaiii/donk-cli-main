@@ -12,11 +12,11 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/shell"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/skills"
 )
 
 // Prompt represents a template-based prompt generator.

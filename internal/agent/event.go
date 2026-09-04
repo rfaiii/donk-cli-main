@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/event"
 )
 
 func (a *sessionAgent) eventPromptSent(sessionID string) {

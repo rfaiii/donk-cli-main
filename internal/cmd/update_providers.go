@@ -6,7 +6,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/exp/charmtone"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -18,22 +18,22 @@ var updateProvidersCmd = &cobra.Command{
 	Long:  `Update provider information from a specified local path or remote URL.`,
 	Example: `
 # Update Catwalk providers remotely (default)
-donk-cli update-providers
+bvr-cli update-providers
 
 # Update Catwalk providers from a custom URL
-donk-cli update-providers https://example.com/providers.json
+bvr-cli update-providers https://example.com/providers.json
 
 # Update Catwalk providers from a local file
-donk-cli update-providers /path/to/local-providers.json
+bvr-cli update-providers /path/to/local-providers.json
 
 # Update Catwalk providers from embedded version
-donk-cli update-providers embedded
+bvr-cli update-providers embedded
 
 # Update Hyper provider information
-donk-cli update-providers --source=hyper
+bvr-cli update-providers --source=hyper
 
 # Update Hyper from a custom URL
-donk-cli update-providers --source=hyper https://hyper.example.com
+bvr-cli update-providers --source=hyper https://hyper.example.com
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// NOTE(@andreynering): We want to skip logging output do stdout here.

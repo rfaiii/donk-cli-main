@@ -5,14 +5,14 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/richavery/donk-cli/internal/agent"
-	mcptools "github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/commands"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/agent"
+	mcptools "github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/commands"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/skills"
 )
 
 // publishConfigChanged publishes a ConfigChanged event on the workspace's

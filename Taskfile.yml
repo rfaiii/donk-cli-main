@@ -1,11 +1,11 @@
 # https://taskfile.dev
-# Taskfile for DONK-CLI
+# Taskfile for BVR-CLI
 # Designed for macOS, Linux, and Windows development
 
 version: '3'
 
 vars:
-  PROJECT_NAME: donk-cli
+  PROJECT_NAME: bvr-cli
 
 tasks:
   default:
@@ -56,7 +56,7 @@ tasks:
     desc: Build a release binary for the current platform
     cmds:
       - |
-        GOWORK=off CGO_ENABLED=0 GOEXPERIMENT=greenteagc go build -ldflags="-s -w -X github.com/richavery/donk-cli/internal/version.Version={{.version}}" -o dist/donk-cli .
+        GOWORK=off CGO_ENABLED=0 GOEXPERIMENT=greenteagc go build -ldflags="-s -w -X github.com/richavery/bvr-cli/internal/version.Version={{.version}}" -o dist/bvr-cli .
 
   build-all:
     desc: Build release artifacts for all supported platforms
@@ -78,7 +78,7 @@ tasks:
   package-homebrew:
     desc: Validate Homebrew formula syntax
     cmds:
-      - ruby -c packaging/homebrew-donk-cli.rb
+      - ruby -c packaging/homebrew-bvr-cli.rb
 
   package-winget:
     desc: Validate Winget manifest syntax

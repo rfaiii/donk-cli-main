@@ -5,7 +5,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 // QuitID is the identifier for the quit dialog.

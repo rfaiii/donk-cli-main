@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/filetracker"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/filetracker"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 
@@ -275,22 +275,22 @@ var _ filetracker.Service = mockFileTracker{}
 func TestReadBuiltinFile(t *testing.T) {
 	t.Parallel()
 
-	t.Run("reads donk-config skill", func(t *testing.T) {
+	t.Run("reads bvr-config skill", func(t *testing.T) {
 		t.Parallel()
 
 		resp, err := readBuiltinFile(ViewParams{
-			FilePath: "donk://skills/donk-config/SKILL.md",
+			FilePath: "bvr://skills/bvr-config/SKILL.md",
 		}, nil)
 		require.NoError(t, err)
 		require.NotEmpty(t, resp.Content)
-		require.Contains(t, resp.Content, "DONK Configuration")
+		require.Contains(t, resp.Content, "BVR Configuration")
 	})
 
 	t.Run("not found", func(t *testing.T) {
 		t.Parallel()
 
 		resp, err := readBuiltinFile(ViewParams{
-			FilePath: "donk://skills/nonexistent/SKILL.md",
+			FilePath: "bvr://skills/nonexistent/SKILL.md",
 		}, nil)
 		require.NoError(t, err)
 		require.True(t, resp.IsError)
@@ -300,14 +300,14 @@ func TestReadBuiltinFile(t *testing.T) {
 		t.Parallel()
 
 		resp, err := readBuiltinFile(ViewParams{
-			FilePath: "donk://skills/donk-config/SKILL.md",
+			FilePath: "bvr://skills/bvr-config/SKILL.md",
 		}, nil)
 		require.NoError(t, err)
 
 		var meta ViewResponseMetadata
 		require.NoError(t, json.Unmarshal([]byte(resp.Metadata), &meta))
 		require.Equal(t, ViewResourceSkill, meta.ResourceType)
-		require.Equal(t, "donk-config", meta.ResourceName)
+		require.Equal(t, "bvr-config", meta.ResourceName)
 		require.NotEmpty(t, meta.ResourceDescription)
 	})
 
@@ -315,7 +315,7 @@ func TestReadBuiltinFile(t *testing.T) {
 		t.Parallel()
 
 		resp, err := readBuiltinFile(ViewParams{
-			FilePath: "donk://skills/donk-config/SKILL.md",
+			FilePath: "bvr://skills/bvr-config/SKILL.md",
 			Offset:   5,
 		}, nil)
 		require.NoError(t, err)

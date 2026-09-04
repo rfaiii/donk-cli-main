@@ -7,9 +7,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/ui/chat"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/ui/chat"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 const (

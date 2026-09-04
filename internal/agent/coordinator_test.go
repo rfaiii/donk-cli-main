@@ -10,7 +10,7 @@ import (
 	"charm.land/fantasy/providers/anthropic"
 	"charm.land/fantasy/providers/bedrock"
 	"charm.land/fantasy/providers/openaicompat"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

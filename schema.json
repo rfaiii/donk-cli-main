@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/richavery/donk-cli/internal/config/config",
+  "$id": "https://github.com/richavery/bvr-cli/internal/config/config",
   "$ref": "#/$defs/Config",
   "$defs": {
     "Attribution": {
@@ -22,7 +22,7 @@
         },
         "generated_with": {
           "type": "boolean",
-          "description": "Add Generated with DONK line to commit messages and issues and PRs",
+          "description": "Add Generated with BVR line to commit messages and issues and PRs",
           "default": true
         }
       },
@@ -437,7 +437,7 @@
             "type": "string",
             "examples": [
               ".cursorrules",
-              "DONK.md"
+              "BVR.md"
             ]
           },
           "type": "array",
@@ -450,7 +450,7 @@
           "type": "array",
           "description": "Paths to files containing global context information for the AI",
           "default": [
-            "~/.config/donk/DONK.md",
+            "~/.config/bvr/BVR.md",
             "~/.config/AGENTS.md"
           ]
         },
@@ -458,7 +458,7 @@
           "items": {
             "type": "string",
             "examples": [
-              "~/.config/donk/skills",
+              "~/.config/bvr/skills",
               "./skills"
             ]
           },
@@ -487,9 +487,9 @@
         "data_directory": {
           "type": "string",
           "description": "Directory for storing application data. Relative paths are resolved against the working directory; absolute paths are used as-is.",
-          "default": ".donk",
+          "default": ".bvr",
           "examples": [
-            ".donk"
+            ".bvr"
           ]
         },
         "disabled_tools": {
@@ -528,7 +528,7 @@
           "default": "AGENTS.md",
           "examples": [
             "AGENTS.md",
-            "DONK.md",
+            "BVR.md",
             "CLAUDE.md",
             "docs/LLMs.md"
           ]
@@ -559,7 +559,7 @@
           "items": {
             "type": "string",
             "examples": [
-              "donk-config"
+              "bvr-config"
             ]
           },
           "type": "array",

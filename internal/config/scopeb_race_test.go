@@ -18,10 +18,10 @@ import (
 // pointer, so a reader always sees an immutable snapshot. Run with -race.
 func TestScopeB_InPlaceMutationRace(t *testing.T) {
 	dir := t.TempDir()
-	configPath := filepath.Join(dir, "donk.json")
+	configPath := filepath.Join(dir, "bvr.json")
 
-	t.Setenv("DONK_GLOBAL_CONFIG", dir)
-	t.Setenv("DONK_GLOBAL_DATA", dir)
+	t.Setenv("BVR_GLOBAL_CONFIG", dir)
+	t.Setenv("BVR_GLOBAL_DATA", dir)
 	resetProviderState()
 	t.Cleanup(resetProviderState)
 

@@ -5,7 +5,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/list"
 	"github.com/rivo/uniseg"
 	"github.com/sahilm/fuzzy"
 )

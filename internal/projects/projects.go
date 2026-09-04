@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 )
 
 const projectsFileName = "projects.json"

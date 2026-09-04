@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/permission"
 )
 
 type DownloadParams struct {
@@ -122,7 +122,7 @@ func NewDownloadTool(permissions permission.Service, workingDir string, client *
 				return fantasy.ToolResponse{}, fmt.Errorf("failed to create request: %w", err)
 			}
 
-			req.Header.Set("User-Agent", "donk/1.0")
+			req.Header.Set("User-Agent", "bvr/1.0")
 
 			resp, err := client.Do(req)
 			if err != nil {

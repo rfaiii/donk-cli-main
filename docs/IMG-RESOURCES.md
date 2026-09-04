@@ -1,32 +1,32 @@
 # Image & Icon Resources
 
-This document lists the image assets for DONK, where they live in the repo,
+This document lists the image assets for BVR, where they live in the repo,
 and how to regenerate or replace them.
 
 ## Source logo
 
-- `resources/icons/donk-logo-1024.png`
+- `resources/icons/bvr-logo-1024.png`
   - High-resolution app logo.
   - Source for app icons, installer graphics, and README branding.
 
 ## macOS icon
 
-- `resources/icons/donk-icon.icns`
+- `resources/icons/bvr-icon.icns`
   - Use in macOS app bundles, DMG disk images, and macOS installer metadata.
   - Regenerate from the source logo with:
     ```sh
-    iconutil -c icns resources/icons/donk-icon.iconset -o resources/icons/donk-icon.icns
+    iconutil -c icns resources/icons/bvr-icon.iconset -o resources/icons/bvr-icon.icns
     ```
 
 ## Windows icon
 
-- `resources/icons/donk-icon.ico`
+- `resources/icons/bvr-icon.ico`
   - Use in Windows EXE/MSI installers and shortcuts.
   - Regenerate from the source logo with ImageMagick:
     ```sh
-    magick convert resources/icons/donk-logo-1024.png \
+    magick convert resources/icons/bvr-logo-1024.png \
       -define icon:auto-resize="256,128,64,48,32,16" \
-      resources/icons/donk-icon.ico
+      resources/icons/bvr-icon.ico
     ```
 
 ## iOS / Mac app icons
@@ -38,9 +38,9 @@ and how to regenerate or replace them.
 
 ## General app icons
 
-- `resources/icons/donk-icon-00.png`
+- `resources/icons/bvr-icon-00.png`
   - App icon for notifications and general UI branding.
-- `resources/icons/donk-icon-info.png`
+- `resources/icons/bvr-icon-info.png`
   - Info/about-style icon variant.
 
 ## Screenshots
@@ -48,10 +48,10 @@ and how to regenerate or replace them.
 - `resources/screenshots/`
   - Place terminal/app screenshots here for README and marketing.
   - Suggested filenames:
-    - `donk-cli-macos.png`
-    - `donk-cli-windows.png`
-    - `donk-cli-linux.png`
-    - `donk-cli-onboarding.png`
+    - `bvr-cli-macos.png`
+    - `bvr-cli-windows.png`
+    - `bvr-cli-linux.png`
+    - `bvr-cli-onboarding.png`
 
 ## Animations
 
@@ -60,8 +60,8 @@ Keep these under 5 MB for GitHub rendering.
 
 | Filename | Purpose | Duration |
 | --- | --- | --- |
-| `resources/screenshots/donk-cli-onboarding.gif` | Onboarding flow demo | 5–10s |
-| `resources/screenshots/donk-cli-session.gif` | Live typing/response demo | 10–15s |
+| `resources/screenshots/bvr-cli-onboarding.gif` | Onboarding flow demo | 5–10s |
+| `resources/screenshots/bvr-cli-session.gif` | Live typing/response demo | 10–15s |
 
 ## Video walkthroughs
 
@@ -70,22 +70,22 @@ Do not rely on GitHub README for video playback.
 
 | Filename | Purpose | Notes |
 | --- | --- | --- |
-| `resources/videos/donk-cli-onboarding.mp4` | Full onboarding walkthrough | 1080p, <2 min |
-| `resources/videos/donk-cli-install-macos.mp4` | macOS install walkthrough | 1080p, <1 min |
-| `resources/videos/donk-cli-install-windows.mp4` | Windows install walkthrough | 1080p, <1 min |
+| `resources/videos/bvr-cli-onboarding.mp4` | Full onboarding walkthrough | 1080p, <2 min |
+| `resources/videos/bvr-cli-install-macos.mp4` | macOS install walkthrough | 1080p, <1 min |
+| `resources/videos/bvr-cli-install-windows.mp4` | Windows install walkthrough | 1080p, <1 min |
 
 ## Usage in README
 
 Reference images from this folder in the README with paths like:
 
 ```md
-![DONK on macOS](resources/screenshots/donk-cli-macos.png)
+![BVR on macOS](resources/screenshots/bvr-cli-macos.png)
 ```
 
 ## About / contact assets
 
 - Company/personal contact details belong in `docs/ABOUT.md`.
-- Use `resources/icons/donk-icon-info.png` as the About pane icon where
+- Use `resources/icons/bvr-icon-info.png` as the About pane icon where
   applicable.
 
 ## Notes

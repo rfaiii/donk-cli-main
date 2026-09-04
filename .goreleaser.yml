@@ -2,7 +2,7 @@
 # vim: set ts=2 sw=2 tw=0 fo=jcroql
 version: 2
 
-project_name: donk-cli
+project_name: bvr-cli
 
 includes:
   - from_url:
@@ -11,9 +11,9 @@ includes:
 metadata:
   mod_timestamp: "{{ .CommitTimestamp }}"
   license: "FSL-1.1-MIT"
-  homepage: "https://github.com/richavery/donk-cli"
-  description: "DONK is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
-  full_description: "DONK is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
+  homepage: "https://github.com/richavery/bvr-cli"
+  description: "BVR is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
+  full_description: "BVR is a keyboard-first terminal AI workspace for projects, local models, tools, and automation."
   maintainers:
     - "kujtimiihoxha <kujtim@charm.sh>"
     - "caarlos0 <carlos@charm.sh>" # for aur
@@ -33,10 +33,10 @@ before:
     - mkdir completions
     - rm -rf manpages
     - mkdir manpages
-      - sh -c 'go run . completion bash >./completions/donk-cli.bash'
-      - sh -c 'go run . completion zsh >./completions/donk-cli.zsh'
-      - sh -c 'go run . completion fish >./completions/donk-cli.fish'
-      - sh -c 'go run . man | gzip -c >./manpages/donk-cli.1.gz'
+      - sh -c 'go run . completion bash >./completions/bvr-cli.bash'
+      - sh -c 'go run . completion zsh >./completions/bvr-cli.zsh'
+      - sh -c 'go run . completion fish >./completions/bvr-cli.fish'
+      - sh -c 'go run . man | gzip -c >./manpages/bvr-cli.1.gz'
 
 # gomod:
 #   proxy: true
@@ -56,13 +56,13 @@ builds:
       - goos: darwin
         goarch: arm
     ldflags:
-      - -s -w -X github.com/richavery/donk-cli/internal/version.Version={{.Version}}
+      - -s -w -X github.com/richavery/bvr-cli/internal/version.Version={{.Version}}
     flags:
       - -trimpath
 
 archives:
   - name_template: >-
-      donk-cli_
+      bvr-cli_
       {{- .Version }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
@@ -86,10 +86,10 @@ checksum:
 aur_sources:
   - private_key: "{{ .Env.AUR_KEY }}"
     disable: "{{ with .Prerelease }}true{{ end }}"
-    git_url: "ssh://aur@aur.archlinux.org/donk-cli.git"
+    git_url: "ssh://aur@aur.archlinux.org/bvr-cli.git"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
     makedepends:
       - go
       - git
@@ -103,71 +103,71 @@ aur_sources:
       export CGO_CXXFLAGS="${CXXFLAGS}"
       export CGO_LDFLAGS="${LDFLAGS}"
       export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
-      go build -ldflags="-w -s -buildid='' -linkmode=external -X github.com/richavery/donk-cli/internal/version.Version=v${pkgver}" .
-      ./donk-cli completion bash >./completions/donk-cli.bash
-      ./donk-cli completion zsh >./completions/donk-cli.zsh
-      ./donk-cli completion fish >./completions/donk-cli.fish
-      ./donk-cli man | gzip -c >./manpages/donk-cli.1.gz
+      go build -ldflags="-w -s -buildid='' -linkmode=external -X github.com/richavery/bvr-cli/internal/version.Version=v${pkgver}" .
+      ./bvr-cli completion bash >./completions/bvr-cli.bash
+      ./bvr-cli completion zsh >./completions/bvr-cli.zsh
+      ./bvr-cli completion fish >./completions/bvr-cli.fish
+      ./bvr-cli man | gzip -c >./manpages/bvr-cli.1.gz
     package: |-
       # bin
-      install -Dm755 "./donk-cli" "${pkgdir}/usr/bin/donk-cli"
+      install -Dm755 "./bvr-cli" "${pkgdir}/usr/bin/bvr-cli"
       # license
-      mkdir -p "${pkgdir}/usr/share/licenses/donk-cli/"
-      install -Dm644 ./LICENSE* "${pkgdir}/usr/share/licenses/donk-cli/"
+      mkdir -p "${pkgdir}/usr/share/licenses/bvr-cli/"
+      install -Dm644 ./LICENSE* "${pkgdir}/usr/share/licenses/bvr-cli/"
       # completions
       mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
       mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
       mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
-      install -Dm644 "./completions/donk-cli.bash" "${pkgdir}/usr/share/bash-completion/completions/donk-cli"
-      install -Dm644 "./completions/donk-cli.zsh" "${pkgdir}/usr/share/zsh/site-functions/_donk-cli"
-      install -Dm644 "./completions/donk-cli.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/donk-cli.fish"
+      install -Dm644 "./completions/bvr-cli.bash" "${pkgdir}/usr/share/bash-completion/completions/bvr-cli"
+      install -Dm644 "./completions/bvr-cli.zsh" "${pkgdir}/usr/share/zsh/site-functions/_bvr-cli"
+      install -Dm644 "./completions/bvr-cli.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/bvr-cli.fish"
       # man pages
-      install -Dm644 "./manpages/donk-cli.1.gz" "${pkgdir}/usr/share/man/man1/donk-cli.1.gz"
+      install -Dm644 "./manpages/bvr-cli.1.gz" "${pkgdir}/usr/share/man/man1/bvr-cli.1.gz"
       # readme
-      mkdir -pv "${pkgdir}/usr/share/doc/donk-cli/"
-      install -Dm644 README* "${pkgdir}/usr/share/doc/donk-cli/"
+      mkdir -pv "${pkgdir}/usr/share/doc/bvr-cli/"
+      install -Dm644 README* "${pkgdir}/usr/share/doc/bvr-cli/"
 
 aurs:
   - private_key: "{{ .Env.AUR_KEY }}"
     disable: "{{ with .Prerelease }}true{{ end }}"
-    git_url: "ssh://aur@aur.archlinux.org/donk-cli-bin.git"
+    git_url: "ssh://aur@aur.archlinux.org/bvr-cli-bin.git"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
     provides:
-      - donk-cli
+      - bvr-cli
     conflicts:
-      - donk-cli
+      - bvr-cli
     package: |-
       case "$CARCH" in
         aarch64)
-          cd "${srcdir}/donk-cli_${pkgver}_Linux_arm64"
+          cd "${srcdir}/bvr-cli_${pkgver}_Linux_arm64"
           ;;
         *)
-          cd "${srcdir}/donk-cli_${pkgver}_Linux_${CARCH}"
+          cd "${srcdir}/bvr-cli_${pkgver}_Linux_${CARCH}"
           ;;
       esac
       # bin
-      install -Dm755 "./donk-cli" "${pkgdir}/usr/bin/donk-cli"
+      install -Dm755 "./bvr-cli" "${pkgdir}/usr/bin/bvr-cli"
       # license
-      mkdir -p "${pkgdir}/usr/share/licenses/donk-cli/"
-      install -Dm644 ./LICENSE* "${pkgdir}/usr/share/licenses/donk-cli/"
+      mkdir -p "${pkgdir}/usr/share/licenses/bvr-cli/"
+      install -Dm644 ./LICENSE* "${pkgdir}/usr/share/licenses/bvr-cli/"
       # completions
       mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
       mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
       mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
-      install -Dm644 "./completions/donk-cli.bash" "${pkgdir}/usr/share/bash-completion/completions/donk-cli"
-      install -Dm644 "./completions/donk-cli.zsh" "${pkgdir}/usr/share/zsh/site-functions/_donk-cli"
-      install -Dm644 "./completions/donk-cli.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/donk-cli.fish"
+      install -Dm644 "./completions/bvr-cli.bash" "${pkgdir}/usr/share/bash-completion/completions/bvr-cli"
+      install -Dm644 "./completions/bvr-cli.zsh" "${pkgdir}/usr/share/zsh/site-functions/_bvr-cli"
+      install -Dm644 "./completions/bvr-cli.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/bvr-cli.fish"
       # man pages
-      install -Dm644 "./manpages/donk-cli.1.gz" "${pkgdir}/usr/share/man/man1/donk-cli.1.gz"
+      install -Dm644 "./manpages/bvr-cli.1.gz" "${pkgdir}/usr/share/man/man1/bvr-cli.1.gz"
       # readme
-      mkdir -pv "${pkgdir}/usr/share/doc/donk-cli/"
-      install -Dm644 README* "${pkgdir}/usr/share/doc/donk-cli/"
+      mkdir -pv "${pkgdir}/usr/share/doc/bvr-cli/"
+      install -Dm644 README* "${pkgdir}/usr/share/doc/bvr-cli/"
 
 furies:
   - disable: "{{ if (or .Prerelease .IsNightly) }}true{{ end }}"
-    account: "{{ with .Env.FURY_TOKEN }}donkcli{{ else }}{{ end }}"
+    account: "{{ with .Env.FURY_TOKEN }}bvrcli{{ else }}{{ end }}"
     secret_name: FURY_TOKEN
 
 brews:
@@ -175,12 +175,12 @@ brews:
       owner: richavery
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    homepage: "https://donk-cli.com"
-    description: "DONK is a keyboard-first terminal AI workspace."
+    homepage: "https://bvr-cli.com"
+    description: "BVR is a keyboard-first terminal AI workspace."
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
     goarm: 7
     extra_install: |-
       bash_completion.install "completions/{{ .ProjectName }}.bash" => "{{ .ProjectName }}"
@@ -193,17 +193,17 @@ scoops:
       owner: richavery
       name: scoop-bucket
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    description: "DONK is a keyboard-first terminal AI workspace."
-    homepage: "https://donk-cli.com"
+    description: "BVR is a keyboard-first terminal AI workspace."
+    homepage: "https://bvr-cli.com"
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
 
 npms:
-  - name: "@donkcli/donk-cli"
-    repository: "git+https://github.com/richavery/donk-cli.git"
-    bugs: https://github.com/richavery/donk-cli/issues
+  - name: "@bvrcli/bvr-cli"
+    repository: "git+https://github.com/richavery/bvr-cli.git"
+    bugs: https://github.com/richavery/bvr-cli/issues
     access: public
     disable: "{{ with .Prerelease }}true{{ end }}"
 
@@ -215,14 +215,14 @@ nfpms:
       - archlinux
     file_name_template: "{{ .ConventionalFileName }}"
     contents:
-      - src: ./completions/donk-cli.bash
-        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files/usr{{ end }}/etc/bash_completion.d/donk-cli'
-      - src: ./completions/donk-cli.fish
-        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/fish/vendor_completions.d/donk-cli.fish'
-      - src: ./completions/donk-cli.zsh
-        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/zsh/site-functions/_donk-cli'
-      - src: ./manpages/donk-cli.1.gz
-        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/man/man1/donk-cli.1.gz'
+      - src: ./completions/bvr-cli.bash
+        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files/usr{{ end }}/etc/bash_completion.d/bvr-cli'
+      - src: ./completions/bvr-cli.fish
+        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/fish/vendor_completions.d/bvr-cli.fish'
+      - src: ./completions/bvr-cli.zsh
+        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/zsh/site-functions/_bvr-cli'
+      - src: ./manpages/bvr-cli.1.gz
+        dst: '{{ if eq .Format "termux.deb" }}/data/data/com.termux/files{{ end }}/usr/share/man/man1/bvr-cli.1.gz'
     rpm:
       signature:
         key_file: '{{ if ne (index .Env "GPG_KEY_PATH") "" }}{{ .Env.GPG_KEY_PATH }}{{ else }}{{ end }}'
@@ -255,30 +255,30 @@ nix:
       name: nur
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
     license: fsl11Mit
     formatter: nixfmt
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     extra_install: |-
-      installManPage ./manpages/donk-cli.1.gz
+      installManPage ./manpages/bvr-cli.1.gz
       installShellCompletion ./completions/*
 
 winget:
-  - publisher: donk-cli
-    copyright: DONK, Inc
-    publisher_url: https://github.com/richavery/donk-cli
-    release_notes_url: "https://github.com/richavery/donk-cli/releases/tag/{{.Tag}}"
-    license_url: https://github.com/richavery/donk-cli/blob/main/LICENSE.md
+  - publisher: bvr-cli
+    copyright: BVR, Inc
+    publisher_url: https://github.com/richavery/bvr-cli
+    release_notes_url: "https://github.com/richavery/bvr-cli/releases/tag/{{.Tag}}"
+    license_url: https://github.com/richavery/bvr-cli/blob/main/LICENSE.md
     skip_upload: "{{ with .Prerelease }}true{{ end }}"
     commit_author:
-      name: "DONK"
-      email: "donkcli@users.noreply.github.com"
+      name: "BVR"
+      email: "bvrcli@users.noreply.github.com"
     repository:
       owner: "charmbracelet"
       name: winget-pkgs
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-      branch: "donk-cli-{{.Version}}"
+      branch: "bvr-cli-{{.Version}}"
       pull_request:
         enabled: true
         draft: false

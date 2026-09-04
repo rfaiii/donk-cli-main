@@ -8,10 +8,10 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/table"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/stringext"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/stringext"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // DockerMCPToolMessageItem is a message item that represents a Docker MCP tool call.

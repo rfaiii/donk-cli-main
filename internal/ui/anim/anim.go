@@ -15,7 +15,7 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/lucasb-eyer/go-colorful"
 
-	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/csync"
 )
 
 const (

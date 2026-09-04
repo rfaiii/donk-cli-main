@@ -13,7 +13,7 @@ Hermes is an autonomous agent built by Nous Research. It is not a single model
 sessions, curates memory, creates and improves its own skills, and can run on a
 local machine, a Docker container, or a serverless cloud backend. Hermes is
 compatible with the <https://agentskills.io> open standard, the same format
-DONK skills use, so project rules and skills can be shared.
+BVR skills use, so project rules and skills can be shared.
 
 ## Install
 
@@ -44,17 +44,17 @@ One subscription, many providers:
 hermes setup --portal   # OAuth to Nous Portal; covers model, web search, image gen, TTS, cloud browser
 ```
 
-## Invoke from DONK
+## Invoke from BVR
 
 Hermes is a long-lived agent, not a one-shot CLI. To delegate work without
-blocking DONK's terminal, run it as a backgrounded yolo/headless session or
+blocking BVR's terminal, run it as a backgrounded yolo/headless session or
 schedule it, then check results from the shared project directory.
 
 Run a fresh, isolated coding session (sandbox data dir so checkpoints stay
 isolated from your main Hermes history):
 
 ```sh
-hermes --data-dir "$TMPDIR/hermes-donk" "Fix the failing CI on main and add a test"
+hermes --data-dir "$TMPDIR/hermes-bvr" "Fix the failing CI on main and add a test"
 ```
 
 Start the messaging gateway so you can steer the run from anywhere (Telegram,
@@ -71,7 +71,7 @@ Schedule recurring agentic work (the schedule writes results into the project):
 hermes schedule create "Daily code review" \
   --cron "0 9 * * MON-FRI" \
   --prompt "Review PRs opened yesterday and summarize issues" \
-  --workspace "$DONK_PROJECT_DIR"
+  --workspace "$BVR_PROJECT_DIR"
 ```
 
 ## Slash commands (in the Hermes TUI or a message thread)
@@ -98,11 +98,11 @@ hermes --backend daytona "Scaffold a Go service with a Postgres migration"
 
 ## MCP and skills
 
-- Hermes consumes MCP servers; it can use the same MCP servers DONK exposes.
+- Hermes consumes MCP servers; it can use the same MCP servers BVR exposes.
 - Hermes reads project rules from `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and
-  `DONK.md` (the same files DONK reads), plus `SOUL.md` for personality.
-- Like DONK, Hermes follows the agentskills.io skill standard, so a skill you
-  author for DONK is understood by Hermes and vice versa.
+  `BVR.md` (the same files BVR reads), plus `SOUL.md` for personality.
+- Like BVR, Hermes follows the agentskills.io skill standard, so a skill you
+  author for BVR is understood by Hermes and vice versa.
 
 ## When to delegate
 
@@ -120,5 +120,5 @@ git --no-pager log --oneline -n 5
 ```
 
 > [!NOTE] Hermes does not yet ship a single "one-shot and exit" mode on every
-> backend; for fire-and-forget coding from DONK prefer Cline `--yolo`, or run
+> backend; for fire-and-forget coding from BVR prefer Cline `--yolo`, or run
 > Hermes through a scheduler/gateway and poll the project directory.

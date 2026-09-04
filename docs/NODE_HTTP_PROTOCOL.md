@@ -1,13 +1,13 @@
 # NODE HTTP Protocol
 
 The NODE agent exposes a small authenticated JSON API for device execution.
-The same `donk node serve` listener also exposes the WebSocket streaming
+The same `bvr node serve` listener also exposes the WebSocket streaming
 endpoint documented in `NODE_WEBSOCKET_PROTOCOL.md`.
 
 ## Start an agent
 
 ```sh
-donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
+bvr node serve --host 0.0.0.0:7777 --token "$BVR_NODE_TOKEN"
 ```
 
 Tokens are required when binding outside localhost. Keep the agent behind a

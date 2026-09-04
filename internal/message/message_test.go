@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

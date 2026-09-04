@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	hyperp "github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/env"
-	"github.com/richavery/donk-cli/internal/lock"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/oauth/copilot"
-	"github.com/richavery/donk-cli/internal/oauth/hyper"
+	hyperp "github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/env"
+	"github.com/richavery/bvr-cli/internal/lock"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth/copilot"
+	"github.com/richavery/bvr-cli/internal/oauth/hyper"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"golang.org/x/sync/singleflight"
@@ -91,8 +91,8 @@ type ConfigStore struct {
 	config             *Config
 	workingDir         string
 	resolver           VariableResolver
-	globalDataPath     string   // ~/.local/share/donk/donk.json
-	workspacePath      string   // .donk/donk.json
+	globalDataPath     string   // ~/.local/share/bvr/bvr.json
+	workspacePath      string   // .bvr/bvr.json
 	loadedPaths        []string // config files that were successfully loaded
 	knownProviders     []catwalk.Provider
 	overrides          RuntimeOverrides
@@ -410,7 +410,7 @@ func (s *ConfigStore) OverridePreferredModel(modelType SelectedModelType, model 
 
 // pinPreferredModelLocked records a model choice made in this instance so
 // that a later config reload cannot replace it with a choice made
-// somewhere else. Several DONK instances share one global config file, so
+// somewhere else. Several BVR instances share one global config file, so
 // a reload triggered by an unrelated write (a token refresh, say) would
 // otherwise import whichever model a sibling instance last selected and
 // switch models out from under the user mid-session.
@@ -574,7 +574,7 @@ func (s *ConfigStore) SetProviderAPIKey(scope Scope, providerID string, apiKey a
 //
 // Providers like Hyper rotate refresh tokens: each exchange consumes the
 // caller's refresh token, issues a new pair, and revokes the old one. If
-// two donk instances (or two goroutines) refresh concurrently with the
+// two bvr instances (or two goroutines) refresh concurrently with the
 // same stored refresh token, the second exchange reuses an already-revoked
 // token, trips the provider's reuse detection, and revokes the entire
 // token family — leaving both with dead tokens even though each refresh

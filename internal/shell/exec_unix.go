@@ -18,10 +18,10 @@ import (
 const defaultKillTimeout = 2 * time.Second
 
 // isolateProcess sets SysProcAttr so the child runs in its own session,
-// fully detached from DONK's controlling terminal. This prevents shells
+// fully detached from BVR's controlling terminal. This prevents shells
 // like zsh from grabbing the TTY for job control, which would cause
 // "suspended (tty input)" and corrupt Bubble Tea's terminal rendering.
-// It also prevents child processes from sending signals to DONK's process
+// It also prevents child processes from sending signals to BVR's process
 // group.
 func isolateProcess(cmd *exec.Cmd) {
 	if cmd.SysProcAttr == nil {
@@ -32,7 +32,7 @@ func isolateProcess(cmd *exec.Cmd) {
 
 // processGroupExecHandler returns an ExecHandlerFunc that replaces
 // interp.DefaultExecHandler with one that fully isolates child processes
-// from DONK's session and controlling terminal.
+// from BVR's session and controlling terminal.
 //
 // Without this, shells like zsh that enable job control when sourcing
 // framework files will attempt to take over the TTY, causing SIGTTIN/SIGTTOU

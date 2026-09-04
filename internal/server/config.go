@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/proto"
 )
 
 // handlePostWorkspaceConfigSet sets a configuration field.

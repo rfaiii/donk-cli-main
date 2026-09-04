@@ -8,9 +8,9 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // -----------------------------------------------------------------------------

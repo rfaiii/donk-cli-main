@@ -13,8 +13,8 @@ import (
 	"github.com/charlievieth/fastwalk"
 	gitconfig "github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing/format/gitignore"
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/home"
 )
 
 // fastIgnoreDirs is a set of directory names that are always ignored.
@@ -34,7 +34,7 @@ var fastIgnoreDirs = map[string]bool{
 	".Trash":          true,
 	".Spotlight-V100": true,
 	".fseventsd":      true,
-	".donk":           true,
+	".bvr":            true,
 	"OrbStack":        true,
 	".local":          true,
 	".share":          true,
@@ -108,14 +108,14 @@ var gitGlobalIgnorePatterns = sync.OnceValue(func() []gitignore.Pattern {
 	return parsePatterns(strings.Split(string(bts), "\n"), nil)
 })
 
-// donkGlobalIgnorePatterns returns patterns from the user's
-// ~/.config/donk/ignore file.
-var donkGlobalIgnorePatterns = sync.OnceValue(func() []gitignore.Pattern {
-	name := filepath.Join(home.Config(), "donk", "ignore")
+// bvrGlobalIgnorePatterns returns patterns from the user's
+// ~/.config/bvr/ignore file.
+var bvrGlobalIgnorePatterns = sync.OnceValue(func() []gitignore.Pattern {
+	name := filepath.Join(home.Config(), "bvr", "ignore")
 	bts, err := os.ReadFile(name)
 	if err != nil {
 		if !os.IsNotExist(err) {
-			slog.Debug("Failed to read donk global ignore file", "path", name, "error", err)
+			slog.Debug("Failed to read bvr global ignore file", "path", name, "error", err)
 		}
 		return nil
 	}
@@ -138,7 +138,7 @@ func parsePatterns(lines []string, domain []string) []gitignore.Pattern {
 }
 
 type directoryLister struct {
-	// dirPatterns caches parsed patterns from .gitignore/.donkignore for each directory.
+	// dirPatterns caches parsed patterns from .gitignore/.bvrignore for each directory.
 	// This avoids re-reading files when building combined matchers.
 	dirPatterns *csync.Map[string, []gitignore.Pattern]
 	// combinedMatchers caches a combined matcher for each directory that includes
@@ -165,7 +165,7 @@ func pathToComponents(path string) []string {
 }
 
 // getDirPatterns returns the parsed patterns for a specific directory's
-// .gitignore and .donkignore files. Results are cached.
+// .gitignore and .bvrignore files. Results are cached.
 func (dl *directoryLister) getDirPatterns(dir string) []gitignore.Pattern {
 	return dl.dirPatterns.GetOrSet(dir, func() []gitignore.Pattern {
 		var allPatterns []gitignore.Pattern
@@ -176,7 +176,7 @@ func (dl *directoryLister) getDirPatterns(dir string) []gitignore.Pattern {
 			domain = pathToComponents(relPath)
 		}
 
-		for _, ignoreFile := range []string{".gitignore", ".donkignore"} {
+		for _, ignoreFile := range []string{".gitignore", ".bvrignore"} {
 			ignPath := filepath.Join(dir, ignoreFile)
 			if content, err := os.ReadFile(ignPath); err == nil {
 				lines := strings.Split(string(content), "\n")
@@ -197,9 +197,9 @@ func (dl *directoryLister) getCombinedMatcher(dir string) gitignore.Matcher {
 		// Add common patterns first (lowest priority).
 		allPatterns = append(allPatterns, commonIgnorePatterns()...)
 
-		// Add global ignore patterns (git core.excludesFile + donk global ignore).
+		// Add global ignore patterns (git core.excludesFile + bvr global ignore).
 		allPatterns = append(allPatterns, gitGlobalIgnorePatterns()...)
-		allPatterns = append(allPatterns, donkGlobalIgnorePatterns()...)
+		allPatterns = append(allPatterns, bvrGlobalIgnorePatterns()...)
 
 		// Collect patterns from root to this directory.
 		relDir, _ := filepath.Rel(dl.rootPath, dir)

@@ -33,41 +33,41 @@ import (
 	"github.com/charmbracelet/ultraviolet/screen"
 	"github.com/charmbracelet/x/editor"
 	xstrings "github.com/charmbracelet/x/exp/strings"
-	"github.com/richavery/donk-cli/internal/agent/hyper"
-	"github.com/richavery/donk-cli/internal/agent/notify"
-	agenttools "github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/app"
-	"github.com/richavery/donk-cli/internal/clipboard"
-	"github.com/richavery/donk-cli/internal/commands"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/discover"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/fsext"
-	"github.com/richavery/donk-cli/internal/history"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/localmodel"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/node"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/question"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/skills"
-	"github.com/richavery/donk-cli/internal/stringext"
-	"github.com/richavery/donk-cli/internal/ui/anim"
-	"github.com/richavery/donk-cli/internal/ui/attachments"
-	"github.com/richavery/donk-cli/internal/ui/chat"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/completions"
-	"github.com/richavery/donk-cli/internal/ui/dialog"
-	fimage "github.com/richavery/donk-cli/internal/ui/image"
-	"github.com/richavery/donk-cli/internal/ui/logo"
-	"github.com/richavery/donk-cli/internal/ui/notification"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/ui/util"
-	"github.com/richavery/donk-cli/internal/version"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/agent/notify"
+	agenttools "github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/app"
+	"github.com/richavery/bvr-cli/internal/clipboard"
+	"github.com/richavery/bvr-cli/internal/commands"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/discover"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/localmodel"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/node"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/question"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/stringext"
+	"github.com/richavery/bvr-cli/internal/ui/anim"
+	"github.com/richavery/bvr-cli/internal/ui/attachments"
+	"github.com/richavery/bvr-cli/internal/ui/chat"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/completions"
+	"github.com/richavery/bvr-cli/internal/ui/dialog"
+	fimage "github.com/richavery/bvr-cli/internal/ui/image"
+	"github.com/richavery/bvr-cli/internal/ui/logo"
+	"github.com/richavery/bvr-cli/internal/ui/notification"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/util"
+	"github.com/richavery/bvr-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/workspace"
 )
 
 // Compact mode breakpoints.
@@ -464,7 +464,7 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 		attachments: attachments,
 		todoSpinner: todoSpinner,
 		bannerAnim: anim.New(anim.Settings{
-			ID:          "donk-banner",
+			ID:          "bvr-banner",
 			Size:        240,
 			GradColorA:  com.Styles.Logo.TitleColorA,
 			GradColorB:  com.Styles.Logo.TitleColorB,
@@ -991,7 +991,7 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 		if cmd := m.sendNotification(notification.Notification{
-			Title:   "Donk is waiting...",
+			Title:   "BVR is waiting...",
 			Message: fmt.Sprintf("Permission required to execute \"%s\"", msg.Payload.ToolName),
 		}); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -1004,7 +1004,7 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 		if cmd := m.sendNotification(notification.Notification{
-			Title:   "Donk is waiting...",
+			Title:   "BVR is waiting...",
 			Message: fmt.Sprintf("%d questions need your input", len(msg.Payload.Questions)),
 		}); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -1415,9 +1415,9 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		cmds = append(cmds, clearInfoMsgCmd(ttl))
 	case app.UpdateAvailableMsg:
-		text := fmt.Sprintf("Donk update available: v%s → v%s.", msg.CurrentVersion, msg.LatestVersion)
+		text := fmt.Sprintf("BVR update available: v%s → v%s.", msg.CurrentVersion, msg.LatestVersion)
 		if msg.IsDevelopment {
-			text = fmt.Sprintf("This is a development version of Donk. The latest version is v%s.", msg.LatestVersion)
+			text = fmt.Sprintf("This is a development version of BVR. The latest version is v%s.", msg.LatestVersion)
 		}
 		ttl := 10 * time.Second
 		m.status.SetInfoMsg(util.InfoMsg{
@@ -3184,7 +3184,7 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	}
 
 	// Debugging rendering (visually see when the tui rerenders)
-	if os.Getenv("DONK_UI_DEBUG") == "true" {
+	if os.Getenv("BVR_UI_DEBUG") == "true" {
 		debugView := lipgloss.NewStyle().Background(lipgloss.ANSIColor(rand.Intn(256))).Width(4).Height(2)
 		debug := uv.NewStyledString(debugView.String())
 		debug.Draw(scr, image.Rectangle{
@@ -3255,7 +3255,7 @@ func (m *UI) View() tea.View {
 		v.MouseMode = tea.MouseModeCellMotion
 	}
 	v.ReportFocus = m.caps.ReportFocusEvents
-	v.WindowTitle = "donk " + home.Short(m.com.Workspace.WorkingDir())
+	v.WindowTitle = "bvr " + home.Short(m.com.Workspace.WorkingDir())
 
 	canvas := uv.NewScreenBuffer(m.width, m.height)
 	v.Cursor = m.Draw(canvas, canvas.Bounds())
@@ -3890,7 +3890,7 @@ func (m *UI) openEditor(value string) tea.Cmd {
 		return util.ReportError(err)
 	}
 	cmd, err := editor.Command(
-		"donk",
+		"bvr",
 		tmpPath,
 		editor.AtPosition(
 			m.textarea.Line()+1,
@@ -3924,7 +3924,7 @@ func (m *UI) openEditor(value string) tea.Cmd {
 // openFileInExternalEditor hands an existing project file to the configured
 // editor without copying its path into a temporary message buffer.
 func (m *UI) openFileInExternalEditor(path string) tea.Cmd {
-	cmd, err := editor.Command("donk", path)
+	cmd, err := editor.Command("bvr", path)
 	if err != nil {
 		return util.ReportError(err)
 	}
@@ -4917,7 +4917,7 @@ func (m *UI) handleAgentNotification(n notify.Notification) tea.Cmd {
 	case notify.TypeAgentFinished:
 		common.StopTurn()
 		cmds = append(cmds, m.sendNotification(notification.Notification{
-			Title:   "Donk is waiting...",
+			Title:   "BVR is waiting...",
 			Message: fmt.Sprintf("Agent's turn completed in \"%s\"", n.SessionTitle),
 		}))
 		if m.com.IsHyper() {
@@ -5366,7 +5366,7 @@ func (m *UI) disableDockerMCP() tea.Msg {
 	return util.NewInfoMsg("Docker MCP disabled successfully")
 }
 
-// renderLogo renders the DONK-CLI logo with the given styles and dimensions.
+// renderLogo renders the BVR-CLI logo with the given styles and dimensions.
 func renderLogo(t *styles.Styles, compact, hyper bool, width, frame int, animation string) string {
 	return logo.Render(t.Logo.GradCanvas, version.ShortVersion(), compact, logo.Opts{
 		FieldColor:   t.Logo.FieldColor,

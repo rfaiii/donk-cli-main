@@ -8,31 +8,31 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/pkg/browser"
-	"github.com/richavery/donk-cli/internal/clipboard"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/oauth/copilot"
-	"github.com/richavery/donk-cli/internal/oauth/hyper"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/clipboard"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth/copilot"
+	"github.com/richavery/bvr-cli/internal/oauth/hyper"
+	"github.com/richavery/bvr-cli/internal/workspace"
 	"github.com/spf13/cobra"
 )
 
 var loginCmd = &cobra.Command{
 	Aliases: []string{"auth"},
 	Use:     "login [platform]",
-	Short:   "Login DONK to a platform",
-	Long: `Login DONK to a specified platform.
+	Short:   "Login BVR to a platform",
+	Long: `Login BVR to a specified platform.
 The platform should be provided as an argument.
 Available platforms are: hyper, copilot.`,
 	Example: `
 # Authenticate with Charm Hyper
-donk-cli login
+bvr-cli login
 
 # Authenticate with GitHub Copilot
-donk-cli login copilot
+bvr-cli login copilot
 
 # Force re-authentication even if already logged in
-donk-cli login -f copilot
+bvr-cli login -f copilot
   `,
 	ValidArgs: []cobra.Completion{
 		"hyper",

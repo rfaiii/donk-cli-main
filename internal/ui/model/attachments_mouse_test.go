@@ -5,10 +5,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/question"
-	"github.com/richavery/donk-cli/internal/ui/attachments"
-	"github.com/richavery/donk-cli/internal/ui/dialog"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/question"
+	"github.com/richavery/bvr-cli/internal/ui/attachments"
+	"github.com/richavery/bvr-cli/internal/ui/dialog"
 	"github.com/stretchr/testify/require"
 )
 

@@ -13,15 +13,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/server"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/server"
 )
 
 // DummyHost is used to satisfy the http.Client's requirement for a URL.
-const DummyHost = "api.donk.localhost"
+const DummyHost = "api.bvr.localhost"
 
-// Client represents an RPC client connected to a DONK server.
+// Client represents an RPC client connected to a BVR server.
 type Client struct {
 	h        *http.Client
 	path     string

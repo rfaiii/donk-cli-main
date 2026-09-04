@@ -3,9 +3,9 @@ package chat
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

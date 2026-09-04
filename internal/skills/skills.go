@@ -15,7 +15,7 @@ import (
 	"sync"
 
 	"github.com/charlievieth/fastwalk"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"gopkg.in/yaml.v3"
 )
 

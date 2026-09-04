@@ -1,25 +1,25 @@
 # Mobile CLI
 
 Plans and outline for the iPhone and Android companion variants, plus the
-host-side companion bridge that connects them to `donk-cli`.
+host-side companion bridge that connects them to `bvr-cli`.
 
 ## Goals
 
-- Provide a mobile-first control surface for Donk CLI sessions.
+- Provide a mobile-first control surface for BVR-CLI sessions.
 - Keep the existing Go CLI intact; add a lightweight companion bridge instead of rewriting the core in another runtime.
 - Support secure local/network transport between the host CLI and mobile clients.
 
 ## Source of Truth
 
 This plan is based on:
-`/Users/richavery/.hermes/attachments/donk_cli_companion_architecture.html`
+`/Users/richavery/.hermes/attachments/bvr_cli_companion_architecture.html`
 
 Companion server design details live in:
-[`docs/DONK-SERVER.md`](DONK-SERVER.md)
+[`docs/BVR-SERVER.md`](BVR-SERVER.md)
 
 ## Topology
 
-- Host machine runs the normal Donk CLI.
+- Host machine runs the normal BVR-CLI.
 - Optional companion server/bridge runs alongside the CLI to expose secure mobile-facing commands.
 - Mobile clients connect via a private/link-local or authenticated channel.
 
@@ -57,7 +57,7 @@ mobile-cli/
 - **Web UI Prototype** built in `mobile-cli/web-preview/` for instant zero-compile UI testing.
 - **FastMCP Server** implemented in `mcp-server/`, exposing tools over SSE.
 - **Networking** The iOS app connects to the local FastMCP/companion bridge via `URLSession` for tool discovery and JSON-RPC requests.
-- Companion server design is documented in `docs/DONK-SERVER.md`.
+- Companion server design is documented in `docs/BVR-SERVER.md`.
 
 ## Current limitations
 

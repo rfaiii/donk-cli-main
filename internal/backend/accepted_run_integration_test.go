@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/agent"
-	"github.com/richavery/donk-cli/internal/agent/agenttest"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/agent"
+	"github.com/richavery/bvr-cli/internal/agent/agenttest"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

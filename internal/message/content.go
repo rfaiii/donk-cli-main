@@ -14,7 +14,7 @@ import (
 	"charm.land/fantasy/providers/google"
 	"charm.land/fantasy/providers/openai"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/stringext"
+	"github.com/richavery/bvr-cli/internal/stringext"
 )
 
 type MessageRole string

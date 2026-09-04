@@ -3,10 +3,10 @@ package model
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/skills"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	uistyles "github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	uistyles "github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 
@@ -65,7 +65,7 @@ func TestSkillStatusItemsExcludesDisabledSkills(t *testing.T) {
 	ui := &UI{
 		com: &common.Common{
 			Styles:    &st,
-			Workspace: &testWorkspace{cfg: &config.Config{Options: &config.Options{DisabledSkills: []string{"go-doc", "donk-config"}}}},
+			Workspace: &testWorkspace{cfg: &config.Config{Options: &config.Options{DisabledSkills: []string{"go-doc", "bvr-config"}}}},
 		},
 		skillStates: []*skills.SkillState{
 			{Name: "go-doc", Path: "/tmp/go-doc/SKILL.md", State: skills.StateNormal},
@@ -76,6 +76,6 @@ func TestSkillStatusItemsExcludesDisabledSkills(t *testing.T) {
 
 	for _, item := range items {
 		require.NotEqual(t, "go-doc", item.name)
-		require.NotEqual(t, "donk-config", item.name)
+		require.NotEqual(t, "bvr-config", item.name)
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/message"
 )
 
 // PersistOutput stores a bang-mode shell command result as a user message.

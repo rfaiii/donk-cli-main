@@ -19,30 +19,30 @@ import (
 	"charm.land/fantasy"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/agent"
-	"github.com/richavery/donk-cli/internal/agent/notify"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/clipboard"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/filetracker"
-	"github.com/richavery/donk-cli/internal/format"
-	"github.com/richavery/donk-cli/internal/herdr"
-	"github.com/richavery/donk-cli/internal/history"
-	"github.com/richavery/donk-cli/internal/log"
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/question"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/shell"
-	"github.com/richavery/donk-cli/internal/skills"
-	"github.com/richavery/donk-cli/internal/ui/anim"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/update"
-	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/agent"
+	"github.com/richavery/bvr-cli/internal/agent/notify"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/clipboard"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/filetracker"
+	"github.com/richavery/bvr-cli/internal/format"
+	"github.com/richavery/bvr-cli/internal/herdr"
+	"github.com/richavery/bvr-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/log"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/question"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/ui/anim"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/update"
+	"github.com/richavery/bvr-cli/internal/version"
 )
 
 // UpdateAvailableMsg is sent when a new version is available.
@@ -80,7 +80,7 @@ type App struct {
 	// runCompletions is the authoritative per-run completion signal,
 	// emitted once per top-level agent turn after all message
 	// updates have been flushed. Bridged into app.events so SSE
-	// subscribers (notably `donk-cli run` in client/server mode) can
+	// subscribers (notably `bvr-cli run` in client/server mode) can
 	// drive their exit on a deterministic, payload-bearing event
 	// instead of guessing from message finish parts.
 	runCompletions *pubsub.Broker[notify.RunComplete]
@@ -578,7 +578,7 @@ func setupSubscriber[T any](
 // app.events broker using PublishMustDeliver instead of Publish. Use
 // this for terminal events that subscribers cannot tolerate losing —
 // notably RunComplete, which is the authoritative end-of-run signal
-// for `donk-cli run`. A lossy fan-in here can drop the only terminal
+// for `bvr-cli run`. A lossy fan-in here can drop the only terminal
 // event and hang non-interactive clients waiting on it.
 func setupSubscriberMustDeliver[T any](
 	ctx context.Context,

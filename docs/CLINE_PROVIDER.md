@@ -1,6 +1,6 @@
 # Cline Provider (api.cline.bot)
 
-Cline's hosted API gateway is integrated into DONK-CLI as a first-class
+Cline's hosted API gateway is integrated into BVR-CLI as a first-class
 provider. It is OpenAI-compatible and fronts a curated set of frontier models
 (Claude, GPT, Gemini, Qwen) using a Cline account token.
 
@@ -14,7 +14,7 @@ provider. It is OpenAI-compatible and fronts a curated set of frontier models
    export CLINE_API_KEY=your-token-here
    ```
 
-   or run `donk-cli`, open the model picker, choose the **Cline** provider,
+   or run `bvr-cli`, open the model picker, choose the **Cline** provider,
    and paste the token when prompted (stored under
    `providers.cline.api_key` in the global config).
 
@@ -32,7 +32,7 @@ provider. It is OpenAI-compatible and fronts a curated set of frontier models
 - **"ADD CLINE API KEY" flow:** when the Cline provider is not yet configured,
   the Other Models dialog shows an "ADD CLINE API KEY" row. Selecting it opens
   the API key input; once the key is saved (verified with the `X-Api-Key`
-  header), donk fetches the full live catalog from the gateway — including all
+  header), bvr fetches the full live catalog from the gateway — including all
   of Cline's **free models** — and shows it without a restart.
 - Selecting a Cline model sets the large model; the small model defaults to
   the provider's `DefaultSmallModelID`.

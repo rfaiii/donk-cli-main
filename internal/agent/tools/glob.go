@@ -15,9 +15,9 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/fsext"
 )
 
 const GlobToolName = "glob"

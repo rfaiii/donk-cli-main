@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/shell"
 	"github.com/stretchr/testify/require"
 )
 
@@ -188,20 +188,20 @@ func TestBuildEnv(t *testing.T) {
 		}
 	}
 
-	require.Equal(t, EventPreToolUse, envMap["DONK_EVENT"])
-	require.Equal(t, "bash", envMap["DONK_TOOL_NAME"])
-	require.Equal(t, "sess-1", envMap["DONK_SESSION_ID"])
-	require.Equal(t, "/work", envMap["DONK_CWD"])
-	require.Equal(t, "/project", envMap["DONK_PROJECT_DIR"])
-	require.Equal(t, "ls", envMap["DONK_TOOL_INPUT_COMMAND"])
-	require.Equal(t, "/tmp/f.txt", envMap["DONK_TOOL_INPUT_FILE_PATH"])
+	require.Equal(t, EventPreToolUse, envMap["BVR_EVENT"])
+	require.Equal(t, "bash", envMap["BVR_TOOL_NAME"])
+	require.Equal(t, "sess-1", envMap["BVR_SESSION_ID"])
+	require.Equal(t, "/work", envMap["BVR_CWD"])
+	require.Equal(t, "/project", envMap["BVR_PROJECT_DIR"])
+	require.Equal(t, "ls", envMap["BVR_TOOL_INPUT_COMMAND"])
+	require.Equal(t, "/tmp/f.txt", envMap["BVR_TOOL_INPUT_FILE_PATH"])
 
-	// Shared DONK markers must be present so hook-authored scripts can
-	// detect they're running under DONK the same way bash-tool-invoked
+	// Shared BVR markers must be present so hook-authored scripts can
+	// detect they're running under BVR the same way bash-tool-invoked
 	// scripts can.
-	require.Equal(t, "1", envMap["DONK"])
-	require.Equal(t, "donk", envMap["AGENT"])
-	require.Equal(t, "donk", envMap["AI_AGENT"])
+	require.Equal(t, "1", envMap["BVR"])
+	require.Equal(t, "bvr", envMap["AGENT"])
+	require.Equal(t, "bvr", envMap["AI_AGENT"])
 }
 
 func splitFirst(s, sep string) []string {
@@ -524,7 +524,7 @@ func TestRunnerParallelExecution(t *testing.T) {
 func TestRunnerEnvVarsPropagated(t *testing.T) {
 	t.Parallel()
 	hookCfg := config.HookConfig{
-		Command: `printf '{"decision":"allow","context":"%s"}' "$DONK_TOOL_NAME"`,
+		Command: `printf '{"decision":"allow","context":"%s"}' "$BVR_TOOL_NAME"`,
 	}
 	r := NewRunner([]config.HookConfig{hookCfg}, t.TempDir(), t.TempDir())
 	result, err := r.Run(context.Background(), EventPreToolUse, "sess", "bash", `{}`)
@@ -748,7 +748,7 @@ func TestParseStdoutClaudeCodeFormat(t *testing.T) {
 		require.Equal(t, DecisionNone, r.Decision)
 	})
 
-	t.Run("donk format still works", func(t *testing.T) {
+	t.Run("bvr format still works", func(t *testing.T) {
 		t.Parallel()
 		r := parseStdout(`{"decision":"allow","context":"hello"}`)
 		require.Equal(t, DecisionAllow, r.Decision)

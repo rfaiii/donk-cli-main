@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/message"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

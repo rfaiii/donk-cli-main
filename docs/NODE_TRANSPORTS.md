@@ -1,6 +1,6 @@
 # NODE Transports
 
-DONK supports one device registry with three transport adapters:
+BVR supports one device registry with three transport adapters:
 
 | Scheme | Adapter | Best for |
 | --- | --- | --- |
@@ -11,7 +11,7 @@ DONK supports one device registry with three transport adapters:
 ## Quick start
 
 ```sh
-donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
+bvr node serve --host 0.0.0.0:7777 --token "$BVR_NODE_TOKEN"
 ```
 
 The listener exposes `/v1/node/health`, `/v1/node/capabilities`,
@@ -32,10 +32,10 @@ selected before running Node/NPM commands.
 
 1. Start the agent on your laptop/desktop:
    ```sh
-   donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
+   bvr node serve --host 0.0.0.0:7777 --token "$BVR_NODE_TOKEN"
    ```
 2. Make sure your iPhone is on the same local network as the host.
-3. Open the DONK companion app on iPhone.
+3. Open the BVR companion app on iPhone.
 4. Enter the host IP and port, then the same bearer token.
 5. The device appears in **NODE Connections** as `online` when the health
    check succeeds.

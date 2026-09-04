@@ -6,7 +6,7 @@ import (
 	"time"
 
 	powernapconfig "github.com/charmbracelet/x/powernap/pkg/config"
-	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/csync"
 	"github.com/stretchr/testify/require"
 )
 

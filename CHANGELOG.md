@@ -5,7 +5,7 @@
 ### Homescreen UI & animations
 
 - New boot brand banner plays a sequence at startup (each element held ~2s):
-  the wordmark **DONK**, the version (`v1.1.7`), **OH BEAV!**, and the
+  the wordmark **BVR**, the version (`v1.1.7`), **OH BEAV!**, and the
   attribution `created by RICHARD AIZEN AVERY III`. Letters scramble into place
   with a slow fade; the bar uses the theme **ACCENT** color for its background
   and the app **BACKGROUND** color for its text so it pops
@@ -83,7 +83,7 @@
   homescreen (NODE → MCP → LSP), with SKILLS on the right, for tighter space use.
 - Clicking outside the Commands (command palette) dialog now dismisses it (click-away
   close), matching the File Finder.
-- Restored the CLI suffix in the header wordmark (now renders "DONK-CLI"), per the
+- Restored the CLI suffix in the header wordmark (now renders "BVR-CLI"), per the
   wordmark source of truth documented in docs/UI_BRANDING.md.
 
 ## 1.1.5
@@ -92,7 +92,7 @@
 
 - Added mobile companion bridge planning and server design.
 - Added `docs/MOBILE-CLI.md` for the iOS/Android companion roadmap.
-- Added `docs/DONK-SERVER.md` for the host-side companion server.
+- Added `docs/BVR-SERVER.md` for the host-side companion server.
 - Added iOS companion app scaffold under `mobile-cli/ios/`.
 - **Note:** the mobile companion is present for testing, but the mobile version
   is currently in **test mode** and not yet ready for general use.
@@ -119,7 +119,7 @@
 
 ### Native Ollama coding
 
-- Added `donk-cli code --native` for small local Ollama coding models.
+- Added `bvr-cli code --native` for small local Ollama coding models.
 - Added the `cmd/codetool` sidecar with a native Ollama `/api/chat` client and
   a minimal flat coding tool set.
 - Added recovery for Qwen-style text tool calls, fenced JSON, truncated view

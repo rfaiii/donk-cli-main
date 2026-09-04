@@ -28,5 +28,5 @@ Start the persistent agent with the same command as the HTTP agent. The CLI
 serves both HTTP and WebSocket routes from the same listener and token:
 
 ```sh
-donk node serve --host 0.0.0.0:7777 --token "$DONK_NODE_TOKEN"
+bvr node serve --host 0.0.0.0:7777 --token "$BVR_NODE_TOKEN"
 ```

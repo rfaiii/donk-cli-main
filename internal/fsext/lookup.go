@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/richavery/donk-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/home"
 )
 
 // Lookup searches for a target files or directories starting from dir

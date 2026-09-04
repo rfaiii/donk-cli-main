@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/log"
+	"github.com/richavery/bvr-cli/internal/log"
 )
 
 var getRg = sync.OnceValue(func() string {

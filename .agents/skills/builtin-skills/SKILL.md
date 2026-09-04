@@ -1,14 +1,14 @@
 ---
 name: builtin-skills
 description:
-  Use when creating a new builtin skill for DONK, editing an existing builtin
+  Use when creating a new builtin skill for BVR, editing an existing builtin
   skill (internal/skills/builtin/), or when the user needs to understand how the
   embedded skill system works.
 ---
 
 # Builtin Skills
 
-DONK embeds skills directly into the binary via `internal/skills/builtin/`.
+BVR embeds skills directly into the binary via `internal/skills/builtin/`.
 These are always available without user configuration.
 
 ## How It Works
@@ -17,8 +17,8 @@ These are always available without user configuration.
 - The tree is embedded at compile time via `//go:embed builtin/*` in
   `internal/skills/embed.go`.
 - `DiscoverBuiltin()` walks the embedded FS, parses each `SKILL.md`, and sets
-  paths with the `donk://skills/` prefix (e.g., `donk://skills/jq/SKILL.md`).
-- The View tool resolves `donk://` paths from the embedded FS, not disk.
+  paths with the `bvr://skills/` prefix (e.g., `bvr://skills/jq/SKILL.md`).
+- The View tool resolves `bvr://` paths from the embedded FS, not disk.
 - User skills with the same name override builtins (last occurrence wins in
   `Deduplicate()`).
 
@@ -37,8 +37,8 @@ These are always available without user configuration.
 
 | Skill          | Directory               | Description                                |
 | -------------- | ----------------------- | ------------------------------------------ |
-| `donk-config` | `builtin/donk-config/` | DONK configuration help                   |
-| `donk-hooks`  | `builtin/donk-hooks/`  | Authoring, configuring and debugging hooks |
+| `bvr-config` | `builtin/bvr-config/` | BVR configuration help                   |
+| `bvr-hooks`  | `builtin/bvr-hooks/`  | Authoring, configuring and debugging hooks |
 | `jq`           | `builtin/jq/`           | jq JSON processor usage guide              |
 | `cline`        | `builtin/cline/`       | Cline autonomous coding agent CLI          |
 | `hermes`       | `builtin/hermes/`      | Hermes self-improving autonomous agent      |

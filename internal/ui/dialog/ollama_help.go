@@ -7,7 +7,7 @@ import (
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 //go:embed ollama_how_to.md

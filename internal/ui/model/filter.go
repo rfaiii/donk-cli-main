@@ -4,7 +4,7 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 // inputFilterInterval targets roughly one filtered sample per 60 Hz frame.

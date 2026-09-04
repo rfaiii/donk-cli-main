@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/hooks"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/hooks"
 	"github.com/stretchr/testify/require"
 )
 
@@ -29,7 +29,7 @@ func TestReloadFromDisk_CompilesHookMatchers(t *testing.T) {
 
 	workDir := t.TempDir()
 	dataDir := t.TempDir()
-	configPath := filepath.Join(workDir, "donk.json")
+	configPath := filepath.Join(workDir, "bvr.json")
 	cfgJSON := `{
         "hooks": {
             "PreToolUse": [
@@ -82,7 +82,7 @@ func TestSetConfigField_AutoReload_PreservesHookMatcherFiltering(t *testing.T) {
 
 	workDir := t.TempDir()
 	dataDir := t.TempDir()
-	configPath := filepath.Join(workDir, "donk.json")
+	configPath := filepath.Join(workDir, "bvr.json")
 	cfgJSON := `{
         "hooks": {
             "PreToolUse": [

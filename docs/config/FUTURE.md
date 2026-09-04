@@ -13,7 +13,7 @@ it as a scratchpad for what's next, not as documentation of current behavior.
 
 ### Motivation
 
-Right now `donkrc` runs once, at startup. If you want to change something
+Right now `bvrrc` runs once, at startup. If you want to change something
 mid-session — swap the large model, allow a tool, add an MCP server — you edit
 the file and restart.
 
@@ -23,16 +23,16 @@ session**. The mental model is exactly a shell and its `.bashrc`:
 
 - Running a config command changes the **current session only** — like typing
   `export` or `alias` at a live prompt.
-- To make it stick, you edit your `donkrc` — like editing `.bashrc`.
+- To make it stick, you edit your `bvrrc` — like editing `.bashrc`.
 
-So you could say "DONK, switch to the small model for a bit" and it just
+So you could say "BVR, switch to the small model for a bit" and it just
 runs `model small …`, live, no restart.
 
 > [!IMPORTANT]
 > **Persistence is a non-goal.** The bash tool never writes config files.
 > This is deliberate: a script can't be round-tripped. You don't regenerate
 > your `.bashrc` from the live shell's state, and we won't regenerate
-> `donkrc` from live config state. Want it permanent? Edit `donkrc`.
+> `bvrrc` from live config state. Want it permanent? Edit `bvrrc`.
 
 ### Why it's mostly wiring
 
@@ -114,26 +114,26 @@ larger, later increment.
 
 ### Motivation
 
-DONK currently uses JSON files in data directories as both persisted machine
+BVR currently uses JSON files in data directories as both persisted machine
 state and high-priority configuration:
 
 ```text
-~/.local/share/donk/donk.json
-.donk/donk.json
+~/.local/share/bvr/bvr.json
+.bvr/bvr.json
 ```
 
 These files hold mutable choices such as preferred/recent models, UI settings,
 workspace overrides, and some credentials. Treating them as ordinary config
 means state enters the same generic JSON merge/reload path as user-authored
-`donkrc` and legacy `donk.json` files.
+`bvrrc` and legacy `bvr.json` files.
 
 The goal is to make the roles explicit:
 
 | Role | Format |
 |---|---|
-| User-authored executable configuration | `donkrc` / `.donkrc` |
-| Legacy user-authored static configuration | `donk.json` / `.donk.json` |
-| DONK-owned persistent preferences and history | versioned `state.json` |
+| User-authored executable configuration | `bvrrc` / `.bvrrc` |
+| Legacy user-authored static configuration | `bvr.json` / `.bvr.json` |
+| BVR-owned persistent preferences and history | versioned `state.json` |
 | Session-only changes | memory |
 | Credentials/OAuth tokens | dedicated secure storage |
 
@@ -145,10 +145,10 @@ config and being deep-merged through the config pipeline.
 ### Proposed files
 
 ```text
-~/.config/donk/donkrc             global user config
-~/.local/share/donk/state.json     global machine state
-./donkrc / ./.donkrc              project user config
-.donk/state.json                   workspace machine state
+~/.config/bvr/bvrrc             global user config
+~/.local/share/bvr/state.json     global machine state
+./bvrrc / ./.bvrrc              project user config
+.bvr/state.json                   workspace machine state
 ```
 
 State files should be machine-owned, written with `0600`, protected by the
@@ -184,12 +184,12 @@ Explicit user configuration should beat remembered state:
 built-in defaults
 → global state defaults
 → workspace state defaults
-→ global legacy donk.json
-→ global donkrc
-→ project legacy donk.json
-→ project donkrc
-→ project .donk.json
-→ project .donkrc
+→ global legacy bvr.json
+→ global bvrrc
+→ project legacy bvr.json
+→ project bvrrc
+→ project .bvr.json
+→ project .bvrrc
 → runtime-only overrides
 ```
 
@@ -201,9 +201,9 @@ building without participating in precedence.
 User-authored JSON remains a supported config input during this work:
 
 ```text
-~/.config/donk/donk.json
-./donk.json
-./.donk.json
+~/.config/bvr/bvr.json
+./bvr.json
+./.bvr.json
 ```
 
 It must be decoded as configuration, never migrated as state. Only the
@@ -215,7 +215,7 @@ If user JSON is retired later:
 1. Keep reading it for a compatibility period.
 2. Warn only when a user-authored JSON config is loaded.
 3. Provide an explicit conversion command (for example,
-   `donk config convert donk.json > donkrc`).
+   `bvr config convert bvr.json > bvrrc`).
 4. Never rewrite user config automatically.
 
 Using JSON internally for state is independent of deprecating JSON as a user
@@ -255,22 +255,22 @@ func (s *ConfigStore) SetCompactMode(scope Scope, enabled bool) error {
 Real-time commands run through the Bash tool remain session-only and do not
 write state, preserving the shell/`.bashrc` mental model.
 
-### Typed donkrc builder
+### Typed bvrrc builder
 
 This is related but separate. Today the Bash path is:
 
 ```text
-donkrc → map[string]any → JSON → Config
+bvrrc → map[string]any → JSON → Config
 ```
 
 A later typed-builder phase should become:
 
 ```text
-donkrc → typed ConfigBuilder → Config
+bvrrc → typed ConfigBuilder → Config
 state.json → typed StateStore ───────┘
 ```
 
-Legacy `donk.json` would decode into a typed config patch and apply to the same
+Legacy `bvr.json` would decode into a typed config patch and apply to the same
 builder. This may require moving pure config data types into a dependency-neutral
 package to avoid import cycles.
 
@@ -282,11 +282,11 @@ package to avoid import cycles.
 4. Stop merging global/workspace data JSON as config.
 5. Move provider credentials and OAuth tokens to dedicated secure storage.
 6. Remove generic state callers of `SetConfigField` / dotted JSON paths.
-7. Replace the `donkrc` map/JSON bridge with a typed config builder.
+7. Replace the `bvrrc` map/JSON bridge with a typed config builder.
 
 Migration must preserve unknown legacy fields or warn and leave the original
 file untouched. Successfully migrated files can be renamed to
-`donk.json.migrated`; corrupt files should be quarantined as timestamped
+`bvr.json.migrated`; corrupt files should be quarantined as timestamped
 `state.json.corrupt-*` files and replaced with defaults.
 
 ## Permission-level hard deny
@@ -294,9 +294,9 @@ file untouched. Successfully migrated files can be renamed to
 **Status:** not implemented; probably unnecessary until a real use case
 appears.
 
-DONK currently has three useful tool states across both config formats:
+BVR currently has three useful tool states across both config formats:
 
-| State | `donkrc` | `donk.json` | Behavior |
+| State | `bvrrc` | `bvr.json` | Behavior |
 |---|---|---|---|
 | Auto-approved | `permissions allow bash` | `permissions.allowed_tools` | Visible; runs without prompting |
 | Prompted | neither list | neither list | Visible; asks the user before running |
@@ -306,7 +306,7 @@ DONK currently has three useful tool states across both config formats:
 block: because the tool is absent from the agent's tool list, the model cannot
 attempt to use it.
 
-The one state DONK does **not** have is "visible but always rejected": the
+The one state BVR does **not** have is "visible but always rejected": the
 model can see and choose the tool, but the permission engine denies every
 request without prompting. Supporting that would require a separate
 permission-level deny list in both the config schema and permission engine.

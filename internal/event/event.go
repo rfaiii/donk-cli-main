@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/posthog/posthog-go"
-	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/version"
 )
 
 const (

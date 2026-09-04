@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 )
 
 // defaultUpdateDebounce is the default debounce window for [Service.Update].

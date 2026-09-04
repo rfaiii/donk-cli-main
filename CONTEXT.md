@@ -1,4 +1,4 @@
-# Project: DONK-CLI
+# Project: BVR-CLI
 # Date: 2026-09-02
 
 ## Current Goal
@@ -13,13 +13,13 @@ shader/skills load-sequence debugging deferred for further research/testing.)
 - **UI:** `internal/ui/...` Bubble Tea state machine
 - **Packaging:** `packaging/` for npm/homebrew, `dist/release/` for binaries, `winget/` for manifest templates
 - **Release:** GitHub Releases v1.1.7
-- **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `donk-cli shaders list/install`
+- **Shaders:** `internal/shader` embeds Ghostty cursor GLSL shaders and provides `bvr-cli shaders list/install`
 - **NODE:** `internal/node` provides device registry, HTTP/WebSocket/SSH transports, and tests
 - **Themes:** 8 themes, each with derived Accent + Alt colors (`Styles.ThemeColor.Accent/.Alt`) per the color-mapping table
 - **Cline:** hosted gateway (api.cline.bot) integrated; live catalog fetch surfaces free models; `X-Api-Key` auth
 
 ## Recent Iterations
-- [x] Boot brand banner: DONK → version → "OH BEAV!" → attribution, accent-bg scramble sequence (internal/ui/model/version_banner.go)
+- [x] Boot brand banner: BVR → version → "OH BEAV!" → attribution, accent-bg scramble sequence (internal/ui/model/version_banner.go)
 - [x] Per-theme Accent/Alt color mapping across all 8 themes (internal/ui/styles/themes.go themeAccentAlt)
 - [x] Cline free-model support: live catalog fetch + in-app "ADD CLINE API KEY" flow, X-Api-Key verification
 - [x] "Other Models" palette entry + Cline catalog dialog (internal/ui/dialog/other_models.go)
@@ -27,7 +27,7 @@ shader/skills load-sequence debugging deferred for further research/testing.)
 - [x] Accent CPU/RAM bars; bold underlined project location; stacked Command (terminal icon) and File Finder (folder icon) home buttons, themed to the Primary color
 - [x] Lightened section help text (LOCAL DEVICE / SKILLS / MCP) for readability
 - [x] Bumped dev version 1.1.6:beta_v2 → 1.1.6:beta_v3 → release 1.1.7
-- [x] Added docs/donk-cli-llm-integration-spec.md and docs/CLINE_PROVIDER.md
+- [x] Added docs/bvr-cli-llm-integration-spec.md and docs/CLINE_PROVIDER.md
 - [x] Bumped project version to v1.1.5 and updated README/CHANGELOG
 - [x] Added DMG Swift launcher with Ghostty-first terminal auto-detection
 - [x] Created GitHub release v1.1.5 and attached cross-platform binaries
@@ -35,7 +35,7 @@ shader/skills load-sequence debugging deferred for further research/testing.)
 - [x] Added Windows installer zip bundle and Winget manifest template
 - [x] Merged maintainer/agent configuration into `AGENTS.md`
 - [x] Added beta testing guide in `docs/BETA.md`
-- [x] Embedded shader set and added `donk-cli shaders` command
+- [x] Embedded shader set and added `bvr-cli shaders` command
 - [x] Added optional Ghostty config installer for bundled shaders
 - [x] Added in-TUI cursor animation support using bundled effects
 - [x] Added `[+]` attachment button wired to FILEFINDER for in-ecosystem attachments

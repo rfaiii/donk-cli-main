@@ -6,7 +6,7 @@ FSL-1.1-MIT
 
 ## Notice
 
-Copyright 2025-2026 DONK, Inc.
+Copyright 2025-2026 BVR, Inc.
 
 ## Terms and Conditions
 

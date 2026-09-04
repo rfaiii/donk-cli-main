@@ -633,7 +633,7 @@ func recGlob(root, pattern string) ([]string, error) {
 // tools (VCS internals, package caches, hidden build dirs, etc.).
 func isExcludedDir(name string) bool {
 	switch name {
-	case ".git", ".donk", "node_modules", "vendor", ".venv", ".cache":
+	case ".git", ".bvr", "node_modules", "vendor", ".venv", ".cache":
 		return true
 	}
 	return strings.HasPrefix(name, ".")

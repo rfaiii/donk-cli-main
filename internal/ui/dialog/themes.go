@@ -6,8 +6,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 const ThemesID = "themes"
@@ -49,7 +49,7 @@ func (t *Themes) HandleMsg(msg tea.Msg) Action {
 }
 func (t *Themes) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	themes := styles.Themes()
-	lines := []string{"DONK THEMES", "", "←/→ choose  enter apply  esc close", ""}
+	lines := []string{"BVR THEMES", "", "←/→ choose  enter apply  esc close", ""}
 	for i, theme := range themes {
 		marker := "○"
 		if i == t.selected {

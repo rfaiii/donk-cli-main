@@ -8,10 +8,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/dialog"
-	"github.com/richavery/donk-cli/internal/ui/util"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/dialog"
+	"github.com/richavery/bvr-cli/internal/ui/util"
 )
 
 type onboardingStep int
@@ -191,7 +191,7 @@ func (o *onboardingModel) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 
 func (o *onboardingModel) render() string {
 	var b strings.Builder
-	b.WriteString(o.com.Styles.Initialize.Header.Render("Welcome to DONK"))
+	b.WriteString(o.com.Styles.Initialize.Header.Render("Welcome to BVR"))
 	b.WriteString("\n\n")
 
 	switch o.step {
@@ -202,7 +202,7 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepHome:
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Home"))
@@ -217,7 +217,7 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepModels:
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Models"))
@@ -230,7 +230,7 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepFileFinder:
 		b.WriteString(o.com.Styles.Initialize.Content.Render("File Finder"))
@@ -243,12 +243,12 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepNotifications:
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Notifications"))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("DONK shows status updates, model warm-up, and task progress in the notification area."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("BVR shows status updates, model warm-up, and task progress in the notification area."))
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Watch for provider, model, and workflow updates here."))
 		b.WriteString("\n\n")
@@ -256,12 +256,12 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepThemes:
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Themes"))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("DONK includes multiple themes."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("BVR includes multiple themes."))
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Available theme screenshots:"))
 		b.WriteString("\n")
@@ -273,16 +273,16 @@ func (o *onboardingModel) render() string {
 		b.WriteString("\n\n")
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to continue"))
 		b.WriteString("\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using DONK now"))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to opt out and start using BVR now"))
 
 	case onboardingStepComplete:
 		b.WriteString(o.com.Styles.Initialize.Accent.Render("Setup complete!"))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Content.Render("You're ready to use DONK."))
+		b.WriteString(o.com.Styles.Initialize.Content.Render("You're ready to use BVR."))
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Open /models to choose a model, then start chatting."))
 		b.WriteString("\n\n")
-		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to launch DONK"))
+		b.WriteString(o.com.Styles.Initialize.Accent.Render("Press Enter to launch BVR"))
 		b.WriteString("\n")
 		b.WriteString(o.com.Styles.Initialize.Content.Render("Press O or Esc to skip and explore later"))
 	}
@@ -333,7 +333,7 @@ func (o *onboardingModel) renderASCIIPreview(name string) string {
 	case "home-menu":
 		return o.com.Styles.Initialize.Content.Render(strings.TrimSpace(`
 ┌─────────────────────┐
-│ ▶ DONK              │
+│ ▶ BVR              │
 │ Project: my-app     │
 │ Model:  mistral     │
 │ Status: ready       │

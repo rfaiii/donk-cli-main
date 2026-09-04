@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 
-SRC=${DONK_MASTER_SKILLS_DIR:-"$HOME/Documents/AI-SKILLS"}
-DST=${DONK_SKILLS_DIR:-"$HOME/.agents/skills"}
+SRC=${BVR_MASTER_SKILLS_DIR:-"$HOME/Documents/AI-SKILLS"}
+DST=${BVR_SKILLS_DIR:-"$HOME/.agents/skills"}
 
 if [ ! -d "$SRC" ]; then
 	printf 'Master skills directory not found: %s\n' "$SRC" >&2

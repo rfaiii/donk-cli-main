@@ -7,7 +7,7 @@ import (
 
 	powernap "github.com/charmbracelet/x/powernap/pkg/lsp"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
-	"github.com/richavery/donk-cli/internal/lsp/util"
+	"github.com/richavery/bvr-cli/internal/lsp/util"
 )
 
 // HandleWorkspaceConfiguration handles workspace configuration requests

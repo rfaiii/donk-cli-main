@@ -12,10 +12,10 @@ func TestRegisterAndList(t *testing.T) {
 
 	// Override the projects file path for testing
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
 	// Test registering a project
-	err := Register("/home/user/project1", "/home/user/project1/.donk")
+	err := Register("/home/user/project1", "/home/user/project1/.bvr")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -34,12 +34,12 @@ func TestRegisterAndList(t *testing.T) {
 		t.Errorf("Expected path /home/user/project1, got %s", projects[0].Path)
 	}
 
-	if projects[0].DataDir != "/home/user/project1/.donk" {
-		t.Errorf("Expected data_dir /home/user/project1/.donk, got %s", projects[0].DataDir)
+	if projects[0].DataDir != "/home/user/project1/.bvr" {
+		t.Errorf("Expected data_dir /home/user/project1/.bvr, got %s", projects[0].DataDir)
 	}
 
 	// Register another project
-	err = Register("/home/user/project2", "/home/user/project2/.donk")
+	err = Register("/home/user/project2", "/home/user/project2/.bvr")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -62,10 +62,10 @@ func TestRegisterAndList(t *testing.T) {
 func TestRegisterUpdatesExisting(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
 	// Register a project
-	err := Register("/home/user/project1", "/home/user/project1/.donk")
+	err := Register("/home/user/project1", "/home/user/project1/.bvr")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -76,7 +76,7 @@ func TestRegisterUpdatesExisting(t *testing.T) {
 	// Wait a bit and re-register
 	time.Sleep(10 * time.Millisecond)
 
-	err = Register("/home/user/project1", "/home/user/project1/.donk-new")
+	err = Register("/home/user/project1", "/home/user/project1/.bvr-new")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -87,7 +87,7 @@ func TestRegisterUpdatesExisting(t *testing.T) {
 		t.Fatalf("Expected 1 project after update, got %d", len(projects))
 	}
 
-	if projects[0].DataDir != "/home/user/project1/.donk-new" {
+	if projects[0].DataDir != "/home/user/project1/.bvr-new" {
 		t.Errorf("Expected updated data_dir, got %s", projects[0].DataDir)
 	}
 
@@ -99,7 +99,7 @@ func TestRegisterUpdatesExisting(t *testing.T) {
 func TestLoadEmptyFile(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
 	// List before any projects exist
 	projects, err := List()
@@ -115,9 +115,9 @@ func TestLoadEmptyFile(t *testing.T) {
 func TestProjectsFilePath(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
-	expected := filepath.Join(tmpDir, "donk", "projects.json")
+	expected := filepath.Join(tmpDir, "bvr", "projects.json")
 	actual := projectsFilePath()
 
 	if actual != expected {
@@ -128,11 +128,11 @@ func TestProjectsFilePath(t *testing.T) {
 func TestRegisterWithParentDataDir(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
-	// Register a project where .donk is in a parent directory.
-	// e.g., working in /home/user/monorepo/packages/app but .donk is at /home/user/monorepo/.donk
-	err := Register("/home/user/monorepo/packages/app", "/home/user/monorepo/.donk")
+	// Register a project where .bvr is in a parent directory.
+	// e.g., working in /home/user/monorepo/packages/app but .bvr is at /home/user/monorepo/.bvr
+	err := Register("/home/user/monorepo/packages/app", "/home/user/monorepo/.bvr")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -150,19 +150,19 @@ func TestRegisterWithParentDataDir(t *testing.T) {
 		t.Errorf("Expected path /home/user/monorepo/packages/app, got %s", projects[0].Path)
 	}
 
-	if projects[0].DataDir != "/home/user/monorepo/.donk" {
-		t.Errorf("Expected data_dir /home/user/monorepo/.donk, got %s", projects[0].DataDir)
+	if projects[0].DataDir != "/home/user/monorepo/.bvr" {
+		t.Errorf("Expected data_dir /home/user/monorepo/.bvr, got %s", projects[0].DataDir)
 	}
 }
 
 func TestRegisterWithExternalDataDir(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("XDG_DATA_HOME", tmpDir)
-	t.Setenv("DONK_GLOBAL_DATA", filepath.Join(tmpDir, "donk"))
+	t.Setenv("BVR_GLOBAL_DATA", filepath.Join(tmpDir, "bvr"))
 
-	// Register a project where .donk is in a completely different location.
-	// e.g., project at /home/user/project but data stored at /var/data/donk/myproject
-	err := Register("/home/user/project", "/var/data/donk/myproject")
+	// Register a project where .bvr is in a completely different location.
+	// e.g., project at /home/user/project but data stored at /var/data/bvr/myproject
+	err := Register("/home/user/project", "/var/data/bvr/myproject")
 	if err != nil {
 		t.Fatalf("Register failed: %v", err)
 	}
@@ -180,7 +180,7 @@ func TestRegisterWithExternalDataDir(t *testing.T) {
 		t.Errorf("Expected path /home/user/project, got %s", projects[0].Path)
 	}
 
-	if projects[0].DataDir != "/var/data/donk/myproject" {
-		t.Errorf("Expected data_dir /var/data/donk/myproject, got %s", projects[0].DataDir)
+	if projects[0].DataDir != "/var/data/bvr/myproject" {
+		t.Errorf("Expected data_dir /var/data/bvr/myproject, got %s", projects[0].DataDir)
 	}
 }

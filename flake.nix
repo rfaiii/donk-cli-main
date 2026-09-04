@@ -1,5 +1,5 @@
 {
-  description = "DONK development environment";
+  description = "BVR development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

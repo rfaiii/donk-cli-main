@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/db"
 )
 
 // Service defines the interface for tracking file reads in sessions.

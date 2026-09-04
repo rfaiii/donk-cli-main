@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"charm.land/lipgloss/v2"
-	"github.com/richavery/donk-cli/internal/history"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/richavery/donk-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/message"
 )
 
 // CreateMessageParams represents parameters for creating a message.

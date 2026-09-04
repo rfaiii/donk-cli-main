@@ -8,9 +8,9 @@ import (
 	"testing"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/env"
-	"github.com/richavery/donk-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/env"
+	"github.com/richavery/bvr-cli/internal/oauth"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/goleak"
 )
@@ -38,7 +38,7 @@ func TestMCPSession_CancelOnClose(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	client := mcp.NewClient(&mcp.Implementation{Name: "donk-test"}, nil)
+	client := mcp.NewClient(&mcp.Implementation{Name: "bvr-test"}, nil)
 	clientSession, err := client.Connect(ctx, clientTransport, nil)
 	require.NoError(t, err)
 
@@ -403,7 +403,7 @@ func TestCreateTransport_HeadersResolution(t *testing.T) {
 // TestCreateSession_ResolutionFailureUpdatesState pins the user-visible
 // half of the regression fix: when any of command/args/env/headers/url
 // fails to resolve, createSession must publish StateError to the state
-// map so donk_info and the TUI's MCP status card can render a real
+// map so bvr_info and the TUI's MCP status card can render a real
 // error instead of the MCP silently sitting in "starting" or being
 // spawned with an empty credential.
 //

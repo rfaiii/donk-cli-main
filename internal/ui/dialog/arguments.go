@@ -15,9 +15,9 @@ import (
 	"golang.org/x/text/language"
 
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/commands"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/util"
+	"github.com/richavery/bvr-cli/internal/commands"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/util"
 )
 
 // ArgumentsID is the identifier for the arguments dialog.

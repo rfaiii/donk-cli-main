@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/invopop/jsonschema"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/stretchr/testify/require"
 )
 

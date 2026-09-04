@@ -9,8 +9,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/client"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/client"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -23,17 +23,17 @@ var (
 var logoutCmd = &cobra.Command{
 	Aliases: []string{"signout"},
 	Use:     "logout [platform]",
-	Short:   "Logout DONK from a platform",
-	Long: `Logout DONK from a specified platform, removing stored credentials.
+	Short:   "Logout BVR from a platform",
+	Long: `Logout BVR from a specified platform, removing stored credentials.
 The platform should be provided as an argument.
 If no argument is given, a list of logged-in platforms will be shown.
 Available platforms are: hyper, copilot.`,
 	Example: `
 # Sign out from Charm Hyper
-donk-cli logout hyper
+bvr-cli logout hyper
 
 # Sign out from GitHub Copilot
-donk-cli logout copilot
+bvr-cli logout copilot
   `,
 	ValidArgs: []cobra.Completion{
 		"hyper",

@@ -5,12 +5,12 @@ import (
 	"errors"
 	"os"
 
-	"github.com/richavery/donk-cli/internal/agent"
-	"github.com/richavery/donk-cli/internal/agent/notify"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/agent"
+	"github.com/richavery/bvr-cli/internal/agent/notify"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/shell"
 )
 
 // SendMessage validates and accepts a prompt for the workspace's agent,
@@ -68,7 +68,7 @@ func (b *Backend) SendMessage(workspaceID string, msg proto.AgentMessage) error 
 // On a non-cancel error it surfaces the failure to observers via a
 // notify.TypeAgentError notification (lossy, best-effort). That alone is
 // not a reliable terminal signal: the agent-event fan-in uses lossy
-// subscribers, so a `donk-cli run` caller blocking on its RunID could hang
+// subscribers, so a `bvr-cli run` caller blocking on its RunID could hang
 // if the event is dropped. To guarantee termination, when msg.RunID is
 // non-empty and the coordinator did not already publish the run's
 // authoritative terminal RunComplete (e.g. the error was returned before

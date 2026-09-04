@@ -9,10 +9,10 @@ import (
 	"charm.land/lipgloss/v2"
 
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/anim"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/anim"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // shellSeq provides unique IDs for ShellItems even when the same
@@ -228,7 +228,7 @@ func (s *ShellItem) RawRender(width int) string {
 	}
 
 	// Remap raw ANSI 16-color codes onto legible Charmtone colors so
-	// dark terminal defaults don't render illegibly on DONK's
+	// dark terminal defaults don't render illegibly on BVR's
 	// background.
 	// Strip trailing whitespace and bare ANSI resets before remapping.
 	// Programs like `task` emit "\x1b[0m\n" after their last line of

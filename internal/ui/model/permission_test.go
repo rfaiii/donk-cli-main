@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/ui/dialog"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/ui/dialog"
 	"github.com/stretchr/testify/require"
 )
 

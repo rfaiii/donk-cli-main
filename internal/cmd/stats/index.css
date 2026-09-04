@@ -272,14 +272,14 @@ td {
   display: block;
 }
 
-/* Override DONK brand colors in footer */
+/* Override BVR brand colors in footer */
 .footer-container .st2 {
   fill: #fffaf1 !important;
 }
 
 @media (prefers-color-scheme: light) {
 
-  /* Override DONK brand colors in footer */
+  /* Override BVR brand colors in footer */
   .footer-container .st2 {
     fill: #644ced !important;
   }

@@ -18,8 +18,8 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/auth"
 	"github.com/modelcontextprotocol/go-sdk/oauthex"
 	"github.com/pkg/browser"
-	"github.com/richavery/donk-cli/internal/oauth"
-	"github.com/richavery/donk-cli/internal/oauth/callback"
+	"github.com/richavery/bvr-cli/internal/oauth"
+	"github.com/richavery/bvr-cli/internal/oauth/callback"
 	"golang.org/x/oauth2"
 )
 
@@ -183,7 +183,7 @@ func NewHandler(
 		Client: newOAuthMetadataClient(http.DefaultTransport, serverURL),
 		DynamicClientRegistrationConfig: &auth.DynamicClientRegistrationConfig{
 			Metadata: &oauthex.ClientRegistrationMetadata{
-				ClientName:   "Donk",
+				ClientName:   "BVR",
 				RedirectURIs: []string{redirectURL},
 				GrantTypes:   []string{"authorization_code", "refresh_token"},
 			},

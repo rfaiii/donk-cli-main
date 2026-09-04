@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/backend"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/backend"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/session"
 )
 
 type controllerV1 struct {

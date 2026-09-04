@@ -19,14 +19,14 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/exp/charmtone"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/event"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/ui/chat"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/event"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/ui/chat"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +34,7 @@ var sessionCmd = &cobra.Command{
 	Use:     "session",
 	Aliases: []string{"sessions", "s"},
 	Short:   "Manage sessions",
-	Long:    "Manage DONK sessions. Agents can use --json for machine-readable output.",
+	Long:    "Manage BVR sessions. Agents can use --json for machine-readable output.",
 }
 
 var (

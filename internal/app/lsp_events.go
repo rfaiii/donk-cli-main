@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/csync"
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 )
 
 // LSPEventType represents the type of LSP event

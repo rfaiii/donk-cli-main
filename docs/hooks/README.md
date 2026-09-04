@@ -4,7 +4,7 @@
 > This document was designed for both humans and agents.
 
 Hooks are user-defined shell scripts that run when various events happen during
-the agent lifecycle, allowing you to both build on top of DONK, customize
+the agent lifecycle, allowing you to both build on top of BVR, customize
 its behavior, and exert deterministic control over an agent's wily behavior.
 
 Hooks are just shell commands, and were designed to be both simple and future
@@ -15,9 +15,9 @@ forward.
 - Hooks are just shell commands
 - Hooks can be written in any language because they’re just executables: Bash, Python, Node, Rust, Haskell, whatever
 - Hooks are Claude Code-compatible
-- DONK ships with a builtin `donk-hook` skill write, edit, and configure
-  hooks; just tell DONK how to configure DONK
-- DONK currently supports just one hook, `PreToolUse`, with plans to support
+- BVR ships with a builtin `bvr-hook` skill write, edit, and configure
+  hooks; just tell BVR how to configure BVR
+- BVR currently supports just one hook, `PreToolUse`, with plans to support
   the full gamut; please let us know which hooks you'd like to see next
 - Hooks run in parallel for speed, but their results compose in config order
   for determinism
@@ -44,9 +44,9 @@ disallow the use of Haskell (but we love you, Simon Peyton Jones).
 ### Config
 
 The first thing we need to do is hook up our hook. Let's add the following to
-our **project-level** `donk.json`. Relative paths like `./no-haskell.sh` work
+our **project-level** `bvr.json`. Relative paths like `./no-haskell.sh` work
 here because the project root is your working directory. If you're configuring
-a global hook (`~/.config/donk/donk.json`), use an absolute path instead.
+a global hook (`~/.config/bvr/bvr.json`), use an absolute path instead.
 
 ```jsonc
 {
@@ -73,8 +73,8 @@ Now, let's make our `no-haskell.sh` hook script.
 #!/usr/bin/env bash
 
 # Disallow ghc, cabal, and stack. Pipe the bash command output
-# ($DONK_TOOL_INPUT_COMMAND) to grep and match on a regexp.
-if echo "$DONK_TOOL_INPUT_COMMAND" | grep -qE '(^| )((ghc|cabal|stack)(\.exe)?)( |$)'; then
+# ($BVR_TOOL_INPUT_COMMAND) to grep and match on a regexp.
+if echo "$BVR_TOOL_INPUT_COMMAND" | grep -qE '(^| )((ghc|cabal|stack)(\.exe)?)( |$)'; then
 
   # Someone is trying to use Haskell. Let's send a message back to the model
   # and user explaining why we're blocking this. Note that we send all feedback
@@ -92,7 +92,7 @@ That's basically it. For the full guide on how hooks work, however, read on.
 
 ## Execution model
 
-Hooks run through DONK's embedded POSIX shell (`mvdan.cc/sh`) — the same
+Hooks run through BVR's embedded POSIX shell (`mvdan.cc/sh`) — the same
 interpreter the `bash` tool uses. Inline commands and shebang-less scripts
 execute in-process; scripts with a `#!` shebang dispatch to the named
 interpreter via `os/exec`. This contract is identical on macOS, Linux, and
@@ -112,26 +112,26 @@ What this means in practice:
   `#!/usr/bin/env bash` scripts work on Windows the same way they do on
   Unix. CRLF line endings in the shebang line are tolerated.
 - **Permissive shebang fallback**: if the absolute path in a shebang
-  doesn't exist (e.g. `#!/bin/bash` on Windows), DONK falls back to a
+  doesn't exist (e.g. `#!/bin/bash` on Windows), BVR falls back to a
   `PATH` lookup of the base name (`bash`) before giving up. A debug-level
   log records the fallback. If the interpreter isn't on `PATH` either, the
   hook fails cleanly as a non-blocking warning and the agent proceeds as
   "no opinion".
-- **Environment**: every hook sees `DONK=1`, `AGENT=donk`, and
-  `AI_AGENT=donk` on top of the `DONK_*` hook-specific variables. These
+- **Environment**: every hook sees `BVR=1`, `AGENT=bvr`, and
+  `AI_AGENT=bvr` on top of the `BVR_*` hook-specific variables. These
   three markers are guaranteed and match what the `bash` tool sets, so
   scripts that detect "am I being run by an AI agent?" behave the same in
   both contexts.
-- **Timeout behavior**: when a hook exceeds its timeout, DONK cancels the
+- **Timeout behavior**: when a hook exceeds its timeout, BVR cancels the
   context and waits a short grace period (~1s) for the interpreter to
-  yield. If the hook still hasn't returned, DONK abandons it, logs a
+  yield. If the hook still hasn't returned, BVR abandons it, logs a
   warning, and treats the result as "no opinion" so the agent can proceed.
   Long-running work should honor context cancellation or run in a
   subprocess via a shebang.
 
 ## Configuration
 
-Hooks can be added to your `donk.json` (or `.donk.json`) at both the global
+Hooks can be added to your `bvr.json` (or `.bvr.json`) at both the global
 and project-level, with project level hooks taking precedence.
 
 ```jsonc
@@ -152,17 +152,17 @@ and project-level, with project level hooks taking precedence.
 > [!IMPORTANT]
 > The `command` is resolved relative to your **current working directory** —
 > not relative to the config file. Relative paths like `./hooks/whatever.sh`
-> work fine in project-level `donk.json` because the project root is also
-> your working directory. For **global** config (`~/.config/donk/`),
+> work fine in project-level `bvr.json` because the project root is also
+> your working directory. For **global** config (`~/.config/bvr/`),
 > however, you must use either an absolute path or an inline command:
 >
 > ```jsonc
-> // Global ~/.config/donk/donk.json
+> // Global ~/.config/bvr/bvr.json
 > {
 >   "hooks": {
 >     "PreToolUse": [
 >       {
->         "command": "/home/you/.config/donk/hooks/no-haskell.sh"
+>         "command": "/home/you/.config/bvr/hooks/no-haskell.sh"
 >         // or use an inline command:
 >         // "command": "echo '{\"decision\":\"allow\"}'"
 >       }
@@ -202,24 +202,24 @@ Hooks are keyed by event name. Only `command` is required, and you can omit
 
 ## Building Hooks
 
-When a hook fires, DONK:
+When a hook fires, BVR:
 
 1. Filters hooks whose `matcher` regex matches the tool name (no matcher = match
    all).
 2. Deduplicates by `command` (identical commands run once).
-3. Runs all matching hooks **in parallel** through DONK's embedded POSIX
+3. Runs all matching hooks **in parallel** through BVR's embedded POSIX
    shell (see [Execution model](#execution-model)).
 4. Waits for all to finish (or time out), then aggregates results **in config
    order**: deny wins over allow, allow wins over none; `updated_input` patches
    shallow-merge in order.
 5. Applies the result **before** permission checks. If the aggregated decision
    is `deny`, the tool call is blocked and you never see a permission prompt
-   for it. If it's `allow`, DONK treats that as affirmative pre-approval and
+   for it. If it's `allow`, BVR treats that as affirmative pre-approval and
    also skips the prompt. Silence (no decision) falls through to the normal
    permission flow.
 
 Note that you can omit `matcher` and match in your shell script instead,
-however you'll incur some additional overhead as DONK will still parse and
+however you'll incur some additional overhead as BVR will still parse and
 run each hook.
 
 ### Input
@@ -234,19 +234,19 @@ The available environment variables are:
 
 | Variable                     | Description                                    |
 | ---------------------------- | ---------------------------------------------- |
-| `DONK`                      | Always `1` when running under DONK.           |
-| `AGENT`                      | Always `donk-cli.                                |
-| `AI_AGENT`                   | Always `donk-cli.                                |
-| `DONK_EVENT`                | The hook event name (e.g. `PreToolUse`).       |
-| `DONK_TOOL_NAME`            | The tool being called (e.g. `bash`).           |
-| `DONK_SESSION_ID`           | Current session ID.                            |
-| `DONK_CWD`                  | Working directory.                             |
-| `DONK_PROJECT_DIR`          | Project root directory.                        |
-| `DONK_TOOL_INPUT_COMMAND`   | For `bash` calls: the shell command being run. |
-| `DONK_TOOL_INPUT_FILE_PATH` | For file tools: the target file path.          |
+| `BVR`                      | Always `1` when running under BVR.           |
+| `AGENT`                      | Always `bvr-cli.                                |
+| `AI_AGENT`                   | Always `bvr-cli.                                |
+| `BVR_EVENT`                | The hook event name (e.g. `PreToolUse`).       |
+| `BVR_TOOL_NAME`            | The tool being called (e.g. `bash`).           |
+| `BVR_SESSION_ID`           | Current session ID.                            |
+| `BVR_CWD`                  | Working directory.                             |
+| `BVR_PROJECT_DIR`          | Project root directory.                        |
+| `BVR_TOOL_INPUT_COMMAND`   | For `bash` calls: the shell command being run. |
+| `BVR_TOOL_INPUT_FILE_PATH` | For file tools: the target file path.          |
 
-The `DONK`, `AGENT`, and `AI_AGENT` markers are also set by the `bash`
-tool, so a script can detect "am I running under DONK?" the same way in
+The `BVR`, `AGENT`, and `AI_AGENT` markers are also set by the `bash`
+tool, so a script can detect "am I running under BVR?" the same way in
 either context.
 
 #### JSON
@@ -288,7 +288,7 @@ command = data.get("tool_input", {}).get("command", "")
 
 ### Output
 
-Hooks communicate back to DONK via **exit code** and `stdout`/`stderr`. The
+Hooks communicate back to BVR via **exit code** and `stdout`/`stderr`. The
 simplest way to do this is to return an error code and print additional context
 to stderr. For example:
 
@@ -382,7 +382,7 @@ EOF
 
 Hooks run in parallel, but their results compose in config order. Whichever hook
 finishes first doesn't get to "win" by virtue of timing; composition is
-deterministic based on the order hooks appear in `donk.json`.
+deterministic based on the order hooks appear in `bvr.json`.
 
 When multiple hooks match the same tool call:
 
@@ -399,7 +399,7 @@ When multiple hooks match the same tool call:
 
 ### Timeouts
 
-If a hook exceeds its timeout, DONK cancels its context and treats the
+If a hook exceeds its timeout, BVR cancels its context and treats the
 result as a non-blocking error so the tool call proceeds. The default
 timeout is 30 seconds. Shebang-dispatched subprocesses are killed through
 `exec.CommandContext`; in-process hooks get a short grace period to yield
@@ -432,7 +432,7 @@ Prevent the agent from running `rm -rf` in bash:
 # Block rm -rf commands in the bash tool. Otherwise stay silent so the
 # normal permission flow runs.
 
-if echo "$DONK_TOOL_INPUT_COMMAND" | grep -qE 'rm\s+-(rf|fr)\s+/'; then
+if echo "$BVR_TOOL_INPUT_COMMAND" | grep -qE 'rm\s+-(rf|fr)\s+/'; then
   echo "Refusing to run rm -rf against root" >&2
   exit 2
 fi
@@ -443,7 +443,7 @@ exit 0
 ### Auto-approve read-only tools
 
 Skip the permission prompt for tools that can't change anything. The hook
-returns `decision: "allow"`, which tells DONK to pre-approve the call:
+returns `decision: "allow"`, which tells BVR to pre-approve the call:
 
 ```jsonc
 {
@@ -466,7 +466,7 @@ risk; consider a more targeted allowlist instead:
 #!/usr/bin/env bash
 # hooks/safe-bash.sh — auto-approve read-only bash commands.
 
-case "$DONK_TOOL_INPUT_COMMAND" in
+case "$BVR_TOOL_INPUT_COMMAND" in
   ls*|cat*|grep*|rg*|echo*|pwd*)
     echo '{"decision":"allow"}'
     ;;
@@ -502,7 +502,7 @@ Add a reminder to the model whenever it writes a Go file:
 # Emit context only; stay silent on `decision` so the normal permission
 # prompt still runs for edits/writes.
 
-if [[ "$DONK_TOOL_INPUT_FILE_PATH" == *.go ]]; then
+if [[ "$BVR_TOOL_INPUT_FILE_PATH" == *.go ]]; then
   echo '{"context": "Remember: run gofumpt after editing Go files."}'
 else
   echo '{}'
@@ -524,7 +524,7 @@ With no `matcher` this fires for every tool. It exits 0 with no stdout so the
 tool call always proceeds.
 
 ```jsonc
-{ "command": "echo \"$(date -Iseconds) $DONK_TOOL_NAME\" >> ./tools.log" }
+{ "command": "echo \"$(date -Iseconds) $BVR_TOOL_NAME\" >> ./tools.log" }
 ```
 
 ### A real-world Example:
@@ -573,13 +573,13 @@ process.stdin.on("end", () => {
 
 ## Claude Code compatibility
 
-DONK hooks are broadly compatible with [Claude Code
+BVR hooks are broadly compatible with [Claude Code
 hooks](https://docs.claude.com/en/docs/claude-code/hooks): the config shape,
 stdin payload, output envelope, and exit codes line up so most Claude Code
-hooks run under DONK unchanged. This document covers the DONK-specific API
+hooks run under BVR unchanged. This document covers the BVR-specific API
 only — anything not documented here isn't guaranteed to work.
 
-One intentional divergence: DONK treats `updated_input` as a shallow-merge
+One intentional divergence: BVR treats `updated_input` as a shallow-merge
 patch against the original `tool_input` rather than a full replacement. Keys
 you omit are preserved. See [Output](#output) for details.
 
@@ -725,7 +725,7 @@ PreToolUse-specific rules:
 
 4. `decision` precedence: `deny` > `allow` > `null`. First deny determines the
    outcome; subsequent allows don't override. If the final aggregated decision
-   is `allow`, DONK pre-approves the tool call and skips the permission
+   is `allow`, BVR pre-approves the tool call and skips the permission
    prompt. If it's `null` (no hook allowed), the tool goes through the normal
    permission flow.
 5. `updated_input` patches shallow-merge sequentially against the original
@@ -743,17 +743,17 @@ See [Environment Variables](#environment-variables) above for the full list.
 We'd love to hear your thoughts on this project. Need help? We gotchu. You can
 find us on:
 
-- [Twitter](https://twitter.com/donkcli)
-- [Slack](https://discord.gg/donk)
-- [Discord](https://discord.gg/donk)
-- [The Fediverse](https://mastodon.social/@donkcli)
-- [Bluesky](https://bsky.app/profile/donk-cli.com)
+- [Twitter](https://twitter.com/bvrcli)
+- [Slack](https://discord.gg/bvr)
+- [Discord](https://discord.gg/bvr)
+- [The Fediverse](https://mastodon.social/@bvrcli)
+- [Bluesky](https://bsky.app/profile/bvr-cli.com)
 
 ---
 
-Part of [DONK](https://donk-cli.com).
+Part of [BVR](https://bvr-cli.com).
 
-<a href="https://donk-cli.com/"><img alt="The DONK logo" width="400" src="https://raw.githubusercontent.com/richavery/donk-cli/main/docs/donk-banner.png" /></a>
+<a href="https://bvr-cli.com/"><img alt="The BVR logo" width="400" src="https://raw.githubusercontent.com/richavery/bvr-cli/main/docs/bvr-banner.png" /></a>
 
 <!--prettier-ignore-->
-DONK热爱开源 • DONK loves open source
+BVR热爱开源 • BVR loves open source

@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/skills"
 )
 
 var namedArgPattern = regexp.MustCompile(`\$([A-Z][A-Z0-9_]*)`)
@@ -121,11 +121,11 @@ func LoadMCPPrompts() ([]MCPPrompt, error) {
 func buildCommandSources(cfg *config.Config) []commandSource {
 	return []commandSource{
 		{
-			path:   filepath.Join(home.Config(), "donk", "commands"),
+			path:   filepath.Join(home.Config(), "bvr", "commands"),
 			prefix: userCommandPrefix,
 		},
 		{
-			path:   filepath.Join(home.Dir(), ".donk", "commands"),
+			path:   filepath.Join(home.Dir(), ".bvr", "commands"),
 			prefix: userCommandPrefix,
 		},
 		{

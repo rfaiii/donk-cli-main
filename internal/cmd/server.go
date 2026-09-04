@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/config"
-	donklog "github.com/richavery/donk-cli/internal/log"
-	"github.com/richavery/donk-cli/internal/server"
+	"github.com/richavery/bvr-cli/internal/config"
+	bvrlog "github.com/richavery/bvr-cli/internal/log"
+	"github.com/richavery/bvr-cli/internal/server"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func init() {
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "Start the DONK server",
+	Short: "Start the BVR server",
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		dataDir, err := cmd.Flags().GetString("data-dir")
 		if err != nil {
@@ -47,17 +47,17 @@ var serverCmd = &cobra.Command{
 			return fmt.Errorf("invalid server host: %v", err)
 		}
 
-		logFile := filepath.Join(config.GlobalCacheDir(), "server-"+safeHostName(hostURL), "donk.log")
+		logFile := filepath.Join(config.GlobalCacheDir(), "server-"+safeHostName(hostURL), "bvr.log")
 
 		if term.IsTerminal(os.Stderr.Fd()) {
-			donklog.Setup(logFile, debug, os.Stderr)
+			bvrlog.Setup(logFile, debug, os.Stderr)
 		} else {
-			donklog.Setup(logFile, debug)
+			bvrlog.Setup(logFile, debug)
 		}
 
 		srv := server.NewServer(cfg, hostURL.Scheme, hostURL.Host)
 		srv.SetLogger(slog.Default())
-		slog.Info("Starting DONK server...", "addr", serverHost)
+		slog.Info("Starting BVR server...", "addr", serverHost)
 
 		errch := make(chan error, 1)
 		sigch := make(chan os.Signal, 1)

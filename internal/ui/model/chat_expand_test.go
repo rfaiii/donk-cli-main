@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/ui/chat"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/ui/chat"
 	"github.com/stretchr/testify/require"
 )
 

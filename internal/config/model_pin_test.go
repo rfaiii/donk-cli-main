@@ -30,16 +30,16 @@ func twoProviderConfig(provider, model string) string {
 }
 
 // TestModelSelectionSurvivesPeerWrite is a regression test for the model
-// switching out from under the user when several DONK instances share the
+// switching out from under the user when several BVR instances share the
 // global config file. A sibling instance selecting a different model must
 // not change ours, even though an unrelated config write (a token refresh,
 // for example) reloads the file we both write to.
 func TestModelSelectionSurvivesPeerWrite(t *testing.T) {
 	dir := t.TempDir()
-	configPath := filepath.Join(dir, "donk.json")
+	configPath := filepath.Join(dir, "bvr.json")
 
-	t.Setenv("DONK_GLOBAL_CONFIG", dir)
-	t.Setenv("DONK_GLOBAL_DATA", dir)
+	t.Setenv("BVR_GLOBAL_CONFIG", dir)
+	t.Setenv("BVR_GLOBAL_DATA", dir)
 	resetProviderState()
 	t.Cleanup(resetProviderState)
 
@@ -70,13 +70,13 @@ func TestModelSelectionSurvivesPeerWrite(t *testing.T) {
 
 // TestModelSelectionYieldsToDiskWhenUnchosen verifies the other half of the
 // rule: a model type this instance never selected still follows the config
-// file, so external edits and `donk-cli login` defaults keep working.
+// file, so external edits and `bvr-cli login` defaults keep working.
 func TestModelSelectionYieldsToDiskWhenUnchosen(t *testing.T) {
 	dir := t.TempDir()
-	configPath := filepath.Join(dir, "donk.json")
+	configPath := filepath.Join(dir, "bvr.json")
 
-	t.Setenv("DONK_GLOBAL_CONFIG", dir)
-	t.Setenv("DONK_GLOBAL_DATA", dir)
+	t.Setenv("BVR_GLOBAL_CONFIG", dir)
+	t.Setenv("BVR_GLOBAL_DATA", dir)
 	resetProviderState()
 	t.Cleanup(resetProviderState)
 

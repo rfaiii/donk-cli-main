@@ -12,14 +12,14 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/diff"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/filetracker"
-	"github.com/richavery/donk-cli/internal/fsext"
-	"github.com/richavery/donk-cli/internal/history"
+	"github.com/richavery/bvr-cli/internal/diff"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/filetracker"
+	"github.com/richavery/bvr-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/history"
 
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/permission"
 )
 
 type EditParams struct {

@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/shell"
 )
 
 // abandonGrace is how long runOne waits after ctx cancellation for the
@@ -155,7 +155,7 @@ func (r *Runner) matchingHooks(toolName string) []config.HookConfig {
 
 // runOne executes a single hook command and returns its result.
 //
-// Execution goes through DONK's embedded POSIX shell (shell.Run) so the
+// Execution goes through BVR's embedded POSIX shell (shell.Run) so the
 // same interpreter, builtins, and coreutils are visible to hooks as to
 // the bash tool. BlockFuncs are intentionally omitted: hooks are
 // user-authored config that carry the same trust as a shell alias.

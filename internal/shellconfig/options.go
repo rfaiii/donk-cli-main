@@ -25,7 +25,7 @@ import (
 //
 // Examples:
 //
-//	option data-directory .donk
+//	option data-directory .bvr
 //	option context-path .cursorrules
 //	option reset skill-path
 //	option metrics false

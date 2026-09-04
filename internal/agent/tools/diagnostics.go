@@ -12,7 +12,7 @@ import (
 
 	"charm.land/fantasy"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
-	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/lsp"
 )
 
 type DiagnosticsParams struct {

@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/hooks"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/hooks"
+	"github.com/richavery/bvr-cli/internal/permission"
 	"github.com/stretchr/testify/require"
 )
 

@@ -19,7 +19,7 @@ var (
 	BuildID = ""
 )
 
-// A user may install donk using `go install github.com/richavery/donk-cli@latest`.
+// A user may install bvr using `go install github.com/richavery/bvr-cli@latest`.
 // without -ldflags, in which case the version above is unset. As a workaround
 // we use the embedded build version that *is* set when using `go install` (and
 // is only set for `go install` and not for `go build`).

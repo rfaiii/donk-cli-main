@@ -1,6 +1,6 @@
 # Packaging & Distribution
 
-This document summarizes the current installer/distribution setup for DONK
+This document summarizes the current installer/distribution setup for BVR
 and where each artifact lives.
 
 ## Release automation
@@ -8,7 +8,7 @@ and where each artifact lives.
 - `.goreleaser.yml` — main release config
   - Homebrew tap: `richavery/homebrew-tap`
   - Scoop bucket: `richavery/scoop-bucket`
-  - NPM package: `@donkcli/donk-cli`
+  - NPM package: `@bvrcli/bvr-cli`
   - Linux packages via `nfpms`
   - AUR source/binary packages
   - Nix package
@@ -23,7 +23,7 @@ and where each artifact lives.
 
 ## Install wrappers
 
-- `packaging/homebrew-donk-cli.rb` — Homebrew formula skeleton
+- `packaging/homebrew-bvr-cli.rb` — Homebrew formula skeleton
 - `packaging/npm-package.json` — NPM package manifest
 - `packaging/scripts/install.js` — NPM postinstall downloader
 - `packaging/scripts/uninstall.js` — NPM uninstall cleanup
@@ -32,7 +32,7 @@ and where each artifact lives.
 
 Each package should include:
 
-- `donk-cli` binary
+- `bvr-cli` binary
 - README and license
 - Shell completions
 - Man page

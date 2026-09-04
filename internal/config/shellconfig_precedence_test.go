@@ -5,13 +5,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/stretchr/testify/require"
 )
 
-// TestShellConfigDotDonkrcTakesPrecedence verifies that a project-local
-// .donkrc overrides donkrc in the same directory on conflicting settings.
-func TestShellConfigDotDonkrcTakesPrecedence(t *testing.T) {
+// TestShellConfigDotBvrrcTakesPrecedence verifies that a project-local
+// .bvrrc overrides bvrrc in the same directory on conflicting settings.
+func TestShellConfigDotBvrrcTakesPrecedence(t *testing.T) {
 	isolated := t.TempDir()
 	t.Setenv("HOME", isolated)
 	t.Setenv("XDG_CONFIG_HOME", filepath.Join(isolated, ".config"))
@@ -20,16 +20,16 @@ func TestShellConfigDotDonkrcTakesPrecedence(t *testing.T) {
 	workDir := t.TempDir()
 	dataDir := t.TempDir()
 	require.NoError(t, os.WriteFile(
-		filepath.Join(workDir, "donkrc"),
+		filepath.Join(workDir, "bvrrc"),
 		[]byte("option notifications bell\n"), 0o644,
 	))
 	require.NoError(t, os.WriteFile(
-		filepath.Join(workDir, ".donkrc"),
+		filepath.Join(workDir, ".bvrrc"),
 		[]byte("option notifications osc\n"), 0o644,
 	))
 
 	store, err := config.Load(workDir, dataDir, false)
 	require.NoError(t, err)
 	require.Equal(t, "osc", store.Config().Options.Notifications,
-		".donkrc should win over donkrc")
+		".bvrrc should win over bvrrc")
 }

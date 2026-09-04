@@ -1,6 +1,6 @@
-# DONK-CLI FastMCP Server
+# BVR-CLI FastMCP Server
 
-This directory contains the Python FastMCP server which acts as the centralized engine (Provider) for the DONK-CLI ecosystem, managing tools like `sync_gemini_command`. 
+This directory contains the Python FastMCP server which acts as the centralized engine (Provider) for the BVR-CLI ecosystem, managing tools like `sync_gemini_command`. 
 
 ## Architecture
 

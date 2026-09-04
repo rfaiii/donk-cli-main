@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/mattn/go-isatty"
-	"github.com/richavery/donk-cli/internal/shader"
+	"github.com/richavery/bvr-cli/internal/shader"
 	"github.com/spf13/cobra"
 )
 
@@ -13,13 +13,13 @@ var shadersCmd = &cobra.Command{
 	Short: "Manage bundled shaders",
 	Long:  "List, preview, and install the bundled cursor/screen shaders.",
 	Example: `# List bundled shaders
-donk-cli shaders list
+bvr-cli shaders list
 
 # Install default shaders into Ghostty
-donk-cli shaders install
+bvr-cli shaders install
 
 # Install with custom shader names
-donk-cli shaders install cursor_warp.glsl cursor_tail.glsl`,
+bvr-cli shaders install cursor_warp.glsl cursor_tail.glsl`,
 	Args: cobra.ArbitraryArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return cmd.Help()

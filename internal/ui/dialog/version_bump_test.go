@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 	"github.com/stretchr/testify/require"
 )

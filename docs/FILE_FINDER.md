@@ -1,6 +1,6 @@
-# DONK File Finder
+# BVR File Finder
 
-DONK includes an in-app project file finder built as a native DONK dialog. It
+BVR includes an in-app project file finder built as a native BVR dialog. It
 keeps keyboard focus, mouse events, theming, and the agent session in one
 Bubble Tea program instead of handing control to a separate application.
 
@@ -49,7 +49,7 @@ large ANSI/Lip Gloss row:
 - The outer panel is calculated first, including its rounded border and padding.
   Content width and height are derived by subtracting that frame, so file
   contents cannot resize or push the panel outside the terminal.
-- The title row contains the green `DONK FILE FINDER` label and the right-aligned
+- The title row contains the green `BVR FILE FINDER` label and the right-aligned
   `[X]` control. A grey pane-header rule is drawn immediately below it, making
   the top edge of both information panes visible.
 - The body is split into a file-list pane, a one-cell center divider, and a

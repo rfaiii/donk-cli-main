@@ -8,8 +8,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/ui/logo"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/logo"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 func main() {

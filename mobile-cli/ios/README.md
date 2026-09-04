@@ -1,11 +1,11 @@
-# Donk CLI Companion — iOS
+# BVR-CLI Companion — iOS
 
-This directory contains the iOS companion app for Donk CLI.
+This directory contains the iOS companion app for BVR-CLI.
 
 ## Setup
 
 1. Open Xcode 15+.
-2. Create a new iOS app project named `DonkCompanion`.
+2. Create a new iOS app project named `BvrCompanion`.
 3. Set the interface to SwiftUI and the language to Swift 5.9+.
 4. Copy the source files from this directory into the Xcode project.
 5. Enable the following capabilities:

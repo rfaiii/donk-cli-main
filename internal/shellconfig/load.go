@@ -8,18 +8,18 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/shell"
-	"github.com/richavery/donk-cli/internal/version"
+	"github.com/richavery/bvr-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/version"
 )
 
-// loadTimeout bounds a single donkrc execution. Config loading runs on the
+// loadTimeout bounds a single bvrrc execution. Config loading runs on the
 // startup and reload critical paths while the config store's write lock is
 // held, so a script that blocks (a hung command substitution, a stray loop)
 // must not be able to wedge the whole store. The interpreter honors context
 // cancellation, so this deadline reliably interrupts a runaway script.
 const loadTimeout = 30 * time.Second
 
-// LoadShellConfig executes a donkrc script and returns its config as a
+// LoadShellConfig executes a bvrrc script and returns its config as a
 // single JSON object. The script uses config builtins (provider, model, mcp,
 // etc.) that mutate a ConfigBuilder in execution order; the builder is then
 // marshaled to JSON, which the config loader merges with any other config
@@ -41,9 +41,9 @@ func LoadShellConfig(ctx context.Context, path string, src []byte) ([]byte, erro
 
 	cwd := filepath.Dir(path)
 
-	// Expose the running DONK version so scripts can feature-detect, e.g.
-	// [[ "$DONK_VERSION" == "devel" ]] or branch on the release.
-	env := append(os.Environ(), "DONK_VERSION="+version.Version)
+	// Expose the running BVR version so scripts can feature-detect, e.g.
+	// [[ "$BVR_VERSION" == "devel" ]] or branch on the release.
+	env := append(os.Environ(), "BVR_VERSION="+version.Version)
 
 	err := shell.Run(runCtx, shell.RunOptions{
 		Command: string(src),

@@ -11,7 +11,7 @@ compatibility: Requires Node.js/npm. Install with `npm install -g cline`. Works 
 Cline is a standalone autonomous coding agent that runs in your terminal and
 your editor. It plans, reads and edits files, runs shell commands, manages
 MCP servers, takes checkpoints, and supports plan/act modes. When the current
-DONK coder model is a small local model that struggles with multi-step coding,
+BVR coder model is a small local model that struggles with multi-step coding,
 delegate to Cline for reliable, autonomous execution.
 
 ## Install
@@ -37,10 +37,10 @@ cline auth --provider openai-native --apikey sk-... --modelid gpt-5
 cline auth --provider openrouter --apikey sk-...
 ```
 
-## Invoke from DONK
+## Invoke from BVR
 
 Run Cline as an autonomous sub-agent through the `bash` tool. Cline inherits
-DONK's current working directory, so no `--cwd` is normally needed.
+BVR's current working directory, so no `--cwd` is normally needed.
 
 Run a single prompt end-to-end with full tool use, auto-approved:
 
@@ -72,32 +72,32 @@ cline --json "List all TODO comments" | jq -r '.event.text'
 |------|-------|
 | `--yolo` | Auto-approve all tools; disable spawn/team tools; exit when done |
 | `--auto-approve false` | Require review before each tool call |
-| `--cwd <path>` | Working directory (inherits DONK's cwd by default) |
+| `--cwd <path>` | Working directory (inherits BVR's cwd by default) |
 | `-P, --provider <id>` | Provider id (`cline`, `anthropic`, `openai`, `openrouter`, `bedrock`, `vertex`, `openai-native`, …) |
 | `-m, --model <id>` | Model id, e.g. `anthropic/claude-sonnet-4-6` |
 | `--thinking [none\|low\|medium\|high\|xhigh]` | Thinking budget when supported |
 | `--retries <n>` | Max consecutive mistakes before halting (default 3) |
 | `--json` | NDJSON event output (non-interactive) |
-| `-i, --tui` | Interactive TUI (don't use from DONK; use headless/yolo instead) |
+| `-i, --tui` | Interactive TUI (don't use from BVR; use headless/yolo instead) |
 | `-s, --system <prompt>` | Override the system prompt |
 
 ## Rules and context
 
 Cline reads `.clinerules` / `.clinerules/` files in the project root, the same
-way DONK reads `AGENTS.md`. A project can therefore share one set of rules
-between DONKs and Cline by keeping coding standards in `.clinerules` and
-DONK-specific shell/workspace rules in `AGENTS.md`.
+way BVR reads `AGENTS.md`. A project can therefore share one set of rules
+between BVRs and Cline by keeping coding standards in `.clinerules` and
+BVR-specific shell/workspace rules in `AGENTS.md`.
 
 ## MCP and checkpoints
 
 - Cline shares MCP servers configured via `cline mcp`. It can use the same MCP
-  servers DONK exposes, so tool access is consistent across both.
+  servers BVR exposes, so tool access is consistent across both.
 - Cline takes checkpoints per session; `cline history` lists past sessions and
-  `/undo` rewinds workspace state. For a throwaway run from DONK, prefer a
+  `/undo` rewinds workspace state. For a throwaway run from BVR, prefer a
   fresh `--data-dir` so checkpoints stay isolated:
 
 ```sh
-cline --yolo --data-dir "$TMPDIR/cline-donk" "Add unit tests for the auth handler"
+cline --yolo --data-dir "$TMPDIR/cline-bvr" "Add unit tests for the auth handler"
 ```
 
 ## When to delegate

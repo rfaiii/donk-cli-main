@@ -1,4 +1,4 @@
-// Package logo renders the DONK-CLI wordmark.
+// Package logo renders the BVR-CLI wordmark.
 package logo
 
 import (
@@ -9,7 +9,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // letterform represents a letterform. It can be stretched horizontally by
@@ -20,11 +20,10 @@ const diag = `╱`
 
 var bannerGlitchRunes = []rune("01ABCDEF~!@#$%^&*+=-/\\|")
 
-var donkCLIASCII = map[rune][]string{
-	'D': {"████ ", "█   █", "█   █", "█   █", "████ "},
-	'O': {" ███ ", "█   █", "█   █", "█   █", " ███ "},
-	'N': {"█   █", "██  █", "█ █ █", "█  ██", "█   █"},
-	'K': {"█  █ ", "█ █  ", "██   ", "█ █  ", "█  █ "},
+var bvrCLIASCII = map[rune][]string{
+	'B': {"████ ", "█   █", "████ ", "█   █", "████ "},
+	'V': {"█   █", "█   █", "█   █", " █ █ ", "  █  "},
+	'R': {"████ ", "█   █", "████ ", "█ █  ", "█  █ "},
 	'-': {"     ", "     ", "█████", "     ", "     "},
 	'C': {" ████", "█    ", "█    ", "█    ", " ████"},
 	'L': {"█    ", "█    ", "█    ", "█    ", "█████"},
@@ -33,9 +32,9 @@ var donkCLIASCII = map[rune][]string{
 
 // Wordmark is the application name shown in the terminal UI. Keep this as the
 // single source of truth; use scripts/set-wordmark.sh to change it safely.
-const Wordmark = "DONK-CLI"
+const Wordmark = "BVR-CLI"
 
-// Opts are the options for rendering the DONK-CLI title art.
+// Opts are the options for rendering the BVR-CLI title art.
 type Opts struct {
 	FieldColor   color.Color // diagonal lines
 	TitleColorA  color.Color // left gradient ramp point
@@ -43,7 +42,7 @@ type Opts struct {
 	CharmColor   color.Color // Legacy metadata color retained for API compatibility
 	VersionColor color.Color // version text color
 	Width        int         // width of the rendered logo, used for truncation
-	Hyper        bool        // retained for compatibility; it does not alter the DONK wordmark
+	Hyper        bool        // retained for compatibility; it does not alter the BVR wordmark
 
 	// When true, stretch a random letterform on each render. Has no effect in
 	// compact mode. Mainly for testing. In production you will want to cache
@@ -63,10 +62,10 @@ type Opts struct {
 	Animation string
 }
 
-// donkCLIWordmark is the compact block-letter suffix used by the Donk brand.
+// bvrCLIWordmark is the compact block-letter suffix used by the BVR-CLI brand.
 // Keeping it in the logo package makes the branding independent from terminal
-// fonts while preserving the existing DONK letterform treatment.
-func donkCLIWordmark(stretch bool) string {
+// fonts while preserving the existing BVR letterform treatment.
+func bvrCLIWordmark(stretch bool) string {
 	cli := "█▀▀▀  █  █\n█     █  █\n▀▀▀▀  ▀  ▀"
 	if stretch {
 		cli = strings.Replace(cli, "█▀▀▀", "█▀▀▀▀▀", 1)
@@ -74,7 +73,7 @@ func donkCLIWordmark(stretch bool) string {
 	return cli
 }
 
-// Render renders the DONK-CLI logo. Set the argument to true to render the narrow
+// Render renders the BVR-CLI logo. Set the argument to true to render the narrow
 // version, intended for use in a sidebar.
 //
 // The compact argument determines whether it renders compact for the sidebar
@@ -85,18 +84,22 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	}
 
 	// Title.
-	var donk string
-	var donkWidth int
+	var bvr string
+	var bvrWidth int
 	if o.Text {
 		if compact {
-			donk = styles.ApplyForegroundGrad(base, Wordmark, o.TitleColorA, o.TitleColorB)
+			bvr = styles.ApplyForegroundGrad(base, Wordmark, o.TitleColorA, o.TitleColorB)
 		} else {
-			donk = renderASCIIWordmark(base, o.TitleColorA, o.TitleColorB)
+			bvr = renderASCIIWordmark(base, o.TitleColorA, o.TitleColorB)
 		}
-		donkWidth = lipgloss.Width(donk)
+		bvrWidth = lipgloss.Width(bvr)
 	} else {
+		// Block-letter mode (Text:false). These shapes are the legacy letterform
+		// set; the live TUI renders the BVR-CLI banner in Text mode (Text:true)
+		// via the ASCII map. Swap them for B/V/R letterforms if block mode is
+		// re-enabled for BVR.
 		const spacing = 1
-		donkLetterforms := []letterform{
+		blockLetterforms := []letterform{
 			LetterD,
 			LetterO,
 			LetterN,
@@ -106,34 +109,34 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 		stretchIndex := -1 // -1 means no stretching.
 		if !compact && !o.Unstable {
 			// Always stretch the same letterform, which is picked once at random.
-			stretchIndex = cachedRandN(len(donkLetterforms))
+			stretchIndex = cachedRandN(len(blockLetterforms))
 		} else if !compact && o.Unstable {
 			// Stretch a random letterform on every render.
-			stretchIndex = rand.IntN(len(donkLetterforms))
+			stretchIndex = rand.IntN(len(blockLetterforms))
 		}
-		donk = renderWord(spacing, stretchIndex, donkLetterforms...)
-		cli := donkCLIWordmark(false)
-		donk = lipgloss.JoinHorizontal(lipgloss.Top, donk, "-", cli)
-		// Hyper is a provider, not a separate DONK product name. The UI keeps
+		bvr = renderWord(spacing, stretchIndex, blockLetterforms...)
+		cli := bvrCLIWordmark(false)
+		bvr = lipgloss.JoinHorizontal(lipgloss.Top, bvr, "-", cli)
+		// Hyper is a provider, not a separate BVR product name. The UI keeps
 		// one stable wordmark regardless of the selected provider.
-		donkWidth = lipgloss.Width(donk)
+		bvrWidth = lipgloss.Width(bvr)
 		b := new(strings.Builder)
-		for r := range strings.SplitSeq(donk, "\n") {
+		for r := range strings.SplitSeq(bvr, "\n") {
 			fmt.Fprintln(b, styles.ApplyForegroundGrad(base, r, o.TitleColorA, o.TitleColorB))
 		}
-		donk = b.String()
+		bvr = b.String()
 	}
 
-	// The Donk-CLI wordmark stands alone; no upstream metadata row.
+	// The BVR-CLI wordmark stands alone; no upstream metadata row.
 	_ = version
 
 	// Narrow version.
 	if compact {
-		field := fg(o.FieldColor, strings.Repeat(diag, donkWidth))
-		return strings.Join([]string{field, field, donk, field, ""}, "\n")
+		field := fg(o.FieldColor, strings.Repeat(diag, bvrWidth))
+		return strings.Join([]string{field, field, bvr, field, ""}, "\n")
 	}
 
-	fieldHeight := lipgloss.Height(donk)
+	fieldHeight := lipgloss.Height(bvr)
 
 	// Left field.
 	const leftWidth = 6
@@ -144,7 +147,7 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	}
 
 	// Right field.
-	rightWidth := max(15, o.Width-donkWidth-leftWidth-2) // 2 for the gap.
+	rightWidth := max(15, o.Width-bvrWidth-leftWidth-2) // 2 for the gap.
 	const stepDownAt = 0
 	rightField := new(strings.Builder)
 	for i := range fieldHeight {
@@ -159,7 +162,7 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 
 	// Return the wide version.
 	const hGap = " "
-	logo := lipgloss.JoinHorizontal(lipgloss.Top, leftFieldText, hGap, donk, hGap, rightFieldText)
+	logo := lipgloss.JoinHorizontal(lipgloss.Top, leftFieldText, hGap, bvr, hGap, rightFieldText)
 	if o.Animated {
 		glitch := o.Animation
 		if glitch == "" {
@@ -199,7 +202,7 @@ func glitchPattern(width, frame int) string {
 func renderASCIIWordmark(base lipgloss.Style, colorA, colorB color.Color) string {
 	rows := make([]string, 5)
 	for _, r := range Wordmark {
-		glyph, ok := donkCLIASCII[r]
+		glyph, ok := bvrCLIASCII[r]
 		if !ok {
 			continue
 		}
@@ -217,7 +220,7 @@ func renderASCIIWordmark(base lipgloss.Style, colorA, colorB color.Color) string
 	return b.String()
 }
 
-// SmallRender renders a smaller version of the DONK-CLI logo, suitable for
+// SmallRender renders a smaller version of the BVR-CLI logo, suitable for
 // smaller windows or sidebar usage.
 func SmallRender(t *styles.Styles, width int, o Opts) string {
 	title := styles.ApplyBoldForegroundGrad(t.Logo.GradCanvas, Wordmark, t.Logo.SmallGradFromColor, t.Logo.SmallGradToColor)

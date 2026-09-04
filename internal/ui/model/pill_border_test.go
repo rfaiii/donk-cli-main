@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/session"
 )
 
 // roundedBorderRunes are chars that only appear when a pill has a visible

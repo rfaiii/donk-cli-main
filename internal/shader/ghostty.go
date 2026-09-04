@@ -77,7 +77,7 @@ func InstallGhostty(shaders []string, force bool) error {
 	}
 
 	if !updated {
-		newLines = append(newLines, "", "# Added by donk-cli shader installer")
+		newLines = append(newLines, "", "# Added by bvr-cli shader installer")
 		newLines = append(newLines, "custom-shader-animation = always")
 		var keys []string
 		for k := range shaderSet {

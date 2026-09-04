@@ -13,8 +13,8 @@ import (
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/clipboard"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/clipboard"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 // FileBrowserID identifies the project file browser overlay.
@@ -449,7 +449,7 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	}
 	footerLines := fixedLines([]string{meta, clip, "↑↓ navigate  a attach  o editor  r refresh  enter open  y copy  esc close"}, contentW, footerH)
 	titleW := max(1, contentW-closeW-1)
-	titleText := padRight(ansi.Truncate("DONK FILE FINDER", titleW, "…"), titleW) + strings.Repeat(" ", contentW-titleW)
+	titleText := padRight(ansi.Truncate("BVR FILE FINDER", titleW, "…"), titleW) + strings.Repeat(" ", contentW-titleW)
 	titleCell := panelTheme.Title.Render(titleText)
 	contentLines := make([]string, 0, contentH)
 	contentLines = append(contentLines, titleCell)

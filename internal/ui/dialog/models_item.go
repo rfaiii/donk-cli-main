@@ -4,10 +4,10 @@ import (
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 	"strings"
 )
@@ -74,12 +74,12 @@ type ModelItem struct {
 	model     catwalk.Model
 	modelType ModelType
 
-	cache          map[int]string
-	t              *styles.Styles
-	m              fuzzy.Match
-	focused        bool
-	showProvider   bool
-	codingCapable  bool
+	cache         map[int]string
+	t             *styles.Styles
+	m             fuzzy.Match
+	focused       bool
+	showProvider  bool
+	codingCapable bool
 }
 
 // Finished implements list.Item. Model items are render-stable

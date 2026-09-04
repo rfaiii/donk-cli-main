@@ -8,10 +8,10 @@ import (
 
 	"charm.land/fantasy"
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/agent"
-	"github.com/richavery/donk-cli/internal/app"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/agent"
+	"github.com/richavery/bvr-cli/internal/app"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/proto"
 	"github.com/stretchr/testify/require"
 )
 

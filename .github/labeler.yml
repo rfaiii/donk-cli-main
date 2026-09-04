@@ -3,8 +3,8 @@
 
 "area: ci":
   - "/^ci: /i"
-"area: donk-cli run":
-  - "/donk-cli run/i"
+"area: bvr-cli run":
+  - "/bvr-cli run/i"
   - "/headless/i"
   - "/non-interactive/i"
 "area: diff":

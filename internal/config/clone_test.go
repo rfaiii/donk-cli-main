@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	"github.com/richavery/donk-cli/internal/csync"
+	"github.com/richavery/bvr-cli/internal/csync"
 	"github.com/stretchr/testify/require"
 )
 

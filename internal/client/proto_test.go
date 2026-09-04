@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	xstrings "github.com/charmbracelet/x/exp/strings"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 )
 
 // parseModelStr parses a model string into provider filter and model ID.
@@ -45,7 +45,7 @@ func findModels(providers map[string]config.ProviderConfig, largeModel, smallMod
 	} {
 		if pf.filter != "" {
 			if _, ok := providers[pf.filter]; !ok {
-				return nil, nil, fmt.Errorf("%s model: provider %q not found in configuration. Use 'donk-cli models' to list available models", pf.label, pf.filter)
+				return nil, nil, fmt.Errorf("%s model: provider %q not found in configuration. Use 'bvr-cli models' to list available models", pf.label, pf.filter)
 			}
 		}
 	}

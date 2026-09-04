@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/diffdetect"
-	"github.com/richavery/donk-cli/internal/stringext"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/diffdetect"
+	"github.com/richavery/bvr-cli/internal/stringext"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 type toolResultContentWidths struct {

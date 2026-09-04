@@ -11,9 +11,9 @@ import (
 
 	"charm.land/fantasy"
 
-	"github.com/richavery/donk-cli/internal/agent/prompt"
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/agent/prompt"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/permission"
 )
 
 //go:embed templates/agentic_fetch.md
@@ -99,7 +99,7 @@ func (c *coordinator) agenticFetchTool(_ context.Context, client *http.Client) (
 				return tools.NewPermissionDeniedResponse(), nil
 			}
 
-			tmpDir, err := os.MkdirTemp(c.cfg.Config().Options.DataDirectory, "donk-fetch-*")
+			tmpDir, err := os.MkdirTemp(c.cfg.Config().Options.DataDirectory, "bvr-fetch-*")
 			if err != nil {
 				return fantasy.NewTextErrorResponse(fmt.Sprintf("Failed to create temporary directory: %s", err)), nil
 			}

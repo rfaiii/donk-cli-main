@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const TARGET = process.argv[1] || path.join(process.cwd(), "node_modules", ".bin", "donk-cli");
+const TARGET = process.argv[1] || path.join(process.cwd(), "node_modules", ".bin", "bvr-cli");
 fs.rmSync(TARGET, { force: true });
-console.log("Removed donk-cli");
+console.log("Removed bvr-cli");

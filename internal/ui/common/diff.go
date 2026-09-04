@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/richavery/donk-cli/internal/ui/diffview"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/diffview"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 )
 
 // DiffFormatter returns a diff formatter with the given styles that can be

@@ -13,9 +13,9 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/backend"
-	"github.com/richavery/donk-cli/internal/config"
-	_ "github.com/richavery/donk-cli/internal/swagger"
+	"github.com/richavery/bvr-cli/internal/backend"
+	"github.com/richavery/bvr-cli/internal/config"
+	_ "github.com/richavery/bvr-cli/internal/swagger"
 	httpswagger "github.com/swaggo/http-swagger/v2"
 )
 
@@ -24,7 +24,7 @@ import (
 // use 104 so the resulting path is portable across both platforms.
 const maxUnixSocketPathLen = 104
 
-// socketDir returns the directory used for the DONK Unix socket.
+// socketDir returns the directory used for the BVR Unix socket.
 // It prefers $XDG_RUNTIME_DIR when set (systemd's per-user runtime
 // directory on Linux), and otherwise falls back to [os.TempDir],
 // which resolves to the per-user private $TMPDIR on macOS and to
@@ -66,16 +66,16 @@ func ParseHostURL(host string) (*url.URL, error) {
 //
 // On Windows the address is a named pipe under \\.\pipe\. On Unix
 // platforms the socket lives in the per-user runtime directory
-// returned by [socketDir] and is named donk-<uid>.sock, falling
-// back to donk.sock when the current uid cannot be determined. If
+// returned by [socketDir] and is named bvr-<uid>.sock, falling
+// back to bvr.sock when the current uid cannot be determined. If
 // the composed path would exceed [maxUnixSocketPathLen] bytes (the
-// macOS sun_path limit), we fall back to /tmp/donk-<uid>.sock so
+// macOS sun_path limit), we fall back to /tmp/bvr-<uid>.sock so
 // the socket remains bindable.
 func DefaultHost() string {
-	sock := "donk.sock"
+	sock := "bvr.sock"
 	usr, err := user.Current()
 	if err == nil && usr.Uid != "" {
-		sock = fmt.Sprintf("donk-%s.sock", usr.Uid)
+		sock = fmt.Sprintf("bvr-%s.sock", usr.Uid)
 	}
 	if runtime.GOOS == "windows" {
 		return fmt.Sprintf("npipe:////./pipe/%s", sock)
@@ -87,7 +87,7 @@ func DefaultHost() string {
 	return "unix://" + path
 }
 
-// Server represents a DONK server bound to a specific address.
+// Server represents a BVR server bound to a specific address.
 type Server struct {
 	// Addr can be a TCP address, a Unix socket path, or a Windows named pipe.
 	Addr    string

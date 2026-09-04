@@ -7,9 +7,9 @@ import (
 	"log/slog"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/agent/tools"
-	"github.com/richavery/donk-cli/internal/hooks"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/agent/tools"
+	"github.com/richavery/bvr-cli/internal/hooks"
+	"github.com/richavery/bvr-cli/internal/permission"
 	"github.com/tidwall/sjson"
 )
 

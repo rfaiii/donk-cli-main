@@ -13,7 +13,7 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	xetag "github.com/charmbracelet/x/etag"
-	"github.com/richavery/donk-cli/internal/agent/hyper"
+	"github.com/richavery/bvr-cli/internal/agent/hyper"
 )
 
 type hyperClient interface {

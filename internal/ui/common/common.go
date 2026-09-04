@@ -7,11 +7,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/clipboard"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/ui/util"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/clipboard"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/util"
+	"github.com/richavery/bvr-cli/internal/workspace"
 )
 
 // MaxAttachmentSize defines the maximum allowed size for file attachments (5 MB).

@@ -157,7 +157,7 @@ var themeDefinitions = []ThemeDefinition{
 func Themes() []ThemeDefinition { return append([]ThemeDefinition(nil), themeDefinitions...) }
 
 // themeAccentAlt returns the (Accent, Alt) color pair for a theme, per the
-// DONK color-mapping table:
+// BVR color-mapping table:
 //
 //	Primary Theme | Accent | Alt
 //	Green         | Pink   | Purple
@@ -339,31 +339,31 @@ func applyTheme(s Styles, theme ThemeDefinition) Styles {
 func ThemeKeyForProvider(providerID string) string {
 	switch providerID {
 	case "hyper":
-		return "dark-donk-theme"
+		return "dark-bvr-theme"
 	default:
-		return "dark-donk-theme"
+		return "dark-bvr-theme"
 	}
 }
 
-// ThemeForProvider returns the Dark Donk theme for every provider. Provider
-// identity is retained for compatibility, but DONK has one visual identity.
+// ThemeForProvider returns the Dark BVR theme for every provider. Provider
+// identity is retained for compatibility, but BVR has one visual identity.
 func ThemeForProvider(providerID string) Styles {
-	return DarkDonkTheme()
+	return DarkBvrTheme()
 }
 
-// DarkDonkTheme returns DONK's dark green theme. The palette is shared with
-// the cross-language references in R&D/DONK-DARK-COLOR.
-func DarkDonkTheme() Styles {
+// DarkBvrTheme returns BVR's dark green theme. The palette is shared with
+// the cross-language references in R&D/BVR-DARK-COLOR.
+func DarkBvrTheme() Styles {
 	theme := ThemeByID(DefaultTheme)
 	s := quickStyle(theme.Palette())
 	return applyTheme(s, theme)
 }
 
 // CharmtonePantera is retained as a source-compatible alias for existing UI
-// tests and callers. New code should use DarkDonkTheme.
-func CharmtonePantera() Styles { return DarkDonkTheme() }
+// tests and callers. New code should use DarkBvrTheme.
+func CharmtonePantera() Styles { return DarkBvrTheme() }
 
-// HyperdonkObsidiana returns the Hyperdonk dark theme.
-func HyperdonkObsidiana() Styles {
-	return DarkDonkTheme()
+// HyperbvrObsidiana returns the Hyperbvr dark theme.
+func HyperbvrObsidiana() Styles {
+	return DarkBvrTheme()
 }

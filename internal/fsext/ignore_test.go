@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDonkIgnore(t *testing.T) {
+func TestBvrIgnore(t *testing.T) {
 	tempDir := t.TempDir()
 	t.Chdir(tempDir)
 
@@ -17,8 +17,8 @@ func TestDonkIgnore(t *testing.T) {
 	require.NoError(t, os.WriteFile("test2.log", []byte("test"), 0o644))
 	require.NoError(t, os.WriteFile("test3.tmp", []byte("test"), 0o644))
 
-	// Create a .donkignore file that ignores .log files
-	require.NoError(t, os.WriteFile(".donkignore", []byte("*.log\n"), 0o644))
+	// Create a .bvrignore file that ignores .log files
+	require.NoError(t, os.WriteFile(".bvrignore", []byte("*.log\n"), 0o644))
 
 	dl := NewDirectoryLister(tempDir)
 	require.True(t, dl.shouldIgnore("test2.log", nil, false), ".log files should be ignored")
@@ -50,16 +50,16 @@ func TestShouldExcludeFile(t *testing.T) {
 		t.Fatalf("Failed to create .gitignore: %v", err)
 	}
 
-	// Create .donkignore file
-	donkignoreContent := "custom_ignored/\n"
-	if err := os.WriteFile(filepath.Join(tempDir, ".donkignore"), []byte(donkignoreContent), 0o644); err != nil {
-		t.Fatalf("Failed to create .donkignore: %v", err)
+	// Create .bvrignore file
+	bvrignoreContent := "custom_ignored/\n"
+	if err := os.WriteFile(filepath.Join(tempDir, ".bvrignore"), []byte(bvrignoreContent), 0o644); err != nil {
+		t.Fatalf("Failed to create .bvrignore: %v", err)
 	}
 
 	// Test that ignored directories are properly ignored
 	require.True(t, ShouldExcludeFile(tempDir, nodeModules), "Expected node_modules to be ignored by .gitignore")
 	require.True(t, ShouldExcludeFile(tempDir, target), "Expected target to be ignored by .gitignore")
-	require.True(t, ShouldExcludeFile(tempDir, customIgnored), "Expected custom_ignored to be ignored by .donkignore")
+	require.True(t, ShouldExcludeFile(tempDir, customIgnored), "Expected custom_ignored to be ignored by .bvrignore")
 
 	// Test that normal directories are not ignored
 	require.False(t, ShouldExcludeFile(tempDir, normalDir), "Expected src directory to not be ignored")
@@ -84,14 +84,14 @@ func TestShouldExcludeFileHierarchical(t *testing.T) {
 		}
 	}
 
-	// Create .donkignore in subdir that ignores normal_nested
-	subDonkignore := "normal_nested/\n"
-	if err := os.WriteFile(filepath.Join(subDir, ".donkignore"), []byte(subDonkignore), 0o644); err != nil {
-		t.Fatalf("Failed to create subdir .donkignore: %v", err)
+	// Create .bvrignore in subdir that ignores normal_nested
+	subBvrignore := "normal_nested/\n"
+	if err := os.WriteFile(filepath.Join(subDir, ".bvrignore"), []byte(subBvrignore), 0o644); err != nil {
+		t.Fatalf("Failed to create subdir .bvrignore: %v", err)
 	}
 
-	// Test hierarchical ignore behavior - this should work because the .donkignore is in the parent directory
-	require.True(t, ShouldExcludeFile(tempDir, nestedNormal), "Expected normal_nested to be ignored by subdir .donkignore")
+	// Test hierarchical ignore behavior - this should work because the .bvrignore is in the parent directory
+	require.True(t, ShouldExcludeFile(tempDir, nestedNormal), "Expected normal_nested to be ignored by subdir .bvrignore")
 	require.False(t, ShouldExcludeFile(tempDir, subDir), "Expected subdir itself to not be ignored")
 }
 

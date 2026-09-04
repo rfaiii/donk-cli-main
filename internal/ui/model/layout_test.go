@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"charm.land/bubbles/v2/textarea"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/session"
-	"github.com/richavery/donk-cli/internal/ui/chat"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/ui/chat"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 // testMessageItem is a minimal chat item used to populate the chat list

@@ -12,8 +12,8 @@ import (
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/pkg/browser"
-	mcptools "github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/ui/common"
+	mcptools "github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/ui/common"
 )
 
 // MCPAuthID is the identifier for the MCP authentication dialog.

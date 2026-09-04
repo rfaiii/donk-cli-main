@@ -17,11 +17,11 @@ import (
 	"unicode/utf8"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/filepathext"
-	"github.com/richavery/donk-cli/internal/filetracker"
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/permission"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/filepathext"
+	"github.com/richavery/bvr-cli/internal/filetracker"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/skills"
 )
 
 //go:embed view.md.tpl
@@ -103,7 +103,7 @@ func NewViewTool(
 				return fantasy.NewTextErrorResponse("file_path is required"), nil
 			}
 
-			// Handle builtin skill files (donk: prefix).
+			// Handle builtin skill files (bvr: prefix).
 			if strings.HasPrefix(params.FilePath, skills.BuiltinPrefix) {
 				resp, err := readBuiltinFile(params, skillTracker)
 				return resp, err

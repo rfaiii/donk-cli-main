@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# RTK hook for DONK
+# RTK hook for BVR
 # This hook rewrites bash commands to use rtk for token savings.
 #
 # https://github.com/rtk-ai/rtk
@@ -39,7 +39,7 @@ if [ -n "$RTK_VERSION" ]; then
     fi
 fi
 
-CMD="${DONK_TOOL_INPUT_COMMAND:-}"
+CMD="${BVR_TOOL_INPUT_COMMAND:-}"
 if [ -z "$CMD" ]; then
     exit 0
 fi

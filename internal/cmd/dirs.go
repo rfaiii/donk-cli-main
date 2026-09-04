@@ -8,19 +8,19 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/exp/charmtone"
 	"github.com/charmbracelet/x/term"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/config"
 	"github.com/spf13/cobra"
 )
 
 var dirsCmd = &cobra.Command{
 	Use:   "dirs",
 	Short: "Show config and data directories",
-	Long: `Show where DONK stores its configuration and data,
+	Long: `Show where BVR stores its configuration and data,
 including any project-level config files discovered
 from the current directory up to the project root.`,
 	Example: `
 # Show all directories
-donk-cli dirs
+bvr-cli dirs
   `,
 	Run: func(cmd *cobra.Command, args []string) {
 		entries := collectDirs(cmd)

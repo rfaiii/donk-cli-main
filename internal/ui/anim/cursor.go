@@ -13,13 +13,13 @@ import (
 // It is intentionally dependency-free beyond Bubble Tea/Lip Gloss so it can
 // live inside the main app without pulling in incompatible graphics stacks.
 type CursorEffect struct {
-	width    int
-	tick     time.Time
-	enabled  bool
-	history  []cursorPoint
-	maxHist  int
-	spacing  int
-	styles   cursorStyles
+	width   int
+	tick    time.Time
+	enabled bool
+	history []cursorPoint
+	maxHist int
+	spacing int
+	styles  cursorStyles
 }
 
 type cursorPoint struct {

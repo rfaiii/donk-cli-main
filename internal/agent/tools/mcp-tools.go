@@ -6,9 +6,9 @@ import (
 	"slices"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/agent/tools/mcp"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/permission"
+	"github.com/richavery/bvr-cli/internal/agent/tools/mcp"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/permission"
 )
 
 // whitelistDockerTools contains Docker MCP tools that don't require permission.

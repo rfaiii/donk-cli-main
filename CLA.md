@@ -1,6 +1,6 @@
 # Contributor License Agreement
 
-Thank you for your interest in the open source project(s) managed by DONK, Inc. ("Company"). In order to clarify the intellectual property license granted with Contributions from any person or entity, Company must have a Contributor License Agreement ("CLA") on file that has been signed by each contributor, indicating agreement to the license terms below. This license is for your protection as a contributor as well as the protection of Company and its other contributors and users; it does not change your rights to use your own Contributions for any other purpose.
+Thank you for your interest in the open source project(s) managed by BVR, Inc. ("Company"). In order to clarify the intellectual property license granted with Contributions from any person or entity, Company must have a Contributor License Agreement ("CLA") on file that has been signed by each contributor, indicating agreement to the license terms below. This license is for your protection as a contributor as well as the protection of Company and its other contributors and users; it does not change your rights to use your own Contributions for any other purpose.
 By submitting a contribution to this repository (e.g. opening a pull request) or otherwise agreeing in writing, You accept and agree to these terms and conditions for Your present and future Contributions submitted to Company. In return, Company shall consider Your Contributions for addition to the official Company open source project(s) for which they were submitted. Except for the license granted herein to Company and recipients of software distributed by Company, You reserve all right, title, and interest in and to Your Contributions.
 
 1. Definitions.
@@ -15,4 +15,4 @@ By submitting a contribution to this repository (e.g. opening a pull request) or
 8. You agree to notify Company of any facts or circumstances of which You become aware that would make the above representations and warranties inaccurate in any respect.
 9. If You are entering into this CLA as a company, You represent and warrant that the individual accepting this CLA is duly authorized to enter into this CLA on the company’s behalf.
 
-For any copyright notices or other communications, please contact us at [info@donk-cli.com](mailto:info@donk-cli.com).
+For any copyright notices or other communications, please contact us at [info@bvr-cli.com](mailto:info@bvr-cli.com).

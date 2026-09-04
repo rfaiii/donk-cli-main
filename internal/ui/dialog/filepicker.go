@@ -15,9 +15,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/home"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	fimage "github.com/richavery/donk-cli/internal/ui/image"
+	"github.com/richavery/bvr-cli/internal/home"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	fimage "github.com/richavery/bvr-cli/internal/ui/image"
 )
 
 // FilePickerID is the identifier for the FilePicker dialog.

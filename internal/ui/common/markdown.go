@@ -6,11 +6,11 @@ import (
 
 	"charm.land/glamour/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/ui/xchroma"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/xchroma"
 )
 
-const formatterName = "donk"
+const formatterName = "bvr"
 
 func init() {
 	// NOTE: Glamour does not offer us an option to pass the formatter
@@ -38,7 +38,7 @@ var (
 //
 // The returned renderer is NOT safe for concurrent Render calls
 // (goldmark's BlockStack carries state across the public Render
-// API). DONK's TUI is single-threaded so production never
+// API). BVR's TUI is single-threaded so production never
 // contends, but parallel callers (most notably parallel tests)
 // must serialize via [LockMarkdownRenderer]. Treat the renderer
 // as effectively pinned to one goroutine at a time.

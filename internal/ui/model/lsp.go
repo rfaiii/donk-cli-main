@@ -8,10 +8,10 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
-	"github.com/richavery/donk-cli/internal/lsp"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
-	"github.com/richavery/donk-cli/internal/workspace"
+	"github.com/richavery/bvr-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/workspace"
 )
 
 // LSPInfo wraps LSP client information with diagnostic counts by severity.

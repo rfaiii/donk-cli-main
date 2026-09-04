@@ -1,4 +1,4 @@
-// Package boot renders the animated DONK-CLI beaver intro sequence before the
+// Package boot renders the animated BVR-CLI beaver intro sequence before the
 // Bubble Tea main loop takes over the terminal.
 package boot
 
@@ -33,7 +33,7 @@ var beaverFrames = map[string]string{
 // bootSequence is the frame order for the intro animation.
 var bootSequence = []string{"center", "left", "center", "right", "center"}
 
-// mascotColor is the DONK neon green (#39f66b) used for the beaver so it pops
+// mascotColor is the BVR neon green (#39f66b) used for the beaver so it pops
 // vibrantly against the dark terminal background.
 var mascotColor = lipgloss.Color("#39f66b")
 
@@ -57,7 +57,7 @@ func Run() {
 		fmt.Print("\033[0;0H") // cursor to top-left
 		fmt.Println(mascotStyle.Render(beaverFrames[frame]))
 		fmt.Println()
-		fmt.Println(loadingStyle.Render("Initializing donk-cli components..."))
+		fmt.Println(loadingStyle.Render("Initializing bvr-cli components..."))
 		time.Sleep(400 * time.Millisecond)
 	}
 }

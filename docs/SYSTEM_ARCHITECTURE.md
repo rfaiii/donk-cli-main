@@ -1,12 +1,12 @@
-# DONK-CLI System Architecture & Roadmap
+# BVR-CLI System Architecture & Roadmap
 
-This document is the working map for DONK-CLI. It describes the current
+This document is the working map for BVR-CLI. It describes the current
 boundaries, the direction of data flow, and the order in which new features can
 be added without destabilizing the terminal UI.
 
 ## North-star product
 
-DONK-CLI is a project-aware terminal workspace. The UI is the durable surface;
+BVR-CLI is a project-aware terminal workspace. The UI is the durable surface;
 sessions, tools, models, project files, and local state plug into it through
 explicit boundaries. A user should be able to see what the system knows, choose
 what it can do, and recover from every operation.
@@ -17,7 +17,7 @@ what it can do, and recover from every operation.
 flowchart TB
     User([User])
     Terminal[Terminal / keyboard / mouse]
-    UI[DONK-CLI UI\nBubble Tea + Lip Gloss + Ultraviolet]
+    UI[BVR-CLI UI\nBubble Tea + Lip Gloss + Ultraviolet]
     Dialogs[Dialog layer\nFinder / models / sessions / commands]
     Finder[File Finder\nlist + preview + metadata]
     Chat[Chat + prompt surface]
@@ -108,7 +108,7 @@ internal/ui/
   |  │               permissions                                         ||
   |  ├── chat/        conversation rendering and prompt behavior         ||
   |  ├── common/      shared terminal/layout primitives                  ||
-  |  ├── logo/        DONK wordmark and banner treatments                ||
+  |  ├── logo/        BVR wordmark and banner treatments                ||
   |  └── styles/      theme and visual tokens                            ||
 
 internal/
@@ -216,7 +216,7 @@ states. Protocol details are in [`NODE_TRANSPORTS.md`](NODE_TRANSPORTS.md).
   WebSockets.
 - iOS companion app scaffolded in `mobile-cli/ios/` for remote control of the
   host CLI.
-- Shared companion protocol and data model defined in `docs/DONK-SERVER.md`
+- Shared companion protocol and data model defined in `docs/BVR-SERVER.md`
   and `docs/MOBILE-CLI.md`.
 - Initial implementation focuses on server-side scaffolding, mobile client
   discovery, and session/telemetry bridging.

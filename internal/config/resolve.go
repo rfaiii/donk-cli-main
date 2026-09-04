@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/env"
-	"github.com/richavery/donk-cli/internal/shell"
+	"github.com/richavery/bvr-cli/internal/env"
+	"github.com/richavery/bvr-cli/internal/shell"
 )
 
 // resolveTimeout bounds how long a single ResolveValue call may spend

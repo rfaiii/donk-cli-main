@@ -1,9 +1,9 @@
 {
-  "name": "@donkcli/donk-cli",
+  "name": "@bvrcli/bvr-cli",
   "version": "1.1.5",
-  "description": "DONK is a keyboard-first terminal AI workspace.",
+  "description": "BVR is a keyboard-first terminal AI workspace.",
   "bin": {
-    "donk-cli": "./bin/donk-cli"
+    "bvr-cli": "./bin/bvr-cli"
   },
   "scripts": {
     "postinstall": "node ./scripts/install.js",
@@ -23,8 +23,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richavery/donk-cli-main.git"
+    "url": "git+https://github.com/richavery/bvr-cli-main.git"
   },
-  "homepage": "https://donk-cli.com",
+  "homepage": "https://bvr-cli.com",
   "license": "MIT"
 }

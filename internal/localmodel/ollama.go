@@ -58,7 +58,7 @@ func (o *Ollama) Status(ctx context.Context) RuntimeStatus {
 		status.Installed = err == nil
 	}
 	// The Ollama API is the source of truth for installed models. A GUI-launched
-	// DONK may not inherit the shell PATH, so a missing CLI must not hide a
+	// BVR may not inherit the shell PATH, so a missing CLI must not hide a
 	// healthy local daemon (and its /api/tags model list).
 	if status.Installed && o.Command != nil {
 		if version, err := o.Command(ctx, "ollama", "--version"); err == nil {
@@ -283,7 +283,7 @@ func (o *Ollama) Start(ctx context.Context) error {
 	}
 	// The desktop application and system service commonly start Ollama for us.
 	// Do not launch a second server (and do not attach a long-running process to
-	// DONK's terminal) when the API is already healthy.
+	// BVR's terminal) when the API is already healthy.
 	if err := o.Health(ctx); err == nil {
 		return nil
 	}

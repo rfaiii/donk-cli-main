@@ -4,8 +4,8 @@ import (
 	"context"
 	_ "embed"
 
-	"github.com/richavery/donk-cli/internal/agent/prompt"
-	"github.com/richavery/donk-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/agent/prompt"
+	"github.com/richavery/bvr-cli/internal/config"
 )
 
 //go:embed templates/coder.md.tpl

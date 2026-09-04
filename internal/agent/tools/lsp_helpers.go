@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
-	"github.com/richavery/donk-cli/internal/lsp"
+	"github.com/richavery/bvr-cli/internal/lsp"
 )
 
 // resolvedSymbol holds the result of resolving a symbol name to an LSP position.

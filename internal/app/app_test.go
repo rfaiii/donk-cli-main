@@ -8,7 +8,7 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 	"github.com/stretchr/testify/require"
 )
 

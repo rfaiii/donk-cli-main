@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	uv "github.com/charmbracelet/ultraviolet"
-	"github.com/richavery/donk-cli/internal/node"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/node"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 
 func TestNodeSettingsDrawShowsDeviceNamesAndStatuses(t *testing.T) {
-	theme := styles.DarkDonkTheme()
+	theme := styles.DarkBvrTheme()
 	dialog := NewNodeSettings(&common.Common{Styles: &theme})
 	dialog.HandleMsg(NodeSettingsUpdateMsg{Devices: []node.Device{
 		{ID: "offline", Name: "Grey Node", Status: node.DeviceStatusOffline},

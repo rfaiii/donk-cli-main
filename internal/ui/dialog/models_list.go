@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/richavery/donk-cli/internal/ui/list"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/list"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 )
 

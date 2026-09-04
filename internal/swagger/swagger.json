@@ -1,15 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "DONK is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.",
-        "title": "DONK API",
+        "description": "BVR is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.",
+        "title": "BVR API",
         "contact": {
-            "name": "DONK",
-            "url": "https://donk-cli.com"
+            "name": "BVR",
+            "url": "https://bvr-cli.com"
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/richavery/donk-cli/blob/main/LICENSE"
+            "url": "https://github.com/richavery/bvr-cli/blob/main/LICENSE"
         },
         "version": "1.0"
     },
@@ -1818,7 +1818,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2512,7 +2512,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2562,7 +2562,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2959,7 +2959,7 @@
         "csync.Map-string-config_ProviderConfig": {
             "type": "object"
         },
-        "github_com_richavery_donk_cli_internal_config.Config": {
+        "github_com_richavery_bvr_cli_internal_config.Config": {
             "type": "object",
             "properties": {
                 "$schema": {
@@ -2988,7 +2988,7 @@
                     }
                 },
                 "options": {
-                    "$ref": "#/definitions/github_com_richavery_donk_cli_internal_config.Options"
+                    "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_config.Options"
                 },
                 "permissions": {
                     "$ref": "#/definitions/config.Permissions"
@@ -3016,7 +3016,7 @@
                 }
             }
         },
-        "github_com_richavery_donk_cli_internal_config.Options": {
+        "github_com_richavery_bvr_cli_internal_config.Options": {
             "type": "object",
             "properties": {
                 "attribution": {
@@ -3032,7 +3032,7 @@
                     }
                 },
                 "data_directory": {
-                    "description": "DataDirectory is where DONK keeps per-project state such as\nthe SQLite database and workspace overrides. Relative paths are\nresolved against the working directory; absolute paths are used\nverbatim. After defaulting the stored value is always absolute.",
+                    "description": "DataDirectory is where BVR keeps per-project state such as\nthe SQLite database and workspace overrides. Relative paths are\nresolved against the working directory; absolute paths are used\nverbatim. After defaulting the stored value is always absolute.",
                     "type": "string"
                 },
                 "debug": {
@@ -3085,7 +3085,7 @@
                 }
             }
         },
-        "github_com_richavery_donk_cli_internal_proto.Message": {
+        "github_com_richavery_bvr_cli_internal_proto.Message": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3636,7 +3636,7 @@
             "type": "object",
             "properties": {
                 "config": {
-                    "$ref": "#/definitions/github_com_richavery_donk_cli_internal_config.Config"
+                    "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_config.Config"
                 },
                 "data_dir": {
                     "type": "string"

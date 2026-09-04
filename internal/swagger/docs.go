@@ -10,12 +10,12 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "DONK",
-            "url": "https://donk-cli.com"
+            "name": "BVR",
+            "url": "https://bvr-cli.com"
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/richavery/donk-cli/blob/main/LICENSE"
+            "url": "https://github.com/richavery/bvr-cli/blob/main/LICENSE"
         },
         "version": "{{.Version}}"
     },
@@ -1825,7 +1825,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2519,7 +2519,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2569,7 +2569,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_richavery_donk_cli_internal_proto.Message"
+                                "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_proto.Message"
                             }
                         }
                     },
@@ -2966,7 +2966,7 @@ const docTemplate = `{
         "csync.Map-string-config_ProviderConfig": {
             "type": "object"
         },
-        "github_com_richavery_donk_cli_internal_config.Config": {
+        "github_com_richavery_bvr_cli_internal_config.Config": {
             "type": "object",
             "properties": {
                 "$schema": {
@@ -2995,7 +2995,7 @@ const docTemplate = `{
                     }
                 },
                 "options": {
-                    "$ref": "#/definitions/github_com_richavery_donk_cli_internal_config.Options"
+                    "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_config.Options"
                 },
                 "permissions": {
                     "$ref": "#/definitions/config.Permissions"
@@ -3023,7 +3023,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_richavery_donk_cli_internal_config.Options": {
+        "github_com_richavery_bvr_cli_internal_config.Options": {
             "type": "object",
             "properties": {
                 "attribution": {
@@ -3039,7 +3039,7 @@ const docTemplate = `{
                     }
                 },
                 "data_directory": {
-                    "description": "DataDirectory is where DONK keeps per-project state such as\nthe SQLite database and workspace overrides. Relative paths are\nresolved against the working directory; absolute paths are used\nverbatim. After defaulting the stored value is always absolute.",
+                    "description": "DataDirectory is where BVR keeps per-project state such as\nthe SQLite database and workspace overrides. Relative paths are\nresolved against the working directory; absolute paths are used\nverbatim. After defaulting the stored value is always absolute.",
                     "type": "string"
                 },
                 "debug": {
@@ -3092,7 +3092,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_richavery_donk_cli_internal_proto.Message": {
+        "github_com_richavery_bvr_cli_internal_proto.Message": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3643,7 +3643,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "config": {
-                    "$ref": "#/definitions/github_com_richavery_donk_cli_internal_config.Config"
+                    "$ref": "#/definitions/github_com_richavery_bvr_cli_internal_config.Config"
                 },
                 "data_dir": {
                     "type": "string"
@@ -3704,8 +3704,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/v1",
 	Schemes:          []string{},
-	Title:            "Donk API",
-	Description:      "Donk is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.",
+	Title:            "BVR API",
+	Description:      "BVR is a terminal-based AI coding assistant. This API is served over a Unix socket (or Windows named pipe) and provides programmatic access to workspaces, sessions, agents, LSP, MCP, and more.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

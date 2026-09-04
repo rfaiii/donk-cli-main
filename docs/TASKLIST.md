@@ -1,7 +1,7 @@
-# DONK Tasklist
+# BVR Tasklist
 
 ## v1.1.7
-- [x] Boot brand banner: DONK → version → "OH BEAV!" → attribution scramble sequence (fades away on completion)
+- [x] Boot brand banner: BVR → version → "OH BEAV!" → attribution scramble sequence (fades away on completion)
 - [x] Per-theme Accent/Alt color mapping across all 8 themes (`Styles.ThemeColor.Accent`/`.Alt`)
 - [x] Cline hosted-gateway free-model support (live catalog fetch + in-app "ADD CLINE API KEY" flow)
 - [x] "Other Models" palette entry + Cline catalog dialog
@@ -11,7 +11,7 @@
 - [x] Stacked NODE/MCP/LSP resource monitors (left) with SKILLS (right) for tighter space use
 - [x] Lightened section and status-bar help text for readability; restored `Status.Help` foreground
 - [x] Reorganized command-palette menu into documented order
-- [x] Restored the "CLI" suffix in the header wordmark (`DONK` → `DONK-CLI`, per `docs/UI_BRANDING.md`)
+- [x] Restored the "CLI" suffix in the header wordmark (`BVR` → `BVR-CLI`, per `docs/UI_BRANDING.md`)
 - [x] Click-away to dismiss the File Finder and the Commands dialog (outside click / `esc` / `[X]`)
 - [x] Truncate long File Finder and SKILLS entries with an ellipsis instead of wrapping
 - [x] Fixed project-location rendering (no garbled/numeric output) by styling the path once
@@ -23,7 +23,7 @@
 - [ ] NODE HTTP health check and bearer auth test
 - [ ] NODE WebSocket streaming and reconnect test
 - [ ] NODE SSH transport and host-key verification test
-- [ ] iPhone pairing smoke test against `donk node serve`
+- [ ] iPhone pairing smoke test against `bvr node serve`
 - [ ] Offline/online NODE UI state transition test
 
 ## Next

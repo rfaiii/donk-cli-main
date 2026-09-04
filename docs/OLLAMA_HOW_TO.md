@@ -1,6 +1,6 @@
 # Ollama How-To
 
-DONK can discover and use local Ollama models without manually maintaining a
+BVR can discover and use local Ollama models without manually maintaining a
 model JSON entry.
 
 ## 1. Install Ollama
@@ -50,13 +50,13 @@ The default API endpoint is:
 http://127.0.0.1:11434
 ```
 
-If Ollama is already running as a desktop/background service, DONK detects it
+If Ollama is already running as a desktop/background service, BVR detects it
 The picker `s` action is a fallback and may report that Ollama is already
 running on macOS or Windows. Selecting a model also warms it automatically.
 
-## 3. Open the DONK model picker
+## 3. Open the BVR model picker
 
-Use `ctrl+l` or open the command palette and choose **Switch Model**. DONK
+Use `ctrl+l` or open the command palette and choose **Switch Model**. BVR
 checks Ollama asynchronously and lists installed models under **Ollama
 (Local)**.
 
@@ -71,11 +71,11 @@ Available model-picker keys:
 | `c` | Cancel an active model pull |
 | `esc` | Close the picker |
 
-## 4. Pull a model from DONK
+## 4. Pull a model from BVR
 
 Highlight a model in the Ollama section and press `p`. Pull progress appears in
 the picker with status, percentage, and digest. Press `c` to cancel. When the
-pull completes, DONK refreshes the local model list.
+pull completes, BVR refreshes the local model list.
 
 You can also pull models from a shell:
 
@@ -85,7 +85,7 @@ ollama pull qwen2.5:7b
 
 ## 5. Select and use a model
 
-Press `enter` on an installed model. DONK creates or updates the managed
+Press `enter` on an installed model. BVR creates or updates the managed
 `ollama-local` provider, saves the selected model, refreshes the agent, and
 warms the model in the background. The home-screen diamond turns green when it
 is ready and red if loading fails.
@@ -94,21 +94,21 @@ the selected local model through Ollama's OpenAI-compatible endpoint.
 
 ## 5a. Use the native small-model coder
 
-For Qwen coder models that are slow or unreliable with the full DONK tool
+For Qwen coder models that are slow or unreliable with the full BVR tool
 surface, use the fantasy-free native path:
 
 ```sh
 GOWORK=off go build -o "$HOME/bin/codetool" ./cmd/codetool
-GOWORK=off go build -o "$HOME/bin/donk-cli" .
+GOWORK=off go build -o "$HOME/bin/bvr-cli" .
 
-DONK_CODETOOL="$HOME/bin/codetool" \
-  "$HOME/bin/donk-cli" code --native \
+BVR_CODETOOL="$HOME/bin/codetool" \
+  "$HOME/bin/bvr-cli" code --native \
   --model qwen2.5-coder:3b-instruct --stream \
   "Read note.txt and tell me exactly what it contains."
 ```
 
 The native path uses the current directory. Use `--cwd /path/to/project` when
-the files are elsewhere. `DONK_CODETOOL` may be omitted when `codetool` is on
+the files are elsewhere. `BVR_CODETOOL` may be omitted when `codetool` is on
 `PATH`. Streaming is on by default; raw JSON tool-call dumps are buffered and
 hidden after recovery, while normal assistant text remains live.
 
@@ -161,7 +161,7 @@ ollama pull qwen2.5:7b
 
 ### Context size looks wrong
 
-DONK reads architecture-specific context metadata from Ollama's `/api/show`.
+BVR reads architecture-specific context metadata from Ollama's `/api/show`.
 Refresh after changing a model or its runtime settings.
 
 ### Native coder cannot find a file
@@ -171,7 +171,7 @@ there, or provide the project explicitly:
 
 ```sh
 ls -l /path/to/project/note.txt
-donk-cli code --native --cwd /path/to/project \
+bvr-cli code --native --cwd /path/to/project \
   --model qwen2.5-coder:3b-instruct "Read note.txt"
 ```
 
@@ -180,7 +180,7 @@ donk-cli code --native --cwd /path/to/project \
 Run with diagnostics:
 
 ```sh
-CODETOOL_DEBUG=1 donk-cli code --native --stream \
+CODETOOL_DEBUG=1 bvr-cli code --native --stream \
   --model qwen2.5-coder:3b-instruct "Inspect this project"
 ```
 

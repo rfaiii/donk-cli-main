@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
 )
 
 // ListWorkspaces retrieves all workspaces from the server.

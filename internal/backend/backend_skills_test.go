@@ -10,11 +10,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/backend"
-	"github.com/richavery/donk-cli/internal/config"
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/pubsub"
-	"github.com/richavery/donk-cli/internal/skills"
+	"github.com/richavery/bvr-cli/internal/backend"
+	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/pubsub"
+	"github.com/richavery/bvr-cli/internal/skills"
 	"github.com/stretchr/testify/require"
 )
 
@@ -33,7 +33,7 @@ func TestBackend_WorkspaceSkillsIsolation(t *testing.T) {
 	t.Setenv("XDG_CONFIG_HOME", filepath.Join(hostHome, ".config"))
 	t.Setenv("XDG_DATA_HOME", filepath.Join(hostHome, ".local", "share"))
 	t.Setenv("XDG_CACHE_HOME", filepath.Join(hostHome, ".cache"))
-	t.Setenv("DONK_SKILLS_DIR", t.TempDir())
+	t.Setenv("BVR_SKILLS_DIR", t.TempDir())
 
 	// Each workspace gets its own working directory containing a
 	// distinct project-local skill so the discovery output differs.
@@ -52,7 +52,7 @@ func TestBackend_WorkspaceSkillsIsolation(t *testing.T) {
 	wsA, _, err := b.CreateWorkspace(proto.Workspace{
 		ClientID: cidA,
 		Path:     wdA,
-		DataDir:  filepath.Join(wdA, ".donk"),
+		DataDir:  filepath.Join(wdA, ".bvr"),
 	})
 	require.NoError(t, err)
 	t.Cleanup(func() { _ = b.DeleteWorkspace(wsA.ID, cidA) })
@@ -60,7 +60,7 @@ func TestBackend_WorkspaceSkillsIsolation(t *testing.T) {
 	wsB, _, err := b.CreateWorkspace(proto.Workspace{
 		ClientID: cidB,
 		Path:     wdB,
-		DataDir:  filepath.Join(wdB, ".donk"),
+		DataDir:  filepath.Join(wdB, ".bvr"),
 	})
 	require.NoError(t, err)
 	t.Cleanup(func() { _ = b.DeleteWorkspace(wsB.ID, cidB) })

@@ -1,15 +1,15 @@
-# DONK Development Guide
+# BVR Development Guide
 
 ## Project Overview
 
-DONK is a terminal-based AI coding assistant built in Go by
-[DONK](https://donk-cli.com). It connects to LLMs and gives them tools to read,
+BVR is a terminal-based AI coding assistant built in Go by
+[BVR](https://bvr-cli.com). It connects to LLMs and gives them tools to read,
 write, and execute code. It supports multiple providers (Anthropic, OpenAI,
 Gemini, Bedrock, Copilot, Hyper, MiniMax, Vercel, and more), integrates with
 LSPs for code intelligence, and supports extensibility via MCP servers and
 agent skills.
 
-The module path is `github.com/richavery/donk-cli`.
+The module path is `github.com/richavery/bvr-cli`.
 
 ## Architecture
 
@@ -20,9 +20,9 @@ internal/
   cmd/                             CLI commands (root, run, login, models, stats, sessions)
   config/
     config.go                      Config struct, context file paths, agent definitions
-    load.go                        donk.json and donkrc loading and validation
+    load.go                        bvr.json and bvrrc loading and validation
     provider.go                    Provider configuration and model resolution
-  shellconfig/                      Bash-powered config format (donkrc builtins)
+  shellconfig/                      Bash-powered config format (bvrrc builtins)
   agent/
     agent.go                       SessionAgent: runs LLM conversations per session
     coordinator.go                 Coordinator: manages named agents ("coder", "task")
@@ -34,7 +34,7 @@ internal/
   hooks/                           Hook engine: runs user shell commands on hook events
     hooks.go                       Decision types, aggregation logic, event constants
     runner.go                      Parallel hook execution, timeout, dedup
-    input.go                       Stdin payload builder, env vars, stdout parsing (DONK + Claude Code compat)
+    input.go                       Stdin payload builder, env vars, stdout parsing (BVR + Claude Code compat)
   session/session.go               Session CRUD backed by SQLite
   message/                         Message model and content types
   db/                              SQLite via sqlc, with migrations
@@ -69,11 +69,11 @@ internal/
   `.md` description file in `internal/agent/tools/`.
 - **System prompts are Go templates**: `internal/agent/templates/*.md.tpl`
   with runtime data injected.
-- **Context files**: DONK reads AGENTS.md, DONK.md, CLAUDE.md, GEMINI.md
+- **Context files**: BVR reads AGENTS.md, BVR.md, CLAUDE.md, GEMINI.md
   (and `.local` variants) from the working directory for project-specific
   instructions.
-- **Bash config format**: In addition to `donk.json`, DONK supports
-  `donkrc` — a Bash script using builtins (`provider`, `model`, `mcp`,
+- **Bash config format**: In addition to `bvr.json`, BVR supports
+  `bvrrc` — a Bash script using builtins (`provider`, `model`, `mcp`,
   `lsp`, `permissions`, `hook`, `options`) to define config. Shell config
   files are discovered alongside JSON configs and deep-merged through the
   same pipeline. Builtins are registered via `shell.RegisterBuiltin` and
@@ -83,7 +83,7 @@ internal/
   generated code in `internal/db/`. Migrations in `internal/db/migrations/`.
 - **Pub/sub**: `internal/pubsub` for decoupled communication between agent,
   UI, and services.
-- **Hooks**: User-defined shell commands in `donk.json` that fire before
+- **Hooks**: User-defined shell commands in `bvr.json` that fire before
   tool execution. The engine (`internal/hooks/`) is independent of fantasy
   and agent — it takes inputs, runs commands, returns decisions. The
   `hookedTool` decorator in `internal/agent/hooked_tool.go` wraps tools at
@@ -233,7 +233,7 @@ overrides), then wire it into `ThemeForProvider`.
 ## Agent Operating Principles
 
 This section documents the active development agent configuration and
-environment preferences for DONK-CLI.
+environment preferences for BVR-CLI.
 
 ### Maintainer
 

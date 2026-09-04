@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"charm.land/fantasy"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/session"
 )
 
 //go:embed todos.md

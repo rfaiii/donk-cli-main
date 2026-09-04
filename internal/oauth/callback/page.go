@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-//go:embed page.html page.css page.js heartbit.svg heartbit-grumpy.svg donk.svg
+//go:embed page.html page.css page.js heartbit.svg heartbit-grumpy.svg bvr.svg
 var assets embed.FS
 
 // closeDelay is how long the page counts down before asking the browser to
@@ -73,7 +73,7 @@ func Write(w io.Writer, r Result) error {
 	if err != nil {
 		return fmt.Errorf("read callback grumpy artwork: %w", err)
 	}
-	logo, err := assets.ReadFile("donk.svg")
+	logo, err := assets.ReadFile("bvr.svg")
 	if err != nil {
 		return fmt.Errorf("read callback logo: %w", err)
 	}
@@ -113,23 +113,23 @@ func Write(w io.Writer, r Result) error {
 	data.Favicon = template.URL("data:image/svg+xml;base64," + base64.StdEncoding.EncodeToString(art))
 
 	if r.Failed() {
-		data.Title = "Authorization failed — DONK"
+		data.Title = "Authorization failed — BVR"
 		data.Kind = "failed"
 		data.Heading = "Authorization failed"
-		data.Detail = "Donk was not granted access to"
+		data.Detail = "BVR was not granted access to"
 		if r.Subject == "" {
-			data.Detail = "Donk was not granted access."
+			data.Detail = "BVR was not granted access."
 		}
 		// A failed page keeps itself open: the reader needs the reason,
 		// and closing the tab out from under them would take it away.
-		data.Status = "Close this tab and try again from DONK."
+		data.Status = "Close this tab and try again from BVR."
 	} else {
-		data.Title = "Authorized — DONK"
+		data.Title = "Authorized — BVR"
 		data.Kind = "ok"
 		data.Heading = "You’re all set"
-		data.Detail = "Donk is now connected to"
+		data.Detail = "BVR is now connected to"
 		if r.Subject == "" {
-			data.Detail = "Donk is now connected."
+			data.Detail = "BVR is now connected."
 		}
 		// Replaced by the countdown as soon as the script runs, so this
 		// text is what a reader without JavaScript is left with.

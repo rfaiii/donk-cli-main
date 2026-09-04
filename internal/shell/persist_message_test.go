@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/richavery/donk-cli/internal/db"
-	"github.com/richavery/donk-cli/internal/message"
-	"github.com/richavery/donk-cli/internal/session"
+	"github.com/richavery/bvr-cli/internal/db"
+	"github.com/richavery/bvr-cli/internal/message"
+	"github.com/richavery/bvr-cli/internal/session"
 	"github.com/stretchr/testify/require"
 )
 

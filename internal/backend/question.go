@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"github.com/richavery/donk-cli/internal/proto"
-	"github.com/richavery/donk-cli/internal/question"
+	"github.com/richavery/bvr-cli/internal/proto"
+	"github.com/richavery/bvr-cli/internal/question"
 )
 
 // AnswerQuestion submits answers for a question. The returned bool

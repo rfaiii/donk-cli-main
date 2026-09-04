@@ -3,7 +3,7 @@ from fastmcp import FastMCP
 from google import genai
 
 # Initialize the FastMCP server
-mcp = FastMCP("Donk Companion MCP Server")
+mcp = FastMCP("BVR Companion MCP Server")
 
 @mcp.tool()
 def sync_gemini_command(command: str) -> str:
@@ -15,7 +15,7 @@ def sync_gemini_command(command: str) -> str:
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        return "Error: GEMINI_API_KEY environment variable is not set in donk.json."
+        return "Error: GEMINI_API_KEY environment variable is not set in bvr.json."
         
     try:
         client = genai.Client(api_key=api_key)

@@ -1,4 +1,4 @@
-# DONK-CLI Dependencies
+# BVR-CLI Dependencies
 
 Concrete dependency reference for end users and maintainers.
 This covers everything a new user or installer needs on macOS and Windows.
@@ -9,7 +9,7 @@ This covers everything a new user or installer needs on macOS and Windows.
 
 | Dependency | Purpose | Notes |
 | --- | --- | --- |
-| DONK binary | Terminal UI runtime | No Go runtime required after build |
+| BVR binary | Terminal UI runtime | No Go runtime required after build |
 | Terminal emulator | Bubble Tea rendering surface | macOS Terminal, Windows Terminal, Alacritty, iTerm2 |
 | Network access | Provider auth, model discovery, updates | Required during first run and `/login` |
 
@@ -61,7 +61,7 @@ This covers everything a new user or installer needs on macOS and Windows.
 
 ### Charm libraries
 
-DONK depends on Charm ecosystem libraries. In the `rfaiii/donk-cli-main`
+BVR depends on Charm ecosystem libraries. In the `rfaiii/bvr-cli-main`
 repo, the expected modules are:
 
 - `charm.land/bubbletea/v2`
@@ -84,7 +84,7 @@ If these are not published under `charm.land`, map them to the local
 This repo may expect a shared `go.work` that includes sibling Charm module
 paths. If `go build ./...` fails from this repo alone, use one of:
 
-- `go build .` from `donk-cli-main` only
+- `go build .` from `bvr-cli-main` only
 - Add this repo to the shared workspace
 - Replace missing `charm.land/*` modules with local paths in `go.mod`
 
@@ -110,7 +110,7 @@ ollama pull llama3.1:8b
 
 ## Provider setup
 
-DONK supports multiple providers. Required items per provider:
+BVR supports multiple providers. Required items per provider:
 
 | Provider | Required | Auto-detect |
 | --- | --- | --- |
@@ -125,10 +125,10 @@ Use `/login` or the models dialog to complete setup.
 ## Verification
 
 ```sh
-donk-cli --version
-donk-cli --help
-donk-cli dirs
-donk-cli projects
+bvr-cli --version
+bvr-cli --help
+bvr-cli dirs
+bvr-cli projects
 ```
 
-Then open DONK, run `/models`, refresh, and confirm a model becomes ready.
+Then open BVR, run `/models`, refresh, and confirm a model becomes ready.

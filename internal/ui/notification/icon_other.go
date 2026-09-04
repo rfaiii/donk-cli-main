@@ -6,5 +6,5 @@ import (
 	_ "embed"
 )
 
-//go:embed donk-icon-solo.png
+//go:embed bvr-icon-solo.png
 var Icon []byte

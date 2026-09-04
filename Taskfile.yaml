@@ -43,9 +43,9 @@ tasks:
   build:
     desc: Run build
     vars:
-      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/donk-cli/internal/version.Version={{.VERSION}}"{{end}}'
+      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/bvr-cli/internal/version.Version={{.VERSION}}"{{end}}'
     cmds:
-      - "go build -v {{if .RACE}}-race{{end}} {{.LDFLAGS}} -o donk-cli{{exeExt}} ."
+      - "go build -v {{if .RACE}}-race{{end}} {{.LDFLAGS}} -o bvr-cli{{exeExt}} ."
     sources:
       - ./**/*.go
       - go.mod
@@ -53,13 +53,13 @@ tasks:
       - internal/agent/**/*.md.tpl
       - internal/agent/hyper/provider.json
     generates:
-      - donk-cli{{exeExt}}
+      - bvr-cli{{exeExt}}
 
   run:
     desc: Run build
     cmds:
       - task: build
-      - "./donk-cli{{exeExt}} {{.CLI_ARGS}} {{if .RACE}}2>race.log{{end}}"
+      - "./bvr-cli{{exeExt}} {{.CLI_ARGS}} {{if .RACE}}2>race.log{{end}}"
 
   run:catwalk:
     desc: Run build with local Catwalk
@@ -67,17 +67,17 @@ tasks:
       CATWALK_URL: http://localhost:8080
     cmds:
       - task: build
-      - ./donk-cli{{exeExt}} {{.CLI_ARGS}}
+      - ./bvr-cli{{exeExt}} {{.CLI_ARGS}}
 
   run:onboarding:
     desc: Run build with custom config to test onboarding
     env:
-      DONK_GLOBAL_DATA: tmp/onboarding/data
-      DONK_GLOBAL_CONFIG: tmp/onboarding/config
+      BVR_GLOBAL_DATA: tmp/onboarding/data
+      BVR_GLOBAL_CONFIG: tmp/onboarding/config
     cmds:
       - task: build
       - rm -rf tmp/onboarding
-      - ./donk-cli{{exeExt}} {{.CLI_ARGS}}
+      - ./bvr-cli{{exeExt}} {{.CLI_ARGS}}
 
   test:
     desc: Run tests
@@ -109,22 +109,22 @@ tasks:
   dev:
     desc: Run with profiling enabled
     env:
-      DONK_PROFILE: true
+      BVR_PROFILE: true
     cmds:
       - go run .
 
   install:
     desc: Install the application
     vars:
-      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/donk-cli/internal/version.Version={{.VERSION}}"{{end}}'
+      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/richavery/bvr-cli/internal/version.Version={{.VERSION}}"{{end}}'
     cmds:
       - task: fetch-tags
-      - go build {{.LDFLAGS}} -o "$(go env GOPATH)/bin/donk-cli{{exeExt}}" .
+      - go build {{.LDFLAGS}} -o "$(go env GOPATH)/bin/bvr-cli{{exeExt}}" .
 
   install:latest:
-    desc: Replace the PATH-installed donk-cli with the current source build
+    desc: Replace the PATH-installed bvr-cli with the current source build
     cmds:
-      - ./scripts/install-donk-cli.sh
+      - ./scripts/install-bvr-cli.sh
     sources:
       - ./**/*.go
       - go.mod

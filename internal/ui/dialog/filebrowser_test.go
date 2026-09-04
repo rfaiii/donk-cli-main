@@ -11,14 +11,14 @@ import (
 
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/richavery/donk-cli/internal/ui/common"
-	"github.com/richavery/donk-cli/internal/ui/styles"
+	"github.com/richavery/bvr-cli/internal/ui/common"
+	"github.com/richavery/bvr-cli/internal/ui/styles"
 	"github.com/stretchr/testify/require"
 )
 
 func TestFixedLinesKeepsViewportStable(t *testing.T) {
 	lines := fixedLines([]string{
-		"/Users/richavery/Projects/donk-cli-go/this-is-a-very-long-path-that-must-not-wrap",
+		"/Users/richavery/Projects/bvr-cli-go/this-is-a-very-long-path-that-must-not-wrap",
 		"second line",
 		"third line should be clipped",
 	}, 20, 2)
@@ -156,7 +156,7 @@ func TestFileBrowserDrawStaysInsideScreenBounds(t *testing.T) {
 	for _, size := range []image.Point{{X: 120, Y: 32}, {X: 42, Y: 10}, {X: 12, Y: 6}} {
 		t.Run(fmt.Sprintf("%dx%d", size.X, size.Y), func(t *testing.T) {
 			t.Parallel()
-			theme := styles.DarkDonkTheme()
+			theme := styles.DarkBvrTheme()
 			f := &FileBrowser{
 				com:      &common.Common{Styles: &theme},
 				dir:      "/project/with/a/very/long/path",

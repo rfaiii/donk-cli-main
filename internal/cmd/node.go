@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/richavery/donk-cli/internal/node"
+	"github.com/richavery/bvr-cli/internal/node"
 	"github.com/spf13/cobra"
 )
 
