@@ -1159,18 +1159,21 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		// Track hover position for inline editors and the homescreen
-		// mascot, which faces the cursor/prompt direction. The position is
-		// debounced: we only update hoverX after the mouse has been at the
-		// same cell for at least 400ms, preventing the beaver from spazzing
-		// out on every micro mouse movement. The mascot's facing is locked
-		// to the last debounced direction until the mouse settles elsewhere.
+		// mascot, which faces the cursor/prompt direction.
 		if m.hoverX != msg.X || m.hoverY != msg.Y {
 			m.hoverX = msg.X
 			m.hoverY = msg.Y
-			// Cancel any pending debounce so we wait for the mouse to settle
-			cmds = append(cmds, tea.Tick(400*time.Millisecond, func(time.Time) tea.Msg {
-				return hoverSettleMsg{}
-			}))
+			
+			if m.activeInline == nil {
+				if m.hoverX < 0 {
+					m.beaverFacing = 0
+				} else if m.hoverX < m.layout.main.Dx()/2 {
+					m.beaverFacing = -1
+				} else {
+					m.beaverFacing = 1
+				}
+			}
+
 			if m.activeInline != nil {
 				if clickable, ok := m.activeInline.(dialog.MouseClickableEditor); ok {
 					clickable.SetHover(msg.X, msg.Y)
@@ -1318,28 +1321,11 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case beaverPulseMsg:
 		m.beaverResting = !m.beaverResting
-	case hoverSettleMsg:
-		// After the mouse has been still, update beaverFacing so the mascot
-		// can track the new direction without spazzing.
-		if m.activeInline != nil {
-			break
-		}
-		if m.hoverX < 0 {
-			m.beaverFacing = 0 // center when unknown
-		} else if m.hoverX < m.layout.main.Dx()/2 {
-			m.beaverFacing = -1 // left
-		} else {
-			m.beaverFacing = 1 // right
-		}
 	case versionBannerTickMsg:
 		if cmd := m.versionBanner.advance(); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
 		cmds = append(cmds, beaverPulseCmd())
-	case versionBannerTickMsg:
-		if cmd := m.versionBanner.advance(); cmd != nil {
-			cmds = append(cmds, cmd)
-		}
 	case scrollbarHideMsg:
 		if m.state == uiChat {
 			m.chat.HideScrollbar(msg.seq)
@@ -3668,6 +3654,16 @@ func (m *UI) updateTextarea(msg tea.Msg) tea.Cmd {
 func (m *UI) updateTextareaWithPrevHeight(msg tea.Msg, prevHeight int) tea.Cmd {
 	ta, cmd := m.textarea.Update(msg)
 	m.textarea = ta
+
+	// Update mascot facing based on keyboard cursor position
+	if _, isKey := msg.(tea.KeyPressMsg); isKey {
+		if m.textarea.Column() < m.textarea.Width()/2 {
+			m.beaverFacing = -1
+		} else {
+			m.beaverFacing = 1
+		}
+	}
+
 	return tea.Batch(cmd, m.handleTextareaHeightChange(prevHeight))
 }
 
