@@ -17,15 +17,21 @@ var mascotStyle = lipgloss.NewStyle().Foreground(boot.MascotColor).Bold(true)
 // BeaverFrame returns the BVR-CLI beaver mascot for the given tick index,
 // cycling through the boot sequence (center, left, center, right, center).
 //
-// It reuses the boot splash mascot so the homescreen beaver is identical to
-// the intro, and is driven by the existing banner ticker (pass m.bannerFrame
-// from the UI model) so it idles on the homescreen without its own tick loop.
-func BeaverFrame(tick int) string {
+// Pass errored=true to render the x-ray (X_X) Beta variant when the agent has
+// errored; otherwise the normal (0_0) Alpha variant is shown. Both reuse the
+// boot splash mascot so the homescreen beaver matches the intro, and both are
+// driven by the existing banner ticker (m.bannerFrame from the UI model) so
+// they idle without their own tick loop.
+func BeaverFrame(tick int, errored bool) string {
+	frames := boot.BeaverFramesDenseAlpha
+	if errored {
+		frames = boot.BeaverFramesDenseBeta
+	}
 	seq := boot.BootSequence
 	if len(seq) == 0 {
 		return ""
 	}
-	if frame, ok := boot.BeaverFrames[seq[tick%len(seq)]]; ok {
+	if frame, ok := frames[seq[tick%len(seq)]]; ok {
 		return mascotStyle.Render(frame)
 	}
 	return ""

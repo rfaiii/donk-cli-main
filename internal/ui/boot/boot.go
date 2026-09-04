@@ -9,25 +9,47 @@ import (
 	"charm.land/lipgloss/v2"
 )
 
-// BeaverFrames are the static-width ASCII mascot frames. Keeping the width
-// constant across frames prevents the terminal grid from collapsing or
-// jittering while the animation plays.
-var BeaverFrames = map[string]string{
+// BeaverFramesDenseAlpha are the dense, character-filled mascot frames for the
+// normal (0_0 eyes) state. Filler characters (A, V, @@, H, AW, WX) shift behind
+// the facial features to keep the 13-cell monospaced bounding box stable across
+// frames while the mascot rotates.
+var BeaverFramesDenseAlpha = map[string]string{
 	"center": `  (\.---./)  
- /   0_0   \ 
-|   -(v)-   |
- \   [=]   / 
-   '-------'  `,
+ /A  0_0  V\ 
+| @@-(v)- H |
+ \AW [=] WX/ 
+  '-------'  `,
 	"left": `  (\.---./)  
- / 0_0     \ 
-| -(v)-     |
- \ [=]     / 
-   '-------'  `,
+ / 0_0  A V\ 
+| -(v)- @@H |
+ \ [=] AWWX/ 
+  '-------'  `,
 	"right": `  (\.---./)  
- /     0_0 \ 
-|     -(v)- |
- \     [=] / 
-   '-------'  `,
+ /A V  0_0 \ 
+| @@H -(v)- |
+ \AWWX [=] / 
+  '-------'  `,
+}
+
+// BeaverFramesDenseBeta is the x-ray ("dead") mascot variant (X_X eyes), shown
+// when the agent errors. Same 13x5 bounding box; only the fillers change (to
+// @R/JU/HI/YH) so the face stays textured.
+var BeaverFramesDenseBeta = map[string]string{
+	"center": `  (\.---./)  
+ /A  X_X AX\ 
+| @R-(v)-JU |
+ \HI [=] YH/ 
+  '-------'  `,
+	"left": `  (\.---./)  
+ / X_X A AX\ 
+| -(v)-@RJU |
+ \ [=] HIYH/ 
+  '-------'  `,
+	"right": `  (\.---./)  
+ /A AX X_X \ 
+| @RJU-(v)- |
+ \HIYH [=] / 
+  '-------'  `,
 }
 
 // BootSequence is the frame order for the intro animation.
@@ -55,7 +77,7 @@ func Run() {
 	fmt.Print("\033[H\033[2J")
 	for _, frame := range BootSequence {
 		fmt.Print("\033[0;0H") // cursor to top-left
-		fmt.Println(mascotStyle.Render(BeaverFrames[frame]))
+		fmt.Println(mascotStyle.Render(BeaverFramesDenseAlpha[frame]))
 		fmt.Println()
 		fmt.Println(loadingStyle.Render("Initializing bvr-cli components..."))
 		time.Sleep(400 * time.Millisecond)

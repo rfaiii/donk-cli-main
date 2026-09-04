@@ -95,10 +95,11 @@ func (m *UI) landingView() string {
 	parts := []string{cwdStyled, "", buttons, "", modelLine}
 
 	parts = append(parts, "", m.modelInfo(width), "", m.nodeInfo(min(42, width), 3))
-	// Idle beaver mascot beneath the status monitors. It walks in step with
-	// the banner ticker (m.bannerFrame) so it costs no extra tick loop, and
-	// reuses the boot splash frames so it matches the intro.
-	parts = append(parts, "", anim.BeaverFrame(m.bannerFrame))
+	// Idle beaver mascot beneath the status monitors. It shows the normal
+	// dense Alpha variant, or the x-ray Beta variant (X_X eyes) when the agent
+	// errors, and is driven by the banner ticker (m.bannerFrame) so it costs no
+	// extra tick loop.
+	parts = append(parts, "", anim.BeaverFrame(m.bannerFrame, m.beaverErrored))
 	infoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)
 
 	var remainingHeightArea image.Rectangle

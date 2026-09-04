@@ -226,8 +226,9 @@ type UI struct {
 	themeKey string
 	themeID  string
 
-	focus uiFocusState
-	state uiState
+	focus         uiFocusState
+	state         uiState
+	beaverErrored bool // idle beaver: dense Beta (x-ray) when the agent errors
 
 	keyMap KeyMap
 	keyenh tea.KeyboardEnhancementsMsg
@@ -4916,6 +4917,7 @@ func (m *UI) handleAgentNotification(n notify.Notification) tea.Cmd {
 	switch n.Type {
 	case notify.TypeAgentFinished:
 		common.StopTurn()
+		m.beaverErrored = false
 		cmds = append(cmds, m.sendNotification(notification.Notification{
 			Title:   "BVR is waiting...",
 			Message: fmt.Sprintf("Agent's turn completed in \"%s\"", n.SessionTitle),
@@ -4924,6 +4926,7 @@ func (m *UI) handleAgentNotification(n notify.Notification) tea.Cmd {
 			cmds = append(cmds, m.fetchHyperCredits())
 		}
 	case notify.TypeAgentError:
+		m.beaverErrored = true
 		// Terminal edge like TypeAgentFinished; fall through to the
 		// busy/queue refresh below.
 	case notify.TypeReAuthenticate:
