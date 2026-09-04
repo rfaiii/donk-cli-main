@@ -44,7 +44,7 @@ type FileBrowser struct {
 	loadSeq    uint64
 
 	up, down, pageUp, pageDown, first, last, toggleHidden, refresh, open, back, copy, attach, external, changeProject, close key.Binding
-	contentRect, closeRect, panelRect                                                                                                   image.Rectangle
+	contentRect, closeRect, panelRect                                                                                        image.Rectangle
 }
 
 var _ Dialog = (*FileBrowser)(nil)
