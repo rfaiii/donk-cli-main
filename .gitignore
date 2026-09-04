@@ -63,3 +63,6 @@ node_modules/
 # Local/experimental files
 antigravity/rules.md
 mcp-server/src/mcp_server/__pycache__/
+
+# Private/internal notes (kept on disk, not broadcast to GitHub)
+docs/TASKLIST.md
