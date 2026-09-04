@@ -11,6 +11,9 @@
 - **Duplicate NODE section removed**: fixed the homescreen layout so the
   NODE/MCP/LSP monitors appear only in the left column of the bottom
   resource bar, giving the beaver mascot its own dedicated lane.
+- **Version mascot recolored to BVR neon green (#3BF66B)**: the
+  `--version` beaver head now renders in the brand green rather than the
+  theme Dolly pink, matching the rest of the brand palette.
 - **Layered icons added**: high-resolution `bvr-cli-1024.png` (1024×1024
   PNG) and a proper macOS `.icon` set under `packaging/icons/` for app
   bundle and installer integration.

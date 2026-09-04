@@ -27,7 +27,6 @@ import (
 	"github.com/charmbracelet/colorprofile"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/charmbracelet/x/exp/charmtone"
 	xstrings "github.com/charmbracelet/x/exp/strings"
 	"github.com/charmbracelet/x/term"
 	"github.com/richavery/bvr-cli/internal/app"
@@ -157,9 +156,9 @@ bvr-cli --continue
 	},
 }
 
-// versionMascot is the dense pink beaver-head silhouette prepended to --version
-// output (in place of the old heart mark), rendered in the theme's Dolly accent.
-var versionMascot = lipgloss.NewStyle().Foreground(charmtone.Dolly).SetString(`
+// versionMascot is the dense beaver-head silhouette prepended to --version
+// output (in place of the old heart mark), rendered in BVR neon green (#3BF66B).
+var versionMascot = lipgloss.NewStyle().Foreground(lipgloss.Color("#3BF66B")).SetString(`
   ██      ██
   ██      ██
   ██████████
