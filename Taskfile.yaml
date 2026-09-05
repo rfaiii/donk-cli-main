@@ -55,6 +55,30 @@ tasks:
     generates:
       - bvr-cli{{exeExt}}
 
+  build:prod:
+    desc: Run production build (stripped)
+    vars:
+      LDFLAGS: '{{if .VERSION}}-ldflags="-s -w -X github.com/richavery/bvr-cli/internal/version.Version={{.VERSION}}"{{else}}-ldflags="-s -w"{{end}}'
+    cmds:
+      - "go build -v {{.LDFLAGS}} -o bvr{{exeExt}} ."
+    sources:
+      - ./**/*.go
+      - go.mod
+    generates:
+      - bvr{{exeExt}}
+
+  build:obfuscate:
+    desc: Run obfuscated production build using garble
+    vars:
+      LDFLAGS: '{{if .VERSION}}-ldflags="-s -w -X github.com/richavery/bvr-cli/internal/version.Version={{.VERSION}}"{{else}}-ldflags="-s -w"{{end}}'
+    cmds:
+      - "garble build -v {{.LDFLAGS}} -o bvr{{exeExt}} ."
+    sources:
+      - ./**/*.go
+      - go.mod
+    generates:
+      - bvr{{exeExt}}
+
   run:
     desc: Run build
     cmds:
