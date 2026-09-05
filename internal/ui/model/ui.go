@@ -982,7 +982,10 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				sound := fmt.Sprintf("chat-%02d", rand.Intn(3)+1)
 				cmds = append(cmds, m.playAudio("BVR-CLI", "Incoming message", sound))
 			} else if string(msg.Payload.Role) == "user" {
-				if strings.Contains(strings.ToUpper(msg.Payload.Content().Text), "EXTRA") {
+				if strings.Contains(msg.Payload.Content().Text, "?") {
+					sound := fmt.Sprintf("question-%02d", rand.Intn(2)+1)
+					cmds = append(cmds, m.playAudio("BVR-CLI", "Question asked", sound))
+				} else if strings.Contains(strings.ToUpper(msg.Payload.Content().Text), "EXTRA") {
 					cmds = append(cmds, m.playAudio("BVR-CLI", "EXTRA EXTRA", "chat-02"))
 				}
 			}
@@ -1028,10 +1031,15 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case pubsub.Event[mcp.Event]:
 		switch msg.Payload.Type {
 		case mcp.EventStateChanged:
-			return m, tea.Batch(
+			eventCmds := []tea.Cmd{
 				m.handleStateChanged(),
 				m.loadMCPrompts,
-			)
+			}
+			if msg.Payload.State == mcp.StateDisabled || msg.Payload.State == mcp.StateError {
+				sound := fmt.Sprintf("question-%02d", rand.Intn(2)+1)
+				eventCmds = append(eventCmds, m.playAudio("BVR-CLI", "Model Disconnected", sound))
+			}
+			return m, tea.Batch(eventCmds...)
 		case mcp.EventPromptsListChanged:
 			return m, handleMCPPromptsEvent(m.com.Workspace, msg.Payload.Name)
 		case mcp.EventToolsListChanged:
