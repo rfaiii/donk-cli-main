@@ -1,7 +1,10 @@
 package audio
 
 import (
+	"fmt"
 	"log/slog"
+	"math/rand"
+	"strings"
 
 	tea "charm.land/bubbletea/v2"
 )
@@ -54,6 +57,11 @@ var defaultAudioFunc = func(title, message, audioType string) error { return nil
 
 // getAudioFilename maps a notification type to its corresponding .wav file.
 func getAudioFilename(audioType string) string {
+	// If the audioType specifies a variation (e.g. "chat-02" or "drill-01")
+	if strings.Contains(audioType, "-") && !strings.HasSuffix(audioType, ".wav") {
+		return audioType + ".wav"
+	}
+
 	switch audioType {
 	case "startup":
 		return "startup-song-01.wav"
@@ -67,7 +75,7 @@ func getAudioFilename(audioType string) string {
 	case "loading":
 		return "loading-01.wav"
 	case "error":
-		return "error-01.wav"
+		return fmt.Sprintf("error-%02d.wav", rand.Intn(3)+1)
 	case "exit":
 		return "exit-01.wav"
 	case "notification":
