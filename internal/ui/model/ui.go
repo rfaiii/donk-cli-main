@@ -978,6 +978,13 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		switch msg.Type {
 		case pubsub.CreatedEvent:
+			if string(msg.Payload.Role) == "assistant" {
+				cmds = append(cmds, m.playAudio("BVR-CLI", "Incoming message", "chat-01"))
+			} else if string(msg.Payload.Role) == "user" {
+				if strings.Contains(strings.ToUpper(msg.Payload.Content().Text), "EXTRA") {
+					cmds = append(cmds, m.playAudio("BVR-CLI", "EXTRA EXTRA", "chat-02"))
+				}
+			}
 			cmds = append(cmds, m.appendSessionMessage(msg.Payload))
 			// A new message is a run boundary — a user prompt starting
 			// a turn or the agent replying/dequeueing. Drop the
@@ -1989,6 +1996,10 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 
 		if m.dialog.ContainsDialog(dialog.FilePickerID) {
 			defer fimage.ResetCache()
+		}
+
+		if last := m.dialog.DialogLast(); last != nil && last.ID() == dialog.CommandsID {
+			cmds = append(cmds, m.playAudio("BVR-CLI", "Close Commands", "drill-02"))
 		}
 
 		m.dialog.CloseFrontDialog()
@@ -4792,7 +4803,7 @@ func (m *UI) openCommandsDialog() tea.Cmd {
 	if m.dialog.ContainsDialog(dialog.CommandsID) {
 		// Bring to front
 		m.dialog.BringToFront(dialog.CommandsID)
-		return nil
+		return m.playAudio("BVR-CLI", "Open Commands", "drill-01")
 	}
 
 	var sessionID string
@@ -4809,8 +4820,10 @@ func (m *UI) openCommandsDialog() tea.Cmd {
 	}
 
 	m.dialog.OpenDialog(commands)
-
-	return commands.InitialCmd()
+	return tea.Batch(
+		commands.InitialCmd(),
+		m.playAudio("BVR-CLI", "Open Commands", "drill-01"),
+	)
 }
 
 // openReasoningDialog opens the reasoning effort dialog.
