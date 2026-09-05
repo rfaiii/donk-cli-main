@@ -51,11 +51,11 @@ This directory contains audio files for the BVR-CLI audio/notification system.
 ### Audio Properties
 | Sound File | Duration | Size | Sample Rate | Bit Depth | Channels |
 |------------|----------|------|-------------|-----------|----------|
-| notification.wav | 0.8s | 245KB | 22.1kHz | 16-bit | Mono |
-| startup.wav | 3.2s | 512KB | 22.1kHz | 16-bit | Stereo |
-| error.wav | 0.6s | 198KB | 22.1kHz | 16-bit | Mono |
-| exit.wav | 0.9s | 275KB | 22.1kHz | 16-bit | Mono |
-| chainsaw.wav | 2.3s | 412KB | 22.1kHz | 16-bit | Stereo |
+| notification-01.wav | 0.8s | 245KB | 44.1kHz | 16-bit | Mono |
+| startup-song-01.wav | 3.2s | 512KB | 44.1kHz | 16-bit | Stereo |
+| error-01.wav | 0.6s | 198KB | 44.1kHz | 16-bit | Mono |
+| question-01.wav | 1.2s | 312KB | 44.1kHz | 16-bit | Mono |
+| chainsaw-01.wav | 2.3s | 412KB | 44.1kHz | 16-bit | Stereo |
 
 ## Usage Instructions
 
@@ -104,11 +104,37 @@ This directory contains audio files for the BVR-CLI audio/notification system.
 ```
 audio/
 ├── sounds/           # Audio files
-│   ├── notification.wav
-│   ├── startup.wav
-│   ├── error.wav
-│   ├── exit.wav
-│   └── chainsaw.wav
+│   ├── advert-01.wav
+│   ├── broken-01.wav
+│   ├── chainsaw-01.wav
+│   ├── chainsaw-02.wav
+│   ├── chainsaw-03.wav
+│   ├── chat-01.wav
+│   ├── chat-02.wav
+│   ├── chat-03.wav
+│   ├── connected-01.wav
+│   ├── drill-01.wav
+│   ├── drill-02.wav
+│   ├── error-01.wav
+│   ├── error-02.wav
+│   ├── error-03.wav
+│   ├── exit-01.wav
+│   ├── exit-02.wav
+│   ├── exit-03.wav
+│   ├── incoming-01.wav
+│   ├── loading-01.wav
+│   ├── loading-02.wav
+│   ├── notification-01.wav
+│   ├── notification-02.wav
+│   ├── notification-03.wav
+│   ├── oops-01.wav
+│   ├── question-01.wav
+│   ├── question-02.wav
+│   ├── reload-01.wav
+│   ├── startup-song-01.wav
+│   ├── sub-01.wav
+│   ├── sub-02.wav
+│   └── sub-03.wav
 ├── metadata/         # Sound specifications
 │   └── sound-index.json
 └── formats/          # Format documentation
@@ -120,60 +146,60 @@ audio/
 {
   "sounds": [
     {
-      "name": "notification",
-      "file": "notification.wav",
+      "name": "notification-01",
+      "file": "notification-01.wav",
       "duration": 0.8,
       "size": 245024,
       "format": "WAV",
-      "sampleRate": 22100,
+      "sampleRate": 44100,
       "bitDepth": 16,
       "channels": "mono",
       "description": "Short notification alert sound",
       "usage": "General notifications and system events"
     },
     {
-      "name": "startup",
-      "file": "startup.wav",
+      "name": "startup-song-01",
+      "file": "startup-song-01.wav",
       "duration": 3.2,
       "size": 524288,
       "format": "WAV",
-      "sampleRate": 22100,
+      "sampleRate": 44100,
       "bitDepth": 16,
       "channels": "stereo",
       "description": "Musical jingle for application startup",
       "usage": "Application startup confirmation"
     },
     {
-      "name": "error",
-      "file": "error.wav",
+      "name": "error-01",
+      "file": "error-01.wav",
       "duration": 0.6,
       "size": 202432,
       "format": "WAV",
-      "sampleRate": 22100,
+      "sampleRate": 44100,
       "bitDepth": 16,
       "channels": "mono",
       "description": "Distinctive alert sound for error conditions",
       "usage": "Error notifications and failure confirmations"
     },
     {
-      "name": "exit",
-      "file": "exit.wav",
-      "duration": 0.9,
-      "size": 281824,
+      "name": "question-01",
+      "file": "question-01.wav",
+      "duration": 1.2,
+      "size": 312000,
       "format": "WAV",
-      "sampleRate": 22100,
+      "sampleRate": 44100,
       "bitDepth": 16,
       "channels": "mono",
-      "description": "Confirmation sound for application termination",
-      "usage": "Clean exit notification"
+      "description": "Sound for when a model disconnects or a question mark is typed",
+      "usage": "Model disconnections or chat questions"
     },
     {
-      "name": "chainsaw",
-      "file": "chainsaw.wav",
+      "name": "chainsaw-01",
+      "file": "chainsaw-01.wav",
       "duration": 2.3,
       "size": 422112,
       "format": "WAV",
-      "sampleRate": 22100,
+      "sampleRate": 44100,
       "bitDepth": 16,
       "channels": "stereo",
       "description": "Unique beaver chainsaw effect for git operations",
