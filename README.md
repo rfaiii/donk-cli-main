@@ -1,4 +1,4 @@
-# ◇ BVR-CLI 1.2.0 by Richard Aizen Avery III
+# ◇ BVR-CLI 1.2.1 by Richard Aizen Avery III
 
 **The keyboard-first AI workspace for your projects.**
 
@@ -6,7 +6,7 @@ BVR brings project files, conversations, local models, tools, permissions,
 skills, LSPs, and automation into one fast terminal cockpit. Inspect the
 workspace, choose the model, and ship.
 
-> **Release 1.2.0:** stability and polish release. The homescreen beaver
+> **Release 1.2.1:** stability and polish release. The homescreen beaver
 > mascot no longer spazzes on every mouse movement (4s pulse + 400ms hover
 > debounce), the duplicate NODE section is gone, the `--version` beaver head
 > is now in BVR neon green (#3BF66B), and the project is organized with
