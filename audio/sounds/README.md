@@ -5,21 +5,48 @@ This directory contains audio files for the BVR-CLI audio/notification system.
 ## Audio File Structure
 
 ### Sound Files
-- **notification.wav**: Short alert sound for general notifications
-- **startup.wav**: Musical jingle for application startup
-- **error.wav**: Distinctive sound for error conditions
-- **exit.wav**: Confirmation sound for application termination
-- **chainsaw.wav**: Unique beaver chainsaw effect for git operations
+- **startup-song-01.wav**: Musical jingle for application startup
+- **advert-01.wav**: Used for future advertisement space or smoke break
+- **broken-01.wav**: Used to indicate that model is broken or too jank to work
+- **notification-01.wav**: Short alert sound for general notifications variation 1
+- **notification-02.wav**: Short alert sound for general notifications variation 2
+- **notification-03.wav**: Short alert sound for general notifications variation 3
+- **connected-01.wav**: Indication for successful connection attempt
+- **drill-01.wav**: Used for annoying your users variation 1
+- **drill-02.wav**: Used for annoying your users variation 2
+- **chat-01.wav**: Used for incoming chat from models variation 1
+- **chat-02.wav**: Used for incoming chat from models variation 2
+- **chat-03.wav**: Used for incoming chat from models variation 3
+- **error-01.wav**: Distinctive sound for error conditions
+- **error-02.wav**: Distinctive sound for error conditions
+- **error-03.wav**: Distinctive sound for error conditions
+- **exit-01.wav**: Confirmation sound for application termination version 1
+ **exit-02.wav**: Confirmation sound for application termination version 2
+  **exit-03.wav**: Confirmation sound for application termination version 3
+- **chainsaw-01.wav**: Unique beaver chainsaw effect for git operations version 1
+- **chainsaw-02.wav**: Unique beaver chainsaw effect for git operations version 2
+- **chainsaw-03.wav**: Unique beaver chainsaw effect for git operations version 3
+- **incoming-01.wav**: Unique way to show up to a party or chat
+**loading-01.wav**: Medium alert sound for slowed operations variation 1
+**loading-02.wav**: Medium alert sound for slowed operations variation 2
+- **oops-01.wav**: Distinctive sound for crapping your pants when trying to fart too hard
+- **question-01.wav**: Did someone say something? I couldn't hear you very well... variation 1
+- **question-02.wav**: Did someone say something? I couldn't hear you very well... variation 2
+- **reload-01.wav**: Did someone spray something? I could smell you from very far away...
+- **sub-01.wav**: When you need more bass than treble... variation 1
+- **sub-02.wav**: When you need more bass than treble... variation 2
+- **sub-03.wav**: When you need more bass than treble... variation 3
+
 
 ## Technical Specifications
 
 ### Format Requirements
 - **Primary Format**: WAV (uncompressed, high quality)
-- **Sample Rate**: 22.1kHz
+- **Sample Rate**: 44.1kHz
 - **Bit Depth**: 16-bit
-- **Channels**: Mono for notifications, stereo for effects
-- **File Size**: Under 500KB per file
-- **Duration**: 0.5-5 seconds based on usage
+- **Channels**: Mono for notifications, stereo for effects (COMING SOON)
+- **File Size**: Under 500KB per file 
+- **Duration**: 0.5-5 seconds based on usage 
 
 ### Audio Properties
 | Sound File | Duration | Size | Sample Rate | Bit Depth | Channels |

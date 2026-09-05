@@ -57,6 +57,7 @@ import (
 	"github.com/richavery/bvr-cli/internal/stringext"
 	"github.com/richavery/bvr-cli/internal/ui/anim"
 	"github.com/richavery/bvr-cli/internal/ui/attachments"
+	"github.com/richavery/bvr-cli/internal/ui/audio"
 	"github.com/richavery/bvr-cli/internal/ui/chat"
 	"github.com/richavery/bvr-cli/internal/ui/common"
 	"github.com/richavery/bvr-cli/internal/ui/completions"
@@ -344,6 +345,7 @@ type UI struct {
 
 	// Notification state
 	notifyBackend       notification.Backend
+	audioBackend        audio.Backend
 	notifyWindowFocused bool
 	// custom commands & mcp commands
 	customCommands []commands.CustomCommand
@@ -483,6 +485,7 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 		lspStates:           make(map[string]workspace.LSPClientInfo),
 		mcpStates:           make(map[string]mcp.ClientInfo),
 		notifyBackend:       notification.NoopBackend{},
+		audioBackend:        audio.NewNativeAudioBackend(),
 		notifyWindowFocused: true,
 		initialSessionID:    initialSessionID,
 		continueLastSession: continueLast,
@@ -561,6 +564,7 @@ type hoverSettleMsg struct{}
 // Init initializes the UI model.
 func (m *UI) Init() tea.Cmd {
 	var cmds []tea.Cmd
+	cmds = append(cmds, m.playAudio("BVR-CLI", "Starting BVR-CLI", "startup"))
 	cmds = append(cmds, m.bannerAnim.Start())
 	cmds = append(cmds, beaverPulseCmd(4000*time.Millisecond))
 	if cmd := m.versionBanner.start(); cmd != nil {
@@ -646,6 +650,18 @@ func (m *UI) sendNotification(n notification.Notification) tea.Cmd {
 	}
 
 	return m.notifyBackend.Send(n)
+}
+
+// playAudio returns a command that plays an audio file based on the event type.
+func (m *UI) playAudio(title, message, audioType string) tea.Cmd {
+	if m.audioBackend == nil {
+		return nil
+	}
+	return m.audioBackend.Play(audio.Audio{
+		Title:   title,
+		Message: message,
+		Type:    audioType,
+	})
 }
 
 // selectNotificationBackend chooses the appropriate notification backend based

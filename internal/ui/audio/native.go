@@ -49,4 +49,46 @@ func (b *NativeAudioBackend) ResetAudioFunc() {
 }
 
 // defaultAudioFunc is a no-op fallback for unsupported platforms.
+// Actual implementations will override this in their init() functions.
 var defaultAudioFunc = func(title, message, audioType string) error { return nil }
+
+// getAudioFilename maps a notification type to its corresponding .wav file.
+func getAudioFilename(audioType string) string {
+	switch audioType {
+	case "startup":
+		return "startup-song-01.wav"
+	case "chainsaw":
+		// Could randomize between 01, 02, 03, but let's stick to 01 for now
+		return "chainsaw-01.wav"
+	case "chat":
+		return "chat-01.wav"
+	case "incoming":
+		return "incoming-01.wav"
+	case "loading":
+		return "loading-01.wav"
+	case "error":
+		return "error-01.wav"
+	case "exit":
+		return "exit-01.wav"
+	case "notification":
+		return "notification-01.wav"
+	case "question":
+		return "question-01.wav"
+	case "reload":
+		return "reload-01.wav"
+	case "drill":
+		return "drill-01.wav"
+	case "sub":
+		return "sub-01.wav"
+	case "oops":
+		return "oops-01.wav"
+	case "connected":
+		return "connected-01.wav"
+	case "advert":
+		return "advert-01.wav"
+	case "broken":
+		return "broken-01.wav"
+	default:
+		return "notification-01.wav"
+	}
+}
