@@ -12,15 +12,20 @@ workspace, choose the model, and ship.
 > is now in BVR neon green (#3BF66B), and the project is organized with
 > `packaging/icons/` and a single `Taskfile.yaml`.
 
+![BVR Authentication Demo](docs/media/demo-auth.gif)
+
+![BVR Usage Demo](docs/media/demo-usage.gif)
+
 ## ⚡ Quick start
 
-See [`docs/installation.md`](docs/installation.md) for all platforms.
+For a zero-friction, cross-platform installation directly from GitHub releases:
 
 ```sh
-cd /path/to/bvr-cli-go
-go build -o ./bvr-cli .
-bvr-cli
+curl -sL https://get.bvr-cli.dev/install.sh | bash
+bvr auth <LICENSE_KEY>
 ```
+
+Or see [`docs/installation.md`](docs/installation.md) for detailed platform-specific methods or building from source.
 
 Install the current source build globally:
 
