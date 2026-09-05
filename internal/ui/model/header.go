@@ -8,7 +8,7 @@ import (
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/richavery/bvr-cli/internal/config"
-	"github.com/richavery/bvr-cli/internal/fsext"
+	"github.com/richavery/bvr-cli/internal/home"
 	"github.com/richavery/bvr-cli/internal/session"
 	"github.com/richavery/bvr-cli/internal/ui/common"
 	"github.com/richavery/bvr-cli/internal/ui/logo"
@@ -67,6 +67,7 @@ func (h *header) drawHeader(
 	frame int,
 	animation string,
 	coderMode bool,
+	projectSource string,
 ) {
 	t := h.com.Styles
 	if width != h.width || compact != h.compact || frame != h.frame {
@@ -102,6 +103,7 @@ func (h *header) drawHeader(
 		availDetailWidth,
 		hyperCredits,
 		coderMode,
+		projectSource,
 	)
 
 	remainingWidth := width -
@@ -135,6 +137,7 @@ func renderHeaderDetails(
 	availWidth int,
 	hyperCredits *int,
 	coderMode bool,
+	projectSource string,
 ) string {
 	t := com.Styles
 
@@ -176,10 +179,10 @@ func renderHeaderDetails(
 	metadata := strings.Join(parts, dot)
 	metadata = dot + metadata
 
-	const dirTrimLimit = 4
-	cwd := fsext.DirTrim(fsext.PrettyPath(com.Workspace.WorkingDir()), dirTrimLimit)
-	cwd = t.Header.WorkingDir.Render(cwd)
+	// Display project source in the header (dynamic, changeable via file browser)
+	projectSrc := home.Short(projectSource)
+	projectSrcStyled := t.Header.WorkingDir.Render("📁 " + projectSrc + "  ")
 
-	result := cwd + metadata
+	result := projectSrcStyled + metadata
 	return ansi.Truncate(result, max(0, availWidth), "…")
 }

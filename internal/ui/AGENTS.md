@@ -162,6 +162,42 @@ tool names to specific types:
 - Dialogs draw last and overlay everything else.
 - Use `RenderContext` from `dialog/common.go` for consistent layout (title
   gradients, width, gap, cursor offset helpers).
+- All dialogs support click-away-to-dismiss (click outside the panel closes
+  the dialog) and a `[X]` close button at the top-right.
+
+#### Web Browser dialog (`dialog/browser.go`)
+
+- `BrowserID = "browser"` — opened via `ctrl+b`, landing screen browser icon,
+  or `ActionOpenDialog{DialogID: BrowserID}` from the File Finder's `b` key.
+- Fetches HTML from any URL using `http.Get` + `codebergreadability.FromReader`
+  (bypasses strict content-type checking in `FromURL`).
+- User-Agent header and HTTP status code check included.
+- Renders article content as Markdown in a scrollable `viewport.Model`.
+- Loading spinner animates during fetch via `spinner.TickMsg`.
+- Input focus management: `Blur()` during fetch, `Focus()` after.
+- Stale state (`content`, `err`, `title`) cleared on new fetch.
+- Help text shows `Enter` (fetch) and `Esc` (close).
+- `[X]` close button and click-outside-to-close implemented.
+
+#### File Picker dialog (`dialog/filepicker.go`)
+
+- `FilePickerID = "filepicker"` — opened via `ctrl+n` in the File Finder,
+  landing screen CREATE FILE button, or
+  `ActionOpenDialog{DialogID: FilePickerID}`.
+- Uses `charm.land/bubbles/v2/filepicker` for file/directory browsing.
+- Supports image previewing (with `image/jpeg` and `image/png` registered).
+- Title reads "New File" (not "Add Image").
+- `[X]` close button and click-outside-to-close implemented.
+- Help text shows navigation and close keys.
+
+#### File Browser dialog (`dialog/filebrowser.go`)
+
+- `FileBrowserID = "file-browser"` — opened via `ctrl+shift+f` or
+  `ActionOpenDialog{DialogID: FileBrowserID}`.
+- Two-pane layout (file list + preview) with metadata and clipboard status.
+- Supports `ctrl+n` to open the File Picker for creating new files.
+- `[X]` close button and click-outside-to-close implemented.
+- Footer shows all key bindings and current metadata/clipboard state.
 
 ### Shared Context
 

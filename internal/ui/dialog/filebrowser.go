@@ -43,8 +43,8 @@ type FileBrowser struct {
 	loadError  string
 	loadSeq    uint64
 
-	up, down, pageUp, pageDown, first, last, toggleHidden, refresh, open, back, copy, attach, external, changeProject, close key.Binding
-	contentRect, closeRect, panelRect                                                                                        image.Rectangle
+	up, down, pageUp, pageDown, first, last, toggleHidden, refresh, open, back, copy, attach, external, changeProject, browser, create, close key.Binding
+	contentRect, closeRect, panelRect                                                                                                         image.Rectangle
 }
 
 var _ Dialog = (*FileBrowser)(nil)
@@ -69,6 +69,8 @@ func NewFileBrowser(com *common.Common) (*FileBrowser, tea.Cmd) {
 	f.attach = key.NewBinding(key.WithKeys("a"), key.WithHelp("a", "attach"))
 	f.external = key.NewBinding(key.WithKeys("o"), key.WithHelp("o", "open editor"))
 	f.changeProject = key.NewBinding(key.WithKeys("s"), key.WithHelp("s", "switch project"))
+	f.browser = key.NewBinding(key.WithKeys("b"), key.WithHelp("b", "web browser"))
+	f.create = key.NewBinding(key.WithKeys("ctrl+n"), key.WithHelp("ctrl+n", "create file"))
 	f.close = CloseKey
 	if b, err := clipboard.Read(clipboard.FormatText); err == nil {
 		f.clipboard = strings.TrimSpace(string(b))
@@ -330,6 +332,10 @@ func (f *FileBrowser) HandleMsg(msg tea.Msg) Action {
 			if len(f.entries) > 0 && f.entries[f.selected].dir {
 				return ActionChangeProject{Path: f.entries[f.selected].path}
 			}
+		case key.Matches(k, f.browser):
+			return ActionOpenDialog{DialogID: BrowserID}
+		case key.Matches(k, f.create):
+			return ActionOpenDialog{DialogID: CreateFileID}
 		case key.Matches(k, f.back):
 			parent := filepath.Dir(f.dir)
 			if parent != f.dir {
@@ -447,7 +453,7 @@ func (f *FileBrowser) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	if f.clipboard != "" {
 		clip = "Clipboard: " + f.clipboard
 	}
-	footerLines := fixedLines([]string{meta, clip, "↑↓ navigate  a attach  o editor  r refresh  enter open  y copy  esc close"}, contentW, footerH)
+	footerLines := fixedLines([]string{meta, clip, "↑↓ navigate  a attach  o editor  s switch project  r refresh  enter open  y copy  esc close  b web browser  ctrl+n create file"}, contentW, footerH)
 	titleW := max(1, contentW-closeW-1)
 	titleText := padRight(ansi.Truncate("BVR FILE FINDER", titleW, "…"), titleW) + strings.Repeat(" ", contentW-titleW)
 	titleCell := panelTheme.Title.Render(titleText)

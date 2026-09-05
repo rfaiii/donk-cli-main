@@ -115,11 +115,29 @@ for beta marketing, release notes, onboarding copy, and internal triage.
 
 ## Editor and attachments
 
-- File attachment support.
-- `[+]` button mapped to FILEFINDER for attach-only flow.
-- Inline editors inside dialogs.
-- Bang-mode shell execution from the editor.
-- Shift+Enter for multiline input.
+- File attachment support (`[+]` button mapped to FILEFINDER for attach-only flow)
+- Inline editors inside dialogs
+- Bang-mode shell execution from the editor
+- Shift+Enter for multiline input
+- **CREATE FILE** button on the landing screen and `ctrl+n` in the File Finder to create new files
+- **Web Browser** (`ctrl+b` or the browser icon button) to fetch and read articles from URLs
+
+## Web browsing
+
+- **Web Browser** dialog (`ctrl+b` or landing screen browser icon) to fetch and read articles from any URL
+- Fetches HTML, extracts readable content via go-readability, renders as Markdown in a terminal viewport
+- URL input field with `[X]` close button and click-outside-to-close
+- Browser history and navigation (`alt+left` for back, `alt+right` for forward, `ctrl+h` for home)
+- Seamless viewport scrolling (`up`/`down` or `pgup`/`pgdn`) separated from URL input field focus
+- Loading spinner during fetch, error display on failure
+- Help text at the bottom showing available keys (`Enter` to fetch, `Esc` to close)
+
+## File creation
+
+- **CREATE FILE** button on the landing screen (paper icon) and `ctrl+n` in the File Finder to create new files
+- Opens the file picker dialog (`New File`) for browsing and creating files
+- Click **[X]** in the upper-right corner, press `esc`, or click outside the panel to close
+- Click-away-to-dismiss works on all dialogs (File Finder, Commands, Browser, and New File)
 
 ## Hooks and permissions
 

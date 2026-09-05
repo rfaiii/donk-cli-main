@@ -228,22 +228,26 @@ type UI struct {
 
 	focus         uiFocusState
 	state         uiState
-	beaverErrored bool // idle beaver: dense Beta (x-ray) when the agent errors
-	beaverResting bool // idle beaver: slow "rest" (center) pose between direction changes
-	beaverFacing  int  // idle beaver: 0=center, -1=left, +1=right (last applied direction)
+	beaverErrored bool   // idle beaver: dense Beta (x-ray) when the agent errors
+	beaverResting bool   // idle beaver: slow "rest" (center) pose between direction changes
+	beaverFacing  int    // idle beaver: 0=center, -1=left, +1=right (last applied direction)
+	projectSource string // current project source directory displayed in the header
 
 	keyMap KeyMap
 	keyenh tea.KeyboardEnhancementsMsg
 
-	dialog            *dialog.Overlay
-	fileBrowser       *dialog.FileBrowser
-	status            *Status
-	resourceSample    resourceSnapshotMsg
-	resourceReady     bool
-	resourceCPU       float64
-	resourceRAM       float64
-	finderButtonRect  image.Rectangle
-	commandButtonRect image.Rectangle
+	dialog               *dialog.Overlay
+	fileBrowser          *dialog.FileBrowser
+	browser              *dialog.Browser
+	status               *Status
+	resourceSample       resourceSnapshotMsg
+	resourceReady        bool
+	resourceCPU          float64
+	resourceRAM          float64
+	finderButtonRect     image.Rectangle
+	commandButtonRect    image.Rectangle
+	createFileButtonRect image.Rectangle
+	browserButtonRect    image.Rectangle
 
 	// isCanceling tracks whether the user has pressed escape once to cancel.
 	isCanceling bool
@@ -541,8 +545,11 @@ func New(com *common.Common, initialSessionID string, continueLast bool) *UI {
 // doesn't flip direction on every mouse-motion event.
 type beaverPulseMsg struct{}
 
-func beaverPulseCmd() tea.Cmd {
-	return tea.Tick(4000*time.Millisecond, func(time.Time) tea.Msg {
+// beaverPulseCmd returns a command that schedules the next beaver pulse.
+// Unlike the old approach of scheduling on every versionBannerTickMsg,
+// this schedules a single one-shot timer that fires after the given delay.
+func beaverPulseCmd(delay time.Duration) tea.Cmd {
+	return tea.Tick(delay, func(time.Time) tea.Msg {
 		return beaverPulseMsg{}
 	})
 }
@@ -555,7 +562,7 @@ type hoverSettleMsg struct{}
 func (m *UI) Init() tea.Cmd {
 	var cmds []tea.Cmd
 	cmds = append(cmds, m.bannerAnim.Start())
-	cmds = append(cmds, beaverPulseCmd())
+	cmds = append(cmds, beaverPulseCmd(4000*time.Millisecond))
 	if cmd := m.versionBanner.start(); cmd != nil {
 		cmds = append(cmds, cmd)
 	}
@@ -570,6 +577,8 @@ func (m *UI) Init() tea.Cmd {
 	cmds = append(cmds, m.loadPromptHistory())
 	// load initial LSP state
 	m.lspStates = m.com.Workspace.LSPGetStates()
+	// Initialize project source to the current working directory
+	m.projectSource = m.com.Workspace.WorkingDir()
 	// load initial session if specified
 	if cmd := m.loadInitialSession(); cmd != nil {
 		cmds = append(cmds, cmd)
@@ -1102,6 +1111,20 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				return m, tea.Batch(cmds...)
 			}
+			if image.Pt(msg.X, msg.Y).In(m.createFileButtonRect) {
+				dlg, cmd := dialog.NewCreateFile(m.com, m.projectSource)
+				m.dialog.OpenDialog(dlg)
+				if cmd != nil {
+					cmds = append(cmds, cmd)
+				}
+				return m, tea.Batch(cmds...)
+			}
+			if image.Pt(msg.X, msg.Y).In(m.browserButtonRect) {
+				if cmd := m.openBrowserDialog(""); cmd != nil {
+					cmds = append(cmds, cmd)
+				}
+				return m, tea.Batch(cmds...)
+			}
 		}
 
 		// Route clicks to inline editors that support mouse interaction.
@@ -1163,7 +1186,7 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.hoverX != msg.X || m.hoverY != msg.Y {
 			m.hoverX = msg.X
 			m.hoverY = msg.Y
-			
+
 			if m.activeInline == nil {
 				if m.hoverX < 0 {
 					m.beaverFacing = 0
@@ -1321,11 +1344,11 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case beaverPulseMsg:
 		m.beaverResting = !m.beaverResting
+		cmds = append(cmds, beaverPulseCmd(4000*time.Millisecond))
 	case versionBannerTickMsg:
 		if cmd := m.versionBanner.advance(); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
-		cmds = append(cmds, beaverPulseCmd())
 	case scrollbarHideMsg:
 		if m.state == uiChat {
 			m.chat.HideScrollbar(msg.seq)
@@ -2213,7 +2236,9 @@ func (m *UI) handleDialogAction(action tea.Msg) tea.Cmd {
 			cmds = append(cmds, m.openFileInExternalEditor(msg.Path))
 		}
 		m.dialog.CloseDialog(dialog.FileBrowserID)
+		m.dialog.CloseDialog(dialog.CreateFileID)
 	case dialog.ActionChangeProject:
+		m.projectSource = msg.Path
 		m.dialog.CloseDialog(dialog.FileBrowserID)
 		cmd, err := os.Executable()
 		if err != nil {
@@ -3084,6 +3109,7 @@ func (m *UI) drawHeader(scr uv.Screen, area uv.Rectangle) {
 		m.bannerFrame,
 		m.bannerAnimation(),
 		m.coderMode,
+		m.projectSource,
 	)
 	// Keep the compact finder affordance in chat/header views. The landing page
 	// has its own larger bordered button, so do not draw a duplicate there.
@@ -4652,6 +4678,12 @@ func (m *UI) openDialog(id string) tea.Cmd {
 		if cmd := m.openFilesDialog(); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
+	case dialog.CreateFileID:
+		dlg, cmd := dialog.NewCreateFile(m.com, m.projectSource)
+		m.dialog.OpenDialog(dlg)
+		if cmd != nil {
+			cmds = append(cmds, cmd)
+		}
 	case dialog.FileBrowserID:
 		if cmd := m.openFileBrowserDialog(); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -4668,6 +4700,10 @@ func (m *UI) openDialog(id string) tea.Cmd {
 		m.dialog.OpenDialog(dialog.NewOtherModels(m.com))
 	case dialog.QuitID:
 		if cmd := m.openQuitDialog(); cmd != nil {
+			cmds = append(cmds, cmd)
+		}
+	case dialog.BrowserID:
+		if cmd := m.openBrowserDialog(""); cmd != nil {
 			cmds = append(cmds, cmd)
 		}
 	default:
@@ -4842,6 +4878,23 @@ func (m *UI) openFileBrowserDialog() tea.Cmd {
 		return cmd
 	}
 	m.dialog.OpenDialog(m.fileBrowser)
+	return nil
+}
+
+// openBrowserDialog opens the embedded web browser.
+func (m *UI) openBrowserDialog(url string) tea.Cmd {
+	if m.dialog.ContainsDialog(dialog.BrowserID) {
+		m.dialog.BringToFront(dialog.BrowserID)
+		return nil
+	}
+	if m.browser == nil {
+		browser, cmd := dialog.NewBrowser(m.com, url)
+		m.browser = browser
+		m.dialog.OpenDialog(browser)
+		return cmd
+	}
+	m.browser.SetURL(url)
+	m.dialog.OpenDialog(m.browser)
 	return nil
 }
 

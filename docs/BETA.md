@@ -122,6 +122,28 @@ Beta testers are tracked in this file. Each entry includes:
 - [ ] Pressing O/Esc opts out at any step
 - [ ] Onboarding completes and shows main UI
 
+### Web Browser
+
+- [ ] `ctrl+b` opens the browser dialog
+- [ ] Landing screen browser icon opens the browser
+- [ ] File Finder `b` key opens the browser
+- [ ] Typing a URL and pressing `Enter` fetches the article
+- [ ] Loading spinner animates during fetch
+- [ ] Article content renders as Markdown
+- [ ] Error message displays for invalid URLs or non-HTML content
+- [ ] `Esc` or `[X]` closes the browser
+- [ ] Clicking outside the browser closes it
+- [ ] Help text at bottom shows shortcuts
+
+### Create File Dialog
+
+- [ ] `ctrl+n` opens the New File dialog
+- [ ] Landing screen paper icon opens the New File dialog
+- [ ] File navigation works (keyboard and mouse)
+- [ ] `[X]` closes the dialog
+- [ ] `Esc` closes the dialog
+- [ ] Clicking outside the dialog closes it
+
 ### Terminal Compatibility
 
 Test on each terminal:

@@ -17,12 +17,14 @@ finder provides:
   editor and attaches its contents;
 - external-editor handoff with `o`, which opens the selected file using the
   configured `$EDITOR`.
+- **switch project** with `s`, which restarts BVR in the selected directory.
+- **create new file** with `ctrl+n`, which opens the New File dialog.
 
 Keys: `↑`/`↓` or `j`/`k` navigate, `pgup`/`pgdn` scroll by a page, `home`/`g`
 go to the first entry, and `end` goes to the last entry. `enter`/`l` opens a
 directory, `h`/`left` or backspace goes to the parent directory, `y` copies the
 selected path, `.` toggles hidden dot-files, `a` attaches a file, `o` opens the
-external editor, and `esc` closes the finder.
+external editor, `s` switches project, `ctrl+n` creates a new file, and `esc` closes the finder.
 
 The finder uses a responsive panel and reflows with terminal resizes. It keeps a
 two-cell terminal inset, uses the available terminal height while open, and is
@@ -31,15 +33,16 @@ application banner while the Finder is active, giving the list and preview more
 vertical room without changing the global header/logo implementation. The block
 scrollbar beside the file list shows the current position when more entries are
 It can be opened by clicking the **OPEN FILE FINDER** button (folder icon) on
-the landing screen or the compact folder icon in the header. Click **[X]** in
-the upper-right corner, press `esc`, or click anywhere **outside the panel** to
-close it. The finder keeps its current directory and selection when closed and
-reopened.
+the landing screen or the compact folder icon in the header, or the
+**CREATE FILE** button (paper icon) on the landing screen for new files.
+Click **[X]** in the upper-right corner, press `esc`, or click anywhere
+**outside the panel** to close it. The finder keeps its current directory
+and selection when closed and reopened.
 
 The selected file uses a light-pink highlight for visibility. The file list and
 preview are separated by a divider, and the footer uses distinct colors for
-metadata, clipboard state, and keyboard instructions. Current implementation
-Current implementation work is tracked in `docs/TASKLIST.md`.
+metadata, clipboard state, and keyboard instructions. Work is tracked
+in `docs/TASKLIST.md`.
 
 ## Layout and clipping contract
 

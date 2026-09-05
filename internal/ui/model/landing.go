@@ -50,8 +50,10 @@ func (m *UI) landingView() string {
 	// blank line between them for cushioning, left-aligned one above the
 	// other.
 	iconColor := t.Header.LogoGradToColor
-	terminalIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\ue795") // superfile icon.Terminal
-	folderIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\uf07b")   // superfile icon.Directory
+	terminalIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\ue795")    // superfile icon.Terminal
+	folderIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\uf07b")      // superfile icon.Directory
+	paperIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\uf15b")       // superfile icon.File
+	browserIcon := lipgloss.NewStyle().Foreground(iconColor).Render("\U000f0208") // superfile icon.Browser
 
 	buttonStyle := lipgloss.NewStyle().
 		Foreground(accent).
@@ -62,7 +64,9 @@ func (m *UI) landingView() string {
 
 	commandButton := buttonStyle.Render(terminalIcon + " " + "OPEN COMMANDS — ctrl+p")
 	folderButton := buttonStyle.Render(folderIcon + " " + "OPEN FILE FINDER — ctrl+shift+f")
-	buttons := commandButton + "\n\n" + folderButton
+	createButton := buttonStyle.Render(paperIcon + " " + "CREATE FILE — ctrl+n")
+	browserBtn := buttonStyle.Render(browserIcon + " " + "WEB BROWSER — ctrl+b")
+	buttons := commandButton + "\n\n" + folderButton + "\n\n" + createButton + "\n\n" + browserBtn
 
 	// Prominent MODEL / PROVIDER line on the homescreen so it's immediately
 	// visible. Uses ACCENT for the values and ALT for the labels.
@@ -80,17 +84,29 @@ func (m *UI) landingView() string {
 		lipgloss.NewStyle().Foreground(accent).Bold(true).Render(providerName)
 
 	// Click rectangles for the stacked home buttons (Command on top,
-	// File Finder below). Both start at the left edge; the File Finder
-	// rectangle is pushed down past the Command button plus the gap line.
+	// File Finder below, CREATE FILE at the bottom). All start at the
+	// left edge; each subsequent rectangle is pushed down past the
+	// previous button plus the gap line.
 	btnTop := m.layout.main.Min.Y + 3
 	cmdH := lipgloss.Height(commandButton)
+	folderH := lipgloss.Height(folderButton)
+	createH := lipgloss.Height(createButton)
+	browserH := lipgloss.Height(browserBtn)
 	m.commandButtonRect = image.Rect(
 		m.layout.main.Min.X, btnTop,
 		m.layout.main.Min.X+lipgloss.Width(commandButton), btnTop+cmdH,
 	)
 	m.finderButtonRect = image.Rect(
 		m.layout.main.Min.X, btnTop+cmdH+1,
-		m.layout.main.Min.X+lipgloss.Width(folderButton), btnTop+cmdH+1+lipgloss.Height(folderButton),
+		m.layout.main.Min.X+lipgloss.Width(folderButton), btnTop+cmdH+1+folderH,
+	)
+	m.createFileButtonRect = image.Rect(
+		m.layout.main.Min.X, btnTop+cmdH+1+folderH+1,
+		m.layout.main.Min.X+lipgloss.Width(createButton), btnTop+cmdH+1+folderH+1+createH,
+	)
+	m.browserButtonRect = image.Rect(
+		m.layout.main.Min.X, btnTop+cmdH+1+folderH+1+createH+1,
+		m.layout.main.Min.X+lipgloss.Width(browserBtn), btnTop+cmdH+1+folderH+1+createH+1+browserH,
 	)
 	parts := []string{cwdStyled, "", buttons, "", modelLine}
 

@@ -163,6 +163,14 @@ flowchart LR
   clipboard state, and directory navigation.
 - Regression coverage for control-heavy and long unbroken content.
 - Documentation and rollback notes for layout-sensitive code.
+- **Web Browser dialog** (`ctrl+b`): fetches articles from any URL,
+  renders Markdown in a scrollable viewport with `[X]` close button,
+  click-outside-to-close, loading spinner, and help text.
+- **Create File dialog** (`ctrl+n`): opens a file picker for creating
+  new files, with `[X]` close button and click-outside-to-close.
+- **Click-away-to-dismiss**: all dialogs (File Finder, Commands,
+  Browser, Create File) close when clicking outside the panel,
+  pressing `esc`, or clicking the `[X]` button.
 
 ### Phase 1 — Feature wiring (in progress)
 

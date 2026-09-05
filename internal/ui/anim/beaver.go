@@ -15,7 +15,7 @@ import (
 var mascotStyle = lipgloss.NewStyle().Foreground(boot.MascotColor).Bold(true)
 
 // BeaverFrame returns the homescreen beaver mascot, facing the given direction.
-// 
+//
 // facing: -1 = look left, 0 = center (resting), +1 = look right.
 // errored: render the x-ray Beta variant (X_X eyes) when the agent has errored.
 // resting: render the neutral center-facing "rest" pose between direction changes.

@@ -132,3 +132,39 @@ bvr-cli projects
 ```
 
 Then open BVR, run `/models`, refresh, and confirm a model becomes ready.
+
+## UI Dialogs and Controls
+
+### Landing Screen Buttons
+
+Three buttons are displayed on the landing screen:
+
+| Button | Icon | Shortcut | Action |
+|--------|------|----------|--------|
+| Open Commands | `terminal` | `ctrl+p` | Opens the command palette |
+| Open File Finder | `folder` | `ctrl+shift+f` | Opens the project file browser |
+| Create File | `paper` | `ctrl+n` | Opens the New File dialog |
+| Web Browser | `browser` | `ctrl+b` | Opens the web article reader |
+
+### Click-Away-to-Dismiss
+
+All dialogs support click-away-to-dismiss: clicking anywhere **outside** the dialog panel, pressing `esc`, or clicking the `[X]` button in the upper-right corner closes the dialog. This applies to the File Finder, Commands dialog, Web Browser, and Create File dialog.
+
+### Dialog Help Text
+
+Each dialog displays a help footer line at the bottom showing the available keyboard shortcuts. The help text is auto-truncated if it exceeds the dialog width.
+
+### Web Browser
+
+- Press `ctrl+b` or click the browser icon on the landing screen
+- Type a URL in the input field and press `Enter` to fetch
+- Content is rendered as Markdown in a scrollable viewport
+- Press `Esc` or click `[X]` to close
+- Loading spinner animates during fetch
+
+### Create File
+
+- Press `ctrl+n` or click the paper icon on the landing screen
+- Browse files and directories in the file picker
+- Press `Esc` or click `[X]` to close
+- Click outside the panel to dismiss

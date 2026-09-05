@@ -15,6 +15,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	uv "github.com/charmbracelet/ultraviolet"
+	"github.com/charmbracelet/x/ansi"
 	"github.com/richavery/bvr-cli/internal/home"
 	"github.com/richavery/bvr-cli/internal/ui/common"
 	fimage "github.com/richavery/bvr-cli/internal/ui/image"
@@ -35,6 +36,8 @@ type FilePicker struct {
 	help            help.Model
 	previewingImage bool // indicates if an image is being previewed
 	isTmux          bool
+	closeRect       image.Rectangle
+	panelRect       image.Rectangle
 
 	km struct {
 		Select,
@@ -175,6 +178,14 @@ func (f *FilePicker) HandleMsg(msg tea.Msg) Action {
 		case key.Matches(msg, f.km.Close):
 			return ActionClose{}
 		}
+	case tea.MouseClickMsg:
+		if msg.Button == uv.MouseLeft && image.Pt(msg.X, msg.Y).In(f.closeRect) {
+			return ActionClose{}
+		}
+		// Click-away to dismiss: a left click outside the panel closes the picker.
+		if msg.Button == uv.MouseLeft && !f.panelRect.Empty() && !image.Pt(msg.X, msg.Y).In(f.panelRect) {
+			return ActionClose{}
+		}
 	}
 
 	var cmd tea.Cmd
@@ -246,7 +257,7 @@ func (f *FilePicker) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 
 	rc := NewRenderContext(t, width)
 	rc.Gap = 1
-	rc.Title = "Add Image"
+	rc.Title = "New File"
 	rc.Help = renderDialogHelp(t, &f.help, f, innerWidth)
 
 	if imgPrevHeight > 0 {
@@ -258,8 +269,19 @@ func (f *FilePicker) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	rc.AddPart(files)
 
 	view := rc.Render()
+	dialogWidth := lipgloss.Width(view)
+	dialogHeight := lipgloss.Height(view)
+	center := common.CenterRect(area, dialogWidth, dialogHeight)
+	uv.NewStyledString(view).Draw(scr, center)
 
-	DrawCenter(scr, area, view)
+	// Close button [X] at top-right of the dialog title area.
+	closeText := closeLabel(width)
+	closeW := ansi.StringWidth(closeText)
+	closeX := center.Min.X + width - closeW - 1
+	f.closeRect = image.Rect(closeX, center.Min.Y, closeX+closeW, center.Min.Y+1)
+	f.panelRect = image.Rect(center.Min.X, center.Min.Y, center.Min.X+dialogWidth, center.Min.Y+dialogHeight)
+	closeStyle := t.Dialog.FileBrowser.Close
+	uv.NewStyledString(closeStyle.Render(closeText)).Draw(scr, f.closeRect)
 	return nil
 }
 
