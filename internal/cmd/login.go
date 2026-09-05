@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 
 	"charm.land/lipgloss/v2"
 	"github.com/pkg/browser"
 	"github.com/richavery/bvr-cli/internal/clipboard"
 	"github.com/richavery/bvr-cli/internal/config"
+	"github.com/richavery/bvr-cli/internal/license"
 	"github.com/richavery/bvr-cli/internal/oauth"
 	"github.com/richavery/bvr-cli/internal/oauth/copilot"
 	"github.com/richavery/bvr-cli/internal/oauth/hyper"
@@ -59,6 +61,9 @@ bvr-cli login -f copilot
 		case "copilot", "github", "github-copilot":
 			return loginCopilot(ws, force)
 		default:
+			if strings.HasPrefix(strings.ToUpper(provider), "BVR-") {
+				return loginLicense(provider)
+			}
 			return fmt.Errorf("unknown platform: %s", args[0])
 		}
 	},
@@ -66,6 +71,20 @@ bvr-cli login -f copilot
 
 func init() {
 	loginCmd.Flags().BoolP("force", "f", false, "Force re-authentication even if already logged in")
+}
+
+func loginLicense(key string) error {
+	fmt.Println("Validating license key...")
+	if err := license.ValidateLicense(key); err != nil {
+		return fmt.Errorf("license validation failed: %w", err)
+	}
+
+	if err := license.SaveLicense(key); err != nil {
+		return fmt.Errorf("failed to save license key: %w", err)
+	}
+
+	fmt.Println("✅ License key activated and saved successfully!")
+	return nil
 }
 
 func loginHyper(ws workspace.Workspace, force bool) error {
