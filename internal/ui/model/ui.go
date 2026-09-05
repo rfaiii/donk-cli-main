@@ -979,7 +979,8 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.Type {
 		case pubsub.CreatedEvent:
 			if string(msg.Payload.Role) == "assistant" {
-				cmds = append(cmds, m.playAudio("BVR-CLI", "Incoming message", "chat-01"))
+				sound := fmt.Sprintf("chat-%02d", rand.Intn(3)+1)
+				cmds = append(cmds, m.playAudio("BVR-CLI", "Incoming message", sound))
 			} else if string(msg.Payload.Role) == "user" {
 				if strings.Contains(strings.ToUpper(msg.Payload.Content().Text), "EXTRA") {
 					cmds = append(cmds, m.playAudio("BVR-CLI", "EXTRA EXTRA", "chat-02"))
